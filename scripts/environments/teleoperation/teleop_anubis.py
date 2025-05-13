@@ -216,7 +216,19 @@ def main():
     while simulation_app.is_running():
         # run everything in inference mode
         with torch.inference_mode():
-            pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
+            if args_cli.teleop_device.lower() == "oculus_droid":
+                init_pos = env.scene["ee_L_frame"].data.target_pos_source[0,0]
+                init_rot = env.scene["ee_L_frame"].data.target_quat_source[0,0]
+                ee_l_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
+        
+                init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
+                init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
+                ee_r_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
+                obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
+                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
+            
+            else:
+                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")
             delta_pose_base = delta_pose_base.astype("float32")
