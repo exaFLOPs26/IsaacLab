@@ -543,6 +543,9 @@ class Oculus_droid(DeviceBase):
         rot_action_gain=2,
         gripper_action_gain=3,
         rmat_reorder=[-2, -1, -3, 4],
+        pos_sensitivity: float = 0.01, 
+        rot_sensitivity: float = 0.01, 
+        base_sensitivity: float = 0.05
     ):
         self.oculus_reader = OculusReader()
         self.vr_to_global_mat = {"r": np.eye(4), "l": np.eye(4)}
@@ -560,6 +563,29 @@ class Oculus_droid(DeviceBase):
         self.reset_state()
 
         run_threaded_command(self._update_internal_state)
+    def get_valid_transforms_and_buttons(self):
+        while True:
+            transforms, buttons = self.get_transformations_and_buttons()
+        
+            # Check if 'l' and 'r' are in transforms, indicating valid data
+            if "l" in transforms and "r" in transforms:
+                # print("Valid transforms received.")
+                return transforms, buttons
+        
+            # Optionally log or print when data isn't available
+            print("Waiting for valid transforms...")
+        
+            # Wait a bit before trying again (to avoid busy loop)
+            time.sleep(0.1)  # Sleep for 100ms before retrying
+    def reset(self):
+        # Stub for now
+        print("Oculus_droid reset called")
+        self.reset_orientation = {"r": True, "l": True}
+        self.reset_state()
+
+    def add_callback(self, callback):
+        # Stub for now
+        print("Callback registered but not used in Oculus_droid")
 
     def reset_state(self):
         self._state = {
@@ -578,8 +604,9 @@ class Oculus_droid(DeviceBase):
         last_read_time = time.time()
         while True:
             time.sleep(1 / hz)
-            poses, buttons = self.oculus_reader.get_transformations_and_buttons()
+            poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
             time_since_read = time.time() - last_read_time
+            
             for cid in ["r", "l"]:
                 self._state["controller_on"][cid] = time_since_read < num_wait_sec
 
@@ -624,11 +651,11 @@ class Oculus_droid(DeviceBase):
         if self.update_sensor[cid]:
             self._process_reading(cid)
             self.update_sensor[cid] = False
-
-        robot_pos = np.array(state_dict["cartesian_position"][:3])
-        robot_euler = state_dict["cartesian_position"][3:]
-        robot_quat = euler_to_quat(robot_euler)
-        robot_gripper = state_dict["gripper_position"]
+        print("state_dict", state_dict)
+        robot_pos = state_dict[:3].cpu().numpy()
+        robot_euler = state_dict[3:6]
+        robot_quat = euler_to_quat(robot_euler.cpu().numpy())
+        robot_gripper = state_dict[6]
 
         if self.reset_origin[cid]:
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
@@ -656,10 +683,25 @@ class Oculus_droid(DeviceBase):
 
     def advance(self, obs_dict):
         if not self._state["poses"]:
-            return np.zeros(14)
+            return (
+            np.zeros(6),  # pose_L
+            0.0,          # gripper_command_L
+            np.zeros(6),  # pose_R
+            0.0,          # gripper_command_R
+            np.zeros(3),  # delta_pose_base
+        )
         action_r = self._calculate_arm_action("r", obs_dict["right_arm"])
         action_l = self._calculate_arm_action("l", obs_dict["left_arm"])
-        return np.concatenate([action_l, action_r])  # [left_arm_action | right_arm_action]
+        
+        print("action_r", action_r)
+        print("action_l", action_l)
+        return (
+        action_l[:6],  # pose_L
+        action_l[6],   # gripper_command_L
+        action_r[:6],  # pose_R
+        action_r[6],   # gripper_command_R
+        np.zeros(3),   # delta_pose_base
+        )    
 
     def get_info(self):
         return {
