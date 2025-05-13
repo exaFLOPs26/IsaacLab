@@ -651,11 +651,13 @@ class Oculus_droid(DeviceBase):
         if self.update_sensor[cid]:
             self._process_reading(cid)
             self.update_sensor[cid] = False
-        print("state_dict", state_dict)
-        robot_pos = state_dict[:3].cpu().numpy()
-        robot_euler = state_dict[3:6]
-        robot_quat = euler_to_quat(robot_euler.cpu().numpy())
-        robot_gripper = state_dict[6]
+        state_dict = state_dict[0]  # This gives you a 1D tensor with shape (7,)
+
+        robot_pos = state_dict[:3].cpu().numpy()  # Position (x, y, z)
+        robot_euler = state_dict[3:6].cpu().numpy()  # Euler angles (roll, pitch, yaw)
+        robot_quat = euler_to_quat(robot_euler)  # Quaternion from Euler angles
+        robot_gripper = state_dict[6].item()  # Gripper state (scalar)
+
 
         if self.reset_origin[cid]:
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
@@ -682,7 +684,7 @@ class Oculus_droid(DeviceBase):
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
 
     def advance(self, obs_dict):
-        if not self._state["poses"]:
+        if not self._state["movement_enabled"]:
             return (
             np.zeros(6),  # pose_L
             0.0,          # gripper_command_L
@@ -690,11 +692,10 @@ class Oculus_droid(DeviceBase):
             0.0,          # gripper_command_R
             np.zeros(3),  # delta_pose_base
         )
+        print(self._state)
         action_r = self._calculate_arm_action("r", obs_dict["right_arm"])
         action_l = self._calculate_arm_action("l", obs_dict["left_arm"])
         
-        print("action_r", action_r)
-        print("action_l", action_l)
         return (
         action_l[:6],  # pose_L
         action_l[6],   # gripper_command_L
