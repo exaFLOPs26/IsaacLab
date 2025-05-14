@@ -17,10 +17,45 @@ from isaaclab.utils.math import sample_uniform
 
 from .real2sim_env_cfg import Real2simEnvCfg
 
+@configclass
+class EventCfg:
+  robot_physics_material = EventTerm(
+      func=mdp.randomize_rigid_body_material,
+      mode="reset",
+      params={
+          "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
+          "static_friction_range": (0.7, 1.3),
+          "dynamic_friction_range": (1.0, 1.0),
+          "restitution_range": (1.0, 1.0),
+          "num_buckets": 250,
+      },
+  )
+  robot_joint_stiffness_and_damping = EventTerm(
+      func=mdp.randomize_actuator_gains,
+      mode="reset",
+      params={
+          "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+          "stiffness_distribution_params": (0.75, 1.5),
+          "damping_distribution_params": (0.3, 3.0),
+          "operation": "scale",
+          "distribution": "log_uniform",
+      },
+  )
+  reset_gravity = EventTerm(
+      func=mdp.randomize_physics_scene_gravity,
+      mode="interval",
+      is_global_time=True,
+      interval_range_s=(36.0, 36.0),  # time_s = num_steps * (decimation * dt)
+      params={
+          "gravity_distribution_params": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.4]),
+          "operation": "add",
+          "distribution": "gaussian",
+      },
+  )
 
 class Real2simEnv(DirectRLEnv):
     cfg: Real2simEnvCfg
-
+    events: EventCfg = EventCfg()
     def __init__(self, cfg: Real2simEnvCfg, render_mode: str | None = None, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
 
@@ -108,6 +143,20 @@ class Real2simEnv(DirectRLEnv):
         self.robot.write_root_pose_to_sim(default_root_state[:, :7], env_ids)
         self.robot.write_root_velocity_to_sim(default_root_state[:, 7:], env_ids)
         self.robot.write_joint_state_to_sim(joint_pos, joint_vel, None, env_ids)
+    
+    # [TODO] Do we need to add noise to the action?
+    
+    # # at every time-step add gaussian noise + bias. The bias is a gaussian sampled at reset
+    # action_noise_model: NoiseModelWithAdditiveBiasCfg = NoiseModelWithAdditiveBiasCfg(
+    #   noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.05, operation="add"),
+    #   bias_noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.015, operation="abs"),
+    # )
+
+    # # at every time-step add gaussian noise + bias. The bias is a gaussian sampled at reset
+    # observation_noise_model: NoiseModelWithAdditiveBiasCfg = NoiseModelWithAdditiveBiasCfg(
+    #   noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.002, operation="add"),
+    #   bias_noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.0001, operation="abs"),
+    # )
 
 
 @torch.jit.script

@@ -130,13 +130,13 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
 
 
 def main():
-    """Running keyboard teleoperation with Isaac Lab manipulation environment."""
+    """Running teleoperation with Isaac Lab manipulation environment."""
     # parse configuration
     env_cfg = parse_env_cfg(
         args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
     )
     # modify configuration
-    env_cfg.terminations.time_out = None
+    # env_cfg.terminations.time_out = None
     if "Lift" in args_cli.task:
         # set the resampling time range to large number to avoid resampling
         env_cfg.commands.object_pose.resampling_time_range = (1.0e9, 1.0e9)
