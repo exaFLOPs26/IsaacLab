@@ -46,6 +46,25 @@ from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
 from scipy.spatial.transform import Rotation
 
+def get_ee_state(env, ee_name, gripper_value=0.0):
+    # arm
+    ee = env.scene[ee_name].data
+    pos = ee.target_pos_source[0, 0]
+    rot = ee.target_quat_source[0, 0]
+
+    euler = torch.from_numpy(
+        Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
+    ).to(dtype=rot.dtype, device=rot.device)
+    
+    # Gripper
+    if ee_name == "ee_L_frame":
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -2:]
+    else:
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
+    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*1.41+0.05 # To match [0.05, 0.165] the real robot
+
+    return torch.cat((pos, euler, gripper_dist)).unsqueeze(0)
+
 def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
     # compute actions based on environment
@@ -65,7 +84,7 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
         print("ee_l_state", ee_l_state)
         print("ee_r_state", ee_r_state)
         print("-----------------------")
-
+        
         # resolve gripper command
         gripper_vel_L = torch.zeros(abs_pose_L.shape[0], 1, device=abs_pose_L.device)
         gripper_vel_L[:] = -1.0 if gripper_command_L else 1.0
@@ -220,29 +239,16 @@ def main():
             if args_cli.teleop_device.lower() == "oculus_droid":
                 # Left arm
                 ipdb.set_trace()
-                init_pos = env.scene["ee_L_frame"].data.target_pos_source[0,0]
-                init_rot = env.scene["ee_L_frame"].data.target_quat_source[0,0]
-                euler_l = torch.tensor(
-                    Rotation.from_quat(init_rot.cpu().numpy()).as_euler('xyz', degrees=False),
-                    dtype=init_rot.dtype, device=init_rot.device
-                )
-                ee_l_state = torch.cat([init_pos, euler_l], dim=0).unsqueeze(0)
-
-                # Right arm
-                init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
-                init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
-                euler_r = torch.tensor(
-                    Rotation.from_quat(init_rot.cpu().numpy()).as_euler('xyz', degrees=False),
-                    dtype=init_rot.dtype, device=init_rot.device
-                )
-                ee_r_state = torch.cat([init_pos, euler_r], dim=0).unsqueeze(0)
+                ee_l_state = get_ee_state(env, "ee_L_frame", gripper_value=0.0)
+                ee_r_state = get_ee_state(env, "ee_R_frame", gripper_value=0.0)
 
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
-                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
 
+                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
 
             else:
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
+            ipdb.set_trace()
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")
             delta_pose_base = delta_pose_base.astype("float32")
