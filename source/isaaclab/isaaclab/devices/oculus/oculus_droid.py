@@ -548,7 +548,7 @@ class Oculus_droid(DeviceBase):
         base_sensitivity: float = 0.05
     ):
         self.oculus_reader = OculusReader()
-        self.vr_to_global_mat = {"r": np.eye(4), "l": np.eye(4)}
+        self.vr_to_global_mat = {"R": np.eye(4), "L": np.eye(4)}
         self.global_to_env_mat = vec_to_reorder_mat(rmat_reorder)
 
         self.max_lin_vel = max_lin_vel
@@ -559,8 +559,8 @@ class Oculus_droid(DeviceBase):
         self.rot_action_gain = rot_action_gain
         self.gripper_action_gain = gripper_action_gain
 
-        self.reset_orientation = {"r": True, "l": True}
-        self.reset_state()
+        self.reset_orientation = {"R": True, "L": True}
+        self.reset()
 
         run_threaded_command(self._update_internal_state)
     def get_valid_transforms_and_buttons(self):
@@ -577,28 +577,21 @@ class Oculus_droid(DeviceBase):
         
             # Wait a bit before trying again (to avoid busy loop)
             time.sleep(0.1)  # Sleep for 100ms before retrying
-    def reset(self):
-        # Stub for now
-        print("Oculus_droid reset called")
-        self.reset_orientation = {"r": True, "l": True}
-        self.reset_state()
-
     def add_callback(self, callback):
-        # Stub for now
         print("Callback registered but not used in Oculus_droid")
-
-    def reset_state(self):
+    def reset(self):
+        print("Oculus_droid reset called")
         self._state = {
             "poses": {},
             "buttons": {},
             "movement_enabled": {"r": False, "l": False},
-            "controller_on": {"r": True, "l": True},
+            "controller_on": {"R": True, "L": True},
         }
-        self.update_sensor = {"r": True, "l": True}
-        self.reset_origin = {"r": True, "l": True}
-        self.robot_origin = {"r": None, "l": None}
-        self.vr_origin = {"r": None, "l": None}
-        self.vr_state = {"r": None, "l": None}
+        self.update_sensor = {"R": True, "L": True}
+        self.reset_origin = {"R": True, "L": True}
+        self.robot_origin = {"R": None, "L": None}
+        self.vr_origin = {"R": None, "L": None}
+        self.vr_state = {"R": None, "L": None}
 
     def _update_internal_state(self, num_wait_sec=5, hz=50):
         last_read_time = time.time()
@@ -607,18 +600,20 @@ class Oculus_droid(DeviceBase):
             poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
             time_since_read = time.time() - last_read_time
             
-            for cid in ["r", "l"]:
+            for cid in ["R", "L"]:
                 self._state["controller_on"][cid] = time_since_read < num_wait_sec
 
                 if cid + "G" in buttons:
+                    print("cid + G", cid + "G")
+                    print(cid.lower())
                     toggled = self._state["movement_enabled"][cid] != buttons[cid + "G"]
                     self.update_sensor[cid] = self.update_sensor[cid] or buttons[cid + "G"]
                     self.reset_orientation[cid] = self.reset_orientation[cid] or buttons[cid + "J"]
                     self.reset_origin[cid] = self.reset_origin[cid] or toggled
                     self._state["movement_enabled"][cid] = buttons[cid + "G"]
 
-                if cid in poses and self.reset_orientation[cid]:
-                    rot_mat = np.asarray(poses[cid])
+                if cid.lower() in poses and self.reset_orientation[cid]:
+                    rot_mat = np.asarray(poses[cid.lower()])
                     try:
                         rot_mat = np.linalg.inv(rot_mat)
                     except:
@@ -633,11 +628,11 @@ class Oculus_droid(DeviceBase):
             last_read_time = time.time()
 
     def _process_reading(self, cid):
-        rot_mat = np.asarray(self._state["poses"][cid])
+        rot_mat = np.asarray(self._state["poses"][cid.lower()])
         rot_mat = self.global_to_env_mat @ self.vr_to_global_mat[cid] @ rot_mat
         vr_pos = self.spatial_coeff * rot_mat[:3, 3]
         vr_quat = rmat_to_quat(rot_mat[:3, :3])
-        trig_key = "rightTrig" if cid == "r" else "leftTrig"
+        trig_key = "rightTrig" if cid == "R" else "leftTrig"
         vr_gripper = self._state["buttons"].get(trig_key, [0])[0]
         self.vr_state[cid] = {"pos": vr_pos, "quat": vr_quat, "gripper": vr_gripper}
 

@@ -32,7 +32,7 @@
 		<child link="base_link"/>
 		<origin rpy="0 0 0" xyz="0 0 0"/>
 		<axis xyz="0 0 1"/>
-    		<limit velocity="100" effort="100" lower="-360.0" upper="360.0" />
+    		<limit velocity="100" effort="100" lower="-6.283" upper="6.283" />
 	</joint>
   
   <link name="base_link">
@@ -97,7 +97,7 @@
     <child link="link11"/>
     <origin xyz="-0.095 -0.135470  0.82335578" rpy="0.174533 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.74533" upper="1.74533" velocity="1.3963"/>
   </joint>
   <link name="link11">
     <inertial>
@@ -127,7 +127,7 @@
     <child link="link12"/>
     <origin rpy="0 0 0" xyz="0 0 0.062"/>
     <axis xyz="0 1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-0.523599" upper="0.523599" velocity="1.3963"/>
   </joint>
   <link name="link12">
         <inertial>
@@ -156,7 +156,7 @@
     <child link="link13"/>
     <origin rpy="0 0 0" xyz="0 0 0.3"/>
     <axis xyz="0 1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-0.523599" upper="1.91986" velocity="1.3963"/>
   </joint>
   <link name="link13">
     <inertial>
@@ -186,7 +186,7 @@
     <child link="link14"/>
     <origin rpy="0 0 0" xyz="0 0 0.32"/>
     <axis xyz="0 1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="0.174533" upper="2.79253" velocity="1.3963"/>
   </joint>
 
   <link name="link14">
@@ -217,7 +217,7 @@
     <child link="link15"/>
     <origin rpy="0 0 0" xyz="0 0 0.04"/>
     <axis xyz="-1 0 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.5708" upper="1.74533" velocity="1.3963"/>
   </joint>
 
   <link name="link15">
@@ -248,7 +248,7 @@
     <child link="ee_link1"/>
     <origin rpy="0 0 -1.57" xyz="0 0 0.027"/>
     <axis xyz="0 0 1"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.5708" upper="1.57085" velocity="1.3963"/>
   </joint>
   
   <link name="ee_link1" >
@@ -400,7 +400,7 @@
     <child link="link21"/>
     <origin xyz="-0.095 0.135470  0.82335578" rpy="0.174533 0 3.14159"/>
     <axis xyz="0 0 1"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.74533" upper="1.74533" velocity="1.3963"/>
   </joint>
   
   <link name="link21">
@@ -431,7 +431,7 @@
     <child link="link22"/>
     <origin rpy="0 0 0" xyz="0 0 0.062"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-0.523599" upper="0.523599" velocity="1.3963"/>
   </joint>
   
   <link name="link22">
@@ -462,7 +462,7 @@
     <child link="link23"/>
     <origin rpy="0 0 0" xyz="0 0 0.3"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-0.523599" upper="1.91986" velocity="1.3963"/>
   </joint>
 
   <link name="link23">
@@ -493,7 +493,7 @@
     <child link="link24"/>
     <origin rpy="0 0 3.14159" xyz="0 0 0.32"/>
     <axis xyz="0 1 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="0.174533" upper="2.79253" velocity="1.3963"/>
   </joint>
   
   <link name="link24">
@@ -523,7 +523,7 @@
     <child link="link25"/>
     <origin rpy="0 0 0" xyz="0 0 0.04"/>
     <axis xyz="-1 0 0"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.5708" upper="1.74533" velocity="1.3963"/>
   </joint>
   <link name="link25">
     <inertial>
@@ -553,7 +553,7 @@
     <child link="ee_link2"/>
     <origin rpy="0 0 -1.57" xyz="0 0 0.027"/>
     <axis xyz="0 0 1"/>
-    <limit effort="39" lower="-2.41" upper="2.41" velocity="1.3963"/>
+    <limit effort="39" lower="-1.5708" upper="1.57085" velocity="1.3963"/>
   </joint>
   <link name="ee_link2" >
       <inertial>
