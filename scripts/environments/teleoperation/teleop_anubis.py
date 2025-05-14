@@ -80,10 +80,6 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
         init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
         init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
         ee_r_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
-        print("-----------------------")
-        print("ee_l_state", ee_l_state)
-        print("ee_r_state", ee_r_state)
-        print("-----------------------")
         
         # resolve gripper command
         gripper_vel_L = torch.zeros(abs_pose_L.shape[0], 1, device=abs_pose_L.device)
@@ -226,7 +222,6 @@ def main():
         )
 
     teleop_interface2.add_callback("R", reset_recording_instance)
-    # print(teleop_interface)
 
     # reset environment
     env.reset()
@@ -238,7 +233,6 @@ def main():
         with torch.inference_mode():
             if args_cli.teleop_device.lower() == "oculus_droid":
                 # Left arm
-                ipdb.set_trace()
                 ee_l_state = get_ee_state(env, "ee_L_frame", gripper_value=0.0)
                 ee_r_state = get_ee_state(env, "ee_R_frame", gripper_value=0.0)
 
@@ -248,7 +242,6 @@ def main():
 
             else:
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
-            ipdb.set_trace()
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")
             delta_pose_base = delta_pose_base.astype("float32")
@@ -263,7 +256,7 @@ def main():
             else: # Delta
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             # apply actions
-            # print(actions)
+            print("actions", actions)
             env.step(actions)
 
             if should_reset_recording_instance:

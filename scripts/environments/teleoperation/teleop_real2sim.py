@@ -47,6 +47,25 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.utils import parse_env_cfg
 
+def get_ee_state(env, ee_name, gripper_value=0.0):
+    # arm
+    ee = env.scene[ee_name].data
+    pos = ee.target_pos_source[0, 0]
+    rot = ee.target_quat_source[0, 0]
+
+    euler = torch.from_numpy(
+        Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
+    ).to(dtype=rot.dtype, device=rot.device)
+    
+    # Gripper
+    if ee_name == "ee_L_frame":
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -2:]
+    else:
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
+    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, 0.165] the real robot
+    print("gripper_dist", gripper_dist)
+    return torch.cat((pos, euler, gripper_dist)).unsqueeze(0)
+
 def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, delta_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
     # resolve gripper command
@@ -105,17 +124,11 @@ def main():
         # run everthing in inference mode
         with torch.inference_mode():
             
-            # Get simulation observation of robot
-            init_pos = env.scene["ee_L_frame"].data.target_pos_source[0,0]
-            init_rot = env.scene["ee_L_frame"].data.target_quat_source[0,0]
-            ee_l_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
-        
-            init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
-            init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
-            ee_r_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
+            ee_l_state = get_ee_state(env, "ee_L_frame", gripper_value=0.0)
+            ee_r_state = get_ee_state(env, "ee_R_frame", gripper_value=0.0)
+
             obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
-            
-            # Get teleoperation actions 
+
             pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
 
             pose_L = pose_L.astype("float32")
@@ -127,7 +140,7 @@ def main():
             delta_pose_base = torch.tensor(delta_pose_base, device=env.device).repeat(env.num_envs, 1)
             
             actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
-            
+
             env.step(actions)
 
             if should_reset_recording_instance:
