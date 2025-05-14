@@ -44,6 +44,7 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
+from scipy.spatial.transform import Rotation
 
 def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
@@ -217,15 +218,28 @@ def main():
         # run everything in inference mode
         with torch.inference_mode():
             if args_cli.teleop_device.lower() == "oculus_droid":
+                # Left arm
+                ipdb.set_trace()
                 init_pos = env.scene["ee_L_frame"].data.target_pos_source[0,0]
                 init_rot = env.scene["ee_L_frame"].data.target_quat_source[0,0]
-                ee_l_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
-        
+                euler_l = torch.tensor(
+                    Rotation.from_quat(init_rot.cpu().numpy()).as_euler('xyz', degrees=False),
+                    dtype=init_rot.dtype, device=init_rot.device
+                )
+                ee_l_state = torch.cat([init_pos, euler_l], dim=0).unsqueeze(0)
+
+                # Right arm
                 init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
                 init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
-                ee_r_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
+                euler_r = torch.tensor(
+                    Rotation.from_quat(init_rot.cpu().numpy()).as_euler('xyz', degrees=False),
+                    dtype=init_rot.dtype, device=init_rot.device
+                )
+                ee_r_state = torch.cat([init_pos, euler_r], dim=0).unsqueeze(0)
+
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
+
 
             else:
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()

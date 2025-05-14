@@ -1,5 +1,5 @@
 "Joystick controller using OculusReader input."""
-
+# LIVESTREAM=2 ./isaaclab.sh -p scripts/environments/teleoperation/teleop_anubis.py --enable_cameras
 import numpy as np
 import weakref
 from collections.abc import Callable
@@ -22,7 +22,7 @@ import sys
 import multiprocessing
 import subprocess
 import threading
-
+import ipdb
 def eprint(*args, **kwargs):
     RED = "\033[1;31m"  
     sys.stderr.write(RED)
@@ -539,9 +539,9 @@ class Oculus_droid(DeviceBase):
         max_rot_vel=1,
         max_gripper_vel=1,
         spatial_coeff=1,
-        pos_action_gain=5,
-        rot_action_gain=2,
-        gripper_action_gain=3,
+        pos_action_gain=1,
+        rot_action_gain=1,
+        gripper_action_gain=1,
         rmat_reorder=[-2, -1, -3, 4],
         pos_sensitivity: float = 0.01, 
         rot_sensitivity: float = 0.01, 
@@ -584,7 +584,7 @@ class Oculus_droid(DeviceBase):
         self._state = {
             "poses": {},
             "buttons": {},
-            "movement_enabled": {"r": False, "l": False},
+            "movement_enabled": {"R": False, "L": False},
             "controller_on": {"R": True, "L": True},
         }
         self.update_sensor = {"R": True, "L": True}
@@ -599,16 +599,17 @@ class Oculus_droid(DeviceBase):
             time.sleep(1 / hz)
             poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
             time_since_read = time.time() - last_read_time
-            
+
+            if not poses:
+                continue  # Avoid updating with bad data
+
             for cid in ["R", "L"]:
                 self._state["controller_on"][cid] = time_since_read < num_wait_sec
 
                 if cid + "G" in buttons:
-                    print("cid + G", cid + "G")
-                    print(cid.lower())
                     toggled = self._state["movement_enabled"][cid] != buttons[cid + "G"]
                     self.update_sensor[cid] = self.update_sensor[cid] or buttons[cid + "G"]
-                    self.reset_orientation[cid] = self.reset_orientation[cid] or buttons[cid + "J"]
+                    self.reset_orientation[cid] = self.reset_orientation[cid] or buttons.get(cid + "J", False)
                     self.reset_origin[cid] = self.reset_origin[cid] or toggled
                     self._state["movement_enabled"][cid] = buttons[cid + "G"]
 
@@ -620,6 +621,7 @@ class Oculus_droid(DeviceBase):
                         rot_mat = np.eye(4)
                         self.reset_orientation[cid] = True
                     self.vr_to_global_mat[cid] = rot_mat
+
                     if buttons.get(cid + "J") or self._state["movement_enabled"][cid]:
                         self.reset_orientation[cid] = False
 
@@ -676,10 +678,12 @@ class Oculus_droid(DeviceBase):
         gripper_action *= self.gripper_action_gain
 
         lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
+        ipdb.set_trace()
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
 
     def advance(self, obs_dict):
-        if not self._state["movement_enabled"]:
+
+        if self._state["poses"] == {}:
             return (
             np.zeros(6),  # pose_L
             0.0,          # gripper_command_L
@@ -687,9 +691,9 @@ class Oculus_droid(DeviceBase):
             0.0,          # gripper_command_R
             np.zeros(3),  # delta_pose_base
         )
-        print(self._state)
-        action_r = self._calculate_arm_action("r", obs_dict["right_arm"])
-        action_l = self._calculate_arm_action("l", obs_dict["left_arm"])
+
+        action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
+        action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
         
         return (
         action_l[:6],  # pose_L
