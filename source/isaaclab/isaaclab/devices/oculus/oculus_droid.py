@@ -9,7 +9,7 @@ import carb
 import omni
 import time
 import math
-import ipdb
+
 from ..device_base import DeviceBase
 
 # from .oculus_reader import OculusReader
@@ -337,6 +337,8 @@ class Oculus_droid(DeviceBase):
         while True:
             time.sleep(1 / hz)
             poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
+            # print("poses", poses)
+            print("buttons", buttons)
             time_since_read = time.time() - last_read_time
 
             if not poses:
@@ -364,9 +366,16 @@ class Oculus_droid(DeviceBase):
                     if buttons.get(cid + "J") or self._state["movement_enabled"][cid]:
                         self.reset_orientation[cid] = False
 
+            # 💡 Reset both L and R origin on RJ press
+            if buttons.get("RJ"):
+                print("[INFO] RJ pressed — resetting both origins.")
+                self.reset_origin["L"] = True
+                self.reset_origin["R"] = True
+
             self._state["poses"] = poses
             self._state["buttons"] = buttons
             last_read_time = time.time()
+    
 
     def _process_reading(self, cid):
         rot_mat = np.asarray(self._state["poses"][cid.lower()])
@@ -395,10 +404,16 @@ class Oculus_droid(DeviceBase):
         robot_gripper = state_dict[6].item()  # Gripper state (scalar)
 
 
+
         if self.reset_origin[cid]:
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
             self.vr_origin[cid] = {"pos": self.vr_state[cid]["pos"], "quat": self.vr_state[cid]["quat"]}
             self.reset_origin[cid] = False
+        print("-------------------------")
+        print("vr origin", self.vr_origin[cid]["pos"])
+        print("robot origin", self.robot_origin[cid]["pos"])
+            print("-------------------------")
+            
 
         pos_action = (self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]) - (
             robot_pos - self.robot_origin[cid]["pos"]
@@ -412,12 +427,17 @@ class Oculus_droid(DeviceBase):
 
         gripper_action = (self.vr_state[cid]["gripper"] * 1.5) - robot_gripper
 
-        pos_action *= self.pos_action_gain
-        euler_action *= self.rot_action_gain
-        gripper_action *= self.gripper_action_gain
+        # pos_action *= self.pos_action_gain
+        # euler_action *= self.rot_action_gain
+        # gripper_action *= self.gripper_action_gain
+        print("------------------------")
+        print("pos_action", pos_action)
+        print("euler_action", euler_action)
+        print("gripper_action", gripper_action)
+        print("------------------------")
 
         lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
-        ipdb.set_trace()
+        # ipdb.set_trace()
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
 
     def advance(self, obs_dict):
@@ -431,8 +451,17 @@ class Oculus_droid(DeviceBase):
             np.zeros(3),  # delta_pose_base
         )
 
-        action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-        action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
+        if self._state["movement_enabled"]["L"]:
+            action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
+            print("action_l", action_l)
+        else:
+            action_l = np.zeros(7)
+
+        if self._state["movement_enabled"]["R"]:
+            action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
+            print("action_r", action_r)
+        else:
+            action_r = np.zeros(7)
         
         return (
         action_l[:6],  # pose_L
