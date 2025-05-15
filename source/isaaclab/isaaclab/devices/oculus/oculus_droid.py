@@ -385,6 +385,12 @@ class Oculus_droid(DeviceBase):
         lin_vel = lin_vel * min(1, self.max_lin_vel / (np.linalg.norm(lin_vel) + 1e-6))
         rot_vel = rot_vel * min(1, self.max_rot_vel / (np.linalg.norm(rot_vel) + 1e-6))
         gripper_vel = np.clip(gripper_vel, -self.max_gripper_vel, self.max_gripper_vel)
+
+        if gripper_vel > 1:
+            gripper_vel = 1
+        elif gripper_vel < 1:
+            gripper_vel = -1
+        print("gripper_vel", gripper_vel)
         return lin_vel, rot_vel, gripper_vel
 
     def _calculate_arm_action(self, cid, state_dict):
@@ -402,11 +408,6 @@ class Oculus_droid(DeviceBase):
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
             self.vr_origin[cid] = {"pos": self.vr_state[cid]["pos"], "quat": self.vr_state[cid]["quat"]}
             self.reset_origin[cid] = False
-        
-        print("-------------------------")
-        print("vr origin", self.vr_origin[cid]["pos"])
-        print("robot origin", self.robot_origin[cid]["pos"])
-        print("-------------------------")
 
         pos_action = (self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]) - (
             robot_pos - self.robot_origin[cid]["pos"]
@@ -419,15 +420,22 @@ class Oculus_droid(DeviceBase):
         euler_action = quat_to_euler(quat_action)
 
         gripper_action = (self.vr_state[cid]["gripper"] * 1.5) - robot_gripper
-
+        # if cid == "L":
+        #     print("robot_left_gripper", robot_gripper)
+        #     print("vr_left_gripper", self.vr_state[cid]["gripper"])
+        #     print("left_gripper_action", gripper_action)
+        # if cid == "R":
+        #     print("robot_right_gripper", robot_gripper)
+        #     print("vr_right_gripper", self.vr_state[cid]["gripper"])
+        #     print("right_gripper_action", gripper_action)
         # pos_action *= self.pos_action_gain
         # euler_action *= self.rot_action_gain
         # gripper_action *= self.gripper_action_gain
-        print("------------------------")
-        print("pos_action", pos_action)
-        print("euler_action", euler_action)
-        print("gripper_action", gripper_action)
-        print("------------------------")
+        # print("------------------------")
+        # print("pos_action", pos_action)
+        # print("euler_action", euler_action)
+        # print("gripper_action", gripper_action)
+        # print("------------------------")
 
         lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
         # ipdb.set_trace()
@@ -446,13 +454,13 @@ class Oculus_droid(DeviceBase):
 
         if self._state["movement_enabled"]["L"]:
             action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
-            print("action_l", action_l)
+            # print("action_l", action_l)
         else:
             action_l = np.zeros(7)
 
         if self._state["movement_enabled"]["R"]:
             action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            print("action_r", action_r)
+            # print("action_r", action_r)
         else:
             action_r = np.zeros(7)
         
