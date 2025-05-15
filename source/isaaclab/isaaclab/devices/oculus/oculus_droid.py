@@ -336,41 +336,36 @@ class Oculus_droid(DeviceBase):
         last_read_time = time.time()
         while True:
             time.sleep(1 / hz)
-            poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
-            # print("poses", poses)
-            print("buttons", buttons)
+            
+            # Read controler
             time_since_read = time.time() - last_read_time
-
-            if not poses:
-                continue  # Avoid updating with bad data
+            poses, buttons = self.oculus_reader.get_valid_transforms_and_buttons()
+            
+            if poses == {}:
+                continue
 
             for cid in ["R", "L"]:
                 self._state["controller_on"][cid] = time_since_read < num_wait_sec
 
-                if cid + "G" in buttons:
-                    toggled = self._state["movement_enabled"][cid] != buttons[cid + "G"]
-                    self.update_sensor[cid] = self.update_sensor[cid] or buttons[cid + "G"]
-                    self.reset_orientation[cid] = self.reset_orientation[cid] or buttons.get(cid + "J", False)
-                    self.reset_origin[cid] = self.reset_origin[cid] or toggled
-                    self._state["movement_enabled"][cid] = buttons[cid + "G"]
+                toggled = self._state["movement_enabled"][cid] != buttons[cid + "G"]
+                self.update_sensor[cid] = self.update_sensor[cid] or buttons[cid + "G"]
+                self.reset_orientation[cid] = self.reset_orientation[cid] or buttons.get(cid + "J", False)
+                self.reset_origin[cid] = self.reset_origin[cid] or toggled
+                
+                self._state["movement_enabled"][cid] = buttons[cid + "G"]
 
-                if cid.lower() in poses and self.reset_orientation[cid]:
+                stop_updating = buttons[cid + "J"] or self._state["movement_enabled"][cid]
+
+                if self.reset_orientation[cid]:
                     rot_mat = np.asarray(poses[cid.lower()])
+                    if stop_updating:
+                        self.reset_orientation[cid] = False
                     try:
                         rot_mat = np.linalg.inv(rot_mat)
                     except:
                         rot_mat = np.eye(4)
                         self.reset_orientation[cid] = True
                     self.vr_to_global_mat[cid] = rot_mat
-
-                    if buttons.get(cid + "J") or self._state["movement_enabled"][cid]:
-                        self.reset_orientation[cid] = False
-
-            # 💡 Reset both L and R origin on RJ press
-            if buttons.get("RJ"):
-                print("[INFO] RJ pressed — resetting both origins.")
-                self.reset_origin["L"] = True
-                self.reset_origin["R"] = True
 
             self._state["poses"] = poses
             self._state["buttons"] = buttons
@@ -403,17 +398,15 @@ class Oculus_droid(DeviceBase):
         robot_quat = euler_to_quat(robot_euler)  # Quaternion from Euler angles
         robot_gripper = state_dict[6].item()  # Gripper state (scalar)
 
-
-
         if self.reset_origin[cid]:
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
             self.vr_origin[cid] = {"pos": self.vr_state[cid]["pos"], "quat": self.vr_state[cid]["quat"]}
             self.reset_origin[cid] = False
+        
         print("-------------------------")
         print("vr origin", self.vr_origin[cid]["pos"])
         print("robot origin", self.robot_origin[cid]["pos"])
-            print("-------------------------")
-            
+        print("-------------------------")
 
         pos_action = (self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]) - (
             robot_pos - self.robot_origin[cid]["pos"]
