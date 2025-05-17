@@ -108,20 +108,20 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
                         pos=(0.0, 0.0, 0.1034),
                     ),
                 ),
-                FrameTransformerCfg.FrameCfg(
-                    prim_path="{ENV_REGEX_NS}/Robot/gripper1L",
-                    name="tool_leftfinger",
-                    offset=OffsetCfg(
-                        pos=(0.0, 0.0, 0.046),
-                    ),
-                ),
-                FrameTransformerCfg.FrameCfg(
-                    prim_path="{ENV_REGEX_NS}/Robot/gripper1R",
-                    name="tool_rightfinger",
-                    offset=OffsetCfg(
-                        pos=(0.0, 0.0, 0.046),
-                    ),
-                ),
+                # FrameTransformerCfg.FrameCfg(
+                #     prim_path="{ENV_REGEX_NS}/Robot/gripper1L",
+                #     name="tool_leftfinger",
+                #     offset=OffsetCfg(
+                #         pos=(0.0, 0.0, 0.046),
+                #     ),
+                # ),
+                # FrameTransformerCfg.FrameCfg(
+                #     prim_path="{ENV_REGEX_NS}/Robot/gripper1R",
+                #     name="tool_rightfinger",
+                #     offset=OffsetCfg(
+                #         pos=(0.0, 0.0, 0.046),
+                #     ),
+                # ),
             ],
         )
         self.scene.ee_L_frame = FrameTransformerCfg(
@@ -136,20 +136,20 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
                         pos=(0.0, 0.0, 0.1034),
                     ),
                 ),
-                FrameTransformerCfg.FrameCfg(
-                    prim_path="{ENV_REGEX_NS}/Robot/gripper2L",
-                    name="tool_leftfinger",
-                    offset=OffsetCfg(
-                        pos=(0.0, 0.0, 0.046),
-                    ),
-                ),
-                FrameTransformerCfg.FrameCfg(
-                    prim_path="{ENV_REGEX_NS}/Robot/gripper2R",
-                    name="tool_rightfinger",
-                    offset=OffsetCfg(
-                        pos=(0.0, 0.0, 0.046),
-                    ),
-                ),
+                # FrameTransformerCfg.FrameCfg(
+                #     prim_path="{ENV_REGEX_NS}/Robot/gripper2L",
+                #     name="tool_leftfinger",
+                #     offset=OffsetCfg(
+                #         pos=(0.0, 0.0, 0.046),
+                #     ),
+                # ),
+                # FrameTransformerCfg.FrameCfg(
+                #     prim_path="{ENV_REGEX_NS}/Robot/gripper2R",
+                #     name="tool_rightfinger",
+                #     offset=OffsetCfg(
+                #         pos=(0.0, 0.0, 0.046),
+                #     ),
+                # ),
             ],
         )
 

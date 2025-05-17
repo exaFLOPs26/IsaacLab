@@ -283,7 +283,7 @@ class Oculus_droid(DeviceBase):
         gripper_action_gain=3,
         rmat_reorder=[-2, -1, -3, 4],
         pos_sensitivity: float = 0.03, 
-        rot_sensitivity: float = 0.005, 
+        rot_sensitivity: float = 0.01, 
         base_sensitivity: float = 0.05
     ):
         self.oculus_reader = OculusReader()
@@ -421,7 +421,8 @@ class Oculus_droid(DeviceBase):
             quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"]),
             quat_diff(robot_quat, self.robot_origin[cid]["quat"]),
         )
-        euler_action = quat_to_euler(quat_action)
+        euler_action = Rotation.from_quat(quat_action).as_rotvec() 
+        
 
         # print("vr Right pos difference",(self.vr_state['R']["pos"] - self.vr_origin['R']["pos"]))
         # print("vr Right euler difference", quat_to_euler(quat_diff(self.vr_state['R']["quat"], self.vr_origin['R']["quat"])))
