@@ -386,11 +386,16 @@ class Oculus_droid(DeviceBase):
         rot_vel = rot_vel * min(1, self.max_rot_vel / (np.linalg.norm(rot_vel) + 1e-6))
         gripper_vel = np.clip(gripper_vel, -self.max_gripper_vel, self.max_gripper_vel)
 
+        # TODO: check if 1 is a threshold for gripper vel
+        print("-------------------------")
+        print("gripper_vel_before", gripper_vel)
         if gripper_vel > 1:
             gripper_vel = 1
         elif gripper_vel < 1:
             gripper_vel = -1
         print("gripper_vel", gripper_vel)
+        print("-------------------------")
+        
         return lin_vel, rot_vel, gripper_vel
 
     def _calculate_arm_action(self, cid, state_dict):
@@ -442,6 +447,10 @@ class Oculus_droid(DeviceBase):
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
 
     def advance(self, obs_dict):
+        
+        # TODO: the arm action is not working as expected
+            # 1. First, check if the vr signal is correct
+            # 2. Check if the robot in sim signal is aligned with the vr signal
 
         if self._state["poses"] == {}:
             return (
@@ -454,15 +463,27 @@ class Oculus_droid(DeviceBase):
 
         if self._state["movement_enabled"]["L"]:
             action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
-            # print("action_l", action_l)
         else:
             action_l = np.zeros(7)
 
         if self._state["movement_enabled"]["R"]:
             action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            # print("action_r", action_r)
         else:
             action_r = np.zeros(7)
+        
+        # TODO 1
+        print("vr pos difference",(self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]))
+        print("vr euler difference", quat_to_euler(quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"])))
+        
+        return (
+            np.zeros(6),  # pose_L
+            0.0,          # gripper_command_L
+            np.zeros(6),  # pose_R
+            0.0,          # gripper_command_R
+            np.zeros(3),  # delta_pose_base
+        )
+        
+        # TODO 2
         
         return (
         action_l[:6],  # pose_L

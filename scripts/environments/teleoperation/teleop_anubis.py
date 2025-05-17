@@ -61,7 +61,7 @@ def get_ee_state(env, ee_name, gripper_value=0.0):
         body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -2:]
     else:
         body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
-    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, 0.165] the real robot
+    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
     return torch.cat((pos, euler, gripper_dist.unsqueeze(0))).unsqueeze(0)
 
 def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
