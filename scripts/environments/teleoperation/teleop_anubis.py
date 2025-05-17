@@ -151,7 +151,7 @@ def main():
         args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
     )
     # modify configuration
-    # env_cfg.terminations.time_out = None
+    env_cfg.terminations.time_out = None
     if "Lift" in args_cli.task:
         # set the resampling time range to large number to avoid resampling
         env_cfg.commands.object_pose.resampling_time_range = (1.0e9, 1.0e9)
@@ -186,9 +186,7 @@ def main():
             pos_sensitivity=2.15 * args_cli.sensitivity, rot_sensitivity=1.0 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
         )
     elif args_cli.teleop_device.lower() == "oculus_droid":
-        teleop_interface = Oculus_droid(
-            pos_sensitivity=2.15 * args_cli.sensitivity, rot_sensitivity=1.0 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
-        ) 
+        teleop_interface = Oculus_droid() 
     elif args_cli.teleop_device.lower() == "spacemouse":
         teleop_interface = Se3SpaceMouse(
             pos_sensitivity=0.000001 * args_cli.sensitivity, rot_sensitivity=0.000001 * args_cli.sensitivity
@@ -255,7 +253,7 @@ def main():
             else: # Delta
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             # apply actions
-            # print("actions", actions)
+            print("actions", actions)
             env.step(actions)
 
             if should_reset_recording_instance:
