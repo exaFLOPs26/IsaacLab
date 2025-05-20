@@ -15,7 +15,7 @@ from isaaclab.app import AppLauncher
 # add argparse arguments
 parser = argparse.ArgumentPaser(description="Teleoperation for real2sim")
 parser.add_argument("--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations.")
-parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
+parser.add_argument("--num_envs", type=int, default=1024, help="Number of environments to simulate.")
 parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
 parser.add_argument("--task", type=str, default="Isaac-Real2sim-Direct-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
@@ -32,7 +32,6 @@ app_launcher = AppLauncher(app_launcher_args)
 simulation_app = app_launcher.app
 
 """Rest everything follows."""
-
 
 import gymnasium as gym
 import torch

@@ -73,9 +73,9 @@ def get_ee_state(env, ee_name, gripper_value=0.0):
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
 
-    euler = torch.from_numpy(
-        Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
-    ).to(dtype=rot.dtype, device=rot.device)
+    # euler = torch.from_numpy(
+    #     Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
+    # ).to(dtype=rot.dtype, device=rot.device)
     
     # Gripper
     if ee_name == "ee_L_frame":
@@ -83,7 +83,7 @@ def get_ee_state(env, ee_name, gripper_value=0.0):
     else:
         body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
     gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
-    return torch.cat((pos, euler, gripper_dist.unsqueeze(0))).unsqueeze(0)
+    return torch.cat((pos, rot, gripper_dist.unsqueeze(0))).unsqueeze(0)
 
 def pre_process_actions(
     teleop_data: tuple[np.ndarray, bool] | list[tuple[np.ndarray, np.ndarray, np.ndarray]], num_envs: int, device: str

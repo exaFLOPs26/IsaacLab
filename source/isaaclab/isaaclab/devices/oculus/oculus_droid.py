@@ -419,9 +419,10 @@ class Oculus_droid(DeviceBase):
         state_dict = state_dict[0]  # This gives you a 1D tensor with shape (7,)
 
         robot_pos = state_dict[:3].cpu().numpy()  # Position (x, y, z)
-        robot_euler = state_dict[3:6].cpu().numpy()  # Euler angles (roll, pitch, yaw)
-        robot_quat = euler_to_quat(robot_euler)  # Quaternion from Euler angles
-        robot_gripper = state_dict[6].item()  # Gripper state (scalar)
+        # robot_euler = state_dict[3:6].cpu().numpy()  # Euler angles (roll, pitch, yaw)
+        # robot_quat = euler_to_quat(robot_euler)  # Quaternion from Euler angles
+        robot_quat = state_dict[3:7].cpu().numpy()
+        robot_gripper = state_dict[7].item()  # Gripper state (scalar)
 
         if self.reset_origin[cid]:
             self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
@@ -442,7 +443,7 @@ class Oculus_droid(DeviceBase):
         # print("vr Right pos difference",(self.vr_state['R']["pos"] - self.vr_origin['R']["pos"]))
         # print("vr Right euler difference", quat_to_euler(quat_diff(self.vr_state['R']["quat"], self.vr_origin['R']["quat"])))
 
-        gripper_action = (self.vr_state[cid]["gripper"] * 1.7 ) + robot_gripper -0.036 # it was - robot_gripper before
+        gripper_action = ((1 - self.vr_state[cid]["gripper"]) * 1.7 ) + robot_gripper -0.036 # it was - robot_gripper before
         # if cid == "L":
         #     print("robot_left_gripper", robot_gripper)
         #     print("vr_left_gripper", self.vr_state[cid]["gripper"])
