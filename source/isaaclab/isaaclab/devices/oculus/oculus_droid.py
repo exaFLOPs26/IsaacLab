@@ -307,6 +307,8 @@ class Oculus_droid(DeviceBase):
 
         self.reset_orientation = {"R": True, "L": True}
         self.reset()
+        
+        self._additional_callbacks = dict()
 
         run_threaded_command(self._update_internal_state)
     def get_valid_transforms_and_buttons(self):
@@ -323,8 +325,7 @@ class Oculus_droid(DeviceBase):
         
             # Wait a bit before trying again (to avoid busy loop)
             time.sleep(0.1)  # Sleep for 100ms before retrying
-    def add_callback(self, callback):
-        print("Callback registered but not used in Oculus_droid")
+            
     def reset(self):
         print("Oculus_droid reset called")
         self._state = {
@@ -350,7 +351,17 @@ class Oculus_droid(DeviceBase):
             
             if poses == {}:
                 continue
-
+            
+            if buttons["B"]:
+                self._additional_callbacks['B']()
+            
+            if buttons["A"]:
+                time.sleep(1)
+                while not buttons["A"]:
+                    time.sleep(0.5)
+                time.sleep(1)
+                self._additional_callbacks['A']()
+            
             for cid in ["R", "L"]:
                 self._state["controller_on"][cid] = time_since_read < num_wait_sec
 
@@ -452,7 +463,12 @@ class Oculus_droid(DeviceBase):
         lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
         # ipdb.set_trace()
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
-
+    
+    def add_callback(self, button_name: str, func: Callable):
+        """Register fn() to be called whenever button_name is pressed."""
+        self._additional_callbacks[button_name] = func
+        print(f"Callback for {button_name} registered.")
+    
     def advance(self, obs_dict):
 
         if self._state["poses"] == {}:

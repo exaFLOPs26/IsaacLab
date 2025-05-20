@@ -54,7 +54,7 @@ import omni.log
 if "handtracking" in args_cli.teleop_device.lower():
     from isaacsim.xr.openxr import OpenXRSpec
 
-from isaaclab.devices import OpenXRDevice, Se3Gamepad, Se3Keyboard, Se3SpaceMouse, Oculus_droid, Se3Keyboard_BMM
+from isaaclab.devices import OpenXRDevice, Se3Gamepad, Se3Keyboard, Se3SpaceMouse, Oculus_droid, Se3Keyboard_BMM, PauseResetController
 
 if args_cli.enable_pinocchio:
     from isaaclab.devices.openxr.retargeters.humanoid.fourier.gr1t2_retargeter import GR1T2Retargeter
@@ -129,6 +129,50 @@ def pre_process_actions(
         gripper_vel[:] = -1 if gripper_command else 1
         # compute actions
         return torch.concat([delta_pose, gripper_vel], dim=1)
+
+from isaaclab.sim import SimulationContext                                    # correct import path 
+import omni.ui as ui                                                           # Omni UI
+import omni.appwindow as appwin                                               
+import carb.input                                                             
+from carb.input import KeyboardEventType, KeyboardInput                       
+
+class PauseResetController:
+    def __init__(self):
+        # SimulationContext singleton
+        self.sim = SimulationContext.instance()                                
+        self.paused = False
+        self.win = None
+
+        # Start sim synchronously
+        self.sim.reset()                                                       # initialize physics 
+        self.sim.play()                                                        # begin stepping 
+    
+    def _enter_pause(self):
+        # Pause the sim
+        self.sim.pause()                                                         # 
+        self.paused = True
+
+        # Create a simple, floating window (no flags needed)
+        self.win = ui.Window("Paused", width=300, height=100)                    
+        # Bring it to the front as a modal
+        self.win.set_top_modal()                                                 
+
+        # Populate the window
+        with self.win.frame:
+            with ui.VStack(spacing=10, alignment=ui.Alignment.CENTER):
+                ui.Label("Waiting for reset…", alignment=ui.Alignment.CENTER)
+                ui.Label("(Press A to reset)", alignment=ui.Alignment.CENTER)
+
+    def _do_reset(self):
+        # Hide overlay
+        if self.win:
+            self.win.visible = False
+            self.win = None
+
+        # Reset & resume
+        self.sim.reset()                                                         # 
+        self.sim.play()                                                          # 
+        self.paused = False
 
 
 def main():
@@ -213,6 +257,10 @@ def main():
         )
     elif args_cli.teleop_device.lower() == "oculus_droid":
         teleop_interface = Oculus_droid()
+        pause_reset = PauseResetController()
+        teleop_interface.add_callback("B", pause_reset._enter_pause)
+        teleop_interface.add_callback("A", pause_reset._do_reset)
+        
     elif "dualhandtracking_abs" in args_cli.teleop_device.lower() and "GR1T2" in args_cli.task:
         # Create GR1T2 retargeter with desired configuration
         gr1t2_retargeter = GR1T2Retargeter(
@@ -252,9 +300,6 @@ def main():
             env_cfg.xr,
             retargeters=[retargeter_device, grip_retargeter],
         )
-        teleop_interface.add_callback("RESET", reset_recording_instance)
-        teleop_interface.add_callback("START", start_teleoperation)
-        teleop_interface.add_callback("STOP", stop_teleoperation)
 
         # Hand tracking needs explicit start gesture to activate
         teleoperation_active = False
@@ -272,7 +317,8 @@ def main():
     # reset environment
     env.reset()
     teleop_interface.reset()
-
+    
+    
     # simulate environment
     while simulation_app.is_running():
         # run everything in inference mode
