@@ -479,19 +479,6 @@ class Oculus_droid(DeviceBase):
         else:
             action_r = np.zeros(7)
         
-        # # TODO 1
-        # print("action_r", action_r)
-        
-        # return (
-        #     np.zeros(6),  # pose_L
-        #     0.0,          # gripper_command_L
-        #     np.zeros(6),  # pose_R
-        #     0.0,          # gripper_command_R
-        #     np.zeros(3),  # delta_pose_base
-        # )
-        
-        # TODO 2
-        
         return (
         action_l[:6],  # pose_L
         action_l[6],   # gripper_command_L
