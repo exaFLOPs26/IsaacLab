@@ -1,6 +1,6 @@
 # Copyright (c) 2022-2025, The Isaac Lab Project Developers.
 # All rights reserved.
-#
+# LIVESTREAM=2 ./isaaclab.sh -p scripts/environments/teleoperation/teleop_se3_agent.py --task Isaac-Lift-Cube-Franka-IK-Rel-v0 --teleop_device oculus_droid
 # SPDX-License-Identifier: BSD-3-Clause
 
 """Script to run a keyboard teleoperation with Isaac Lab manipulation environments."""
@@ -54,7 +54,7 @@ import omni.log
 if "handtracking" in args_cli.teleop_device.lower():
     from isaacsim.xr.openxr import OpenXRSpec
 
-from isaaclab.devices import OpenXRDevice, Se3Gamepad, Se3Keyboard, Se3SpaceMouse
+from isaaclab.devices import OpenXRDevice, Se3Gamepad, Se3Keyboard, Se3SpaceMouse, Oculus_droid, Se3Keyboard_BMM
 
 if args_cli.enable_pinocchio:
     from isaaclab.devices.openxr.retargeters.humanoid.fourier.gr1t2_retargeter import GR1T2Retargeter
@@ -65,7 +65,25 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
+from scipy.spatial.transform import Rotation
 
+def get_ee_state(env, ee_name, gripper_value=0.0):
+    # arm
+    ee = env.scene[ee_name].data
+    pos = ee.target_pos_source[0, 0]
+    rot = ee.target_quat_source[0, 0]
+
+    euler = torch.from_numpy(
+        Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
+    ).to(dtype=rot.dtype, device=rot.device)
+    
+    # Gripper
+    if ee_name == "ee_L_frame":
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -2:]
+    else:
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
+    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
+    return torch.cat((pos, euler, gripper_dist.unsqueeze(0))).unsqueeze(0)
 
 def pre_process_actions(
     teleop_data: tuple[np.ndarray, bool] | list[tuple[np.ndarray, np.ndarray, np.ndarray]], num_envs: int, device: str
@@ -193,6 +211,8 @@ def main():
         teleop_interface = Se3Gamepad(
             pos_sensitivity=0.1 * args_cli.sensitivity, rot_sensitivity=0.1 * args_cli.sensitivity
         )
+    elif args_cli.teleop_device.lower() == "oculus_droid":
+        teleop_interface = Oculus_droid()
     elif "dualhandtracking_abs" in args_cli.teleop_device.lower() and "GR1T2" in args_cli.task:
         # Create GR1T2 retargeter with desired configuration
         gr1t2_retargeter = GR1T2Retargeter(
@@ -243,10 +263,11 @@ def main():
             f"Invalid device interface '{args_cli.teleop_device}'. Supported: 'keyboard', 'spacemouse', 'gamepad',"
             " 'handtracking', 'handtracking_abs'."
         )
+    teleop_interface2 = Se3Keyboard_BMM(
+            pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.01 * args_cli.sensitivity
+        )
 
-    # add teleoperation key for env reset (for all devices)
-    teleop_interface.add_callback("R", reset_recording_instance)
-    print(teleop_interface)
+    teleop_interface2.add_callback("R", reset_recording_instance)
 
     # reset environment
     env.reset()
@@ -256,9 +277,17 @@ def main():
     while simulation_app.is_running():
         # run everything in inference mode
         with torch.inference_mode():
-            # get device command
-            teleop_data = teleop_interface.advance()
 
+            if args_cli.teleop_device.lower() == "oculus_droid":
+                # Right arm
+                ee_r_state = get_ee_state(env, "ee_frame", gripper_value=0.0)
+
+                obs_dict = {"left_arm": 0 , "right_arm": ee_r_state}
+                teleop_data = teleop_interface.advance_onearm(obs_dict)
+                print("teleop_data", teleop_data)
+            else:
+                teleop_data = teleop_interface.advance()
+                
             # Only apply teleop commands when active
             if teleoperation_active:
                 # compute actions based on environment

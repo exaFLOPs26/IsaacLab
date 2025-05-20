@@ -240,6 +240,7 @@ class OculusReader:
             return self.last_transforms, self.last_buttons
     
     def get_valid_transforms_and_buttons(self):
+        i=0
         while True:
             transforms, buttons = self.get_transformations_and_buttons()
         
@@ -250,7 +251,10 @@ class OculusReader:
         
             # Optionally log or print when data isn't available
             print("Waiting for valid transforms...")
-        
+            i+=1
+            if i == 300:
+                eprint("No valid transforms received after 20 seconds. Please check the connection.")
+                sys.exit(1)
             # Wait a bit before trying again (to avoid busy loop)
             time.sleep(0.1)  # Sleep for 100ms before retrying
     
@@ -450,10 +454,6 @@ class Oculus_droid(DeviceBase):
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
 
     def advance(self, obs_dict):
-        
-        # TODO: the arm action is not working as expected
-            # 1. First, check if the vr signal is correct
-            # 2. Check if the robot in sim signal is aligned with the vr signal
 
         if self._state["poses"] == {}:
             return (
@@ -486,6 +486,27 @@ class Oculus_droid(DeviceBase):
         action_r[6],   # gripper_command_R
         np.zeros(3),   # delta_pose_base
         )    
+
+    def advance_onearm(self, obs_dict):
+
+        if self._state["poses"] == {}:
+            return (
+            np.zeros(6),  # pose_R
+            0.0,          # gripper_command_R
+        )
+
+        if self._state["movement_enabled"]["R"]:
+            action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
+            action_r[:3] *= self.pos_sensitivity
+            action_r[3:6] *= self.rot_sensitivity
+            action_r[6] *= 1.0
+        else:
+            action_r = np.zeros(7)
+        
+        return (
+        action_r[:6],  # pose_R
+        action_r[6],   # gripper_command_R
+        ) 
 
     def get_info(self):
         return {
