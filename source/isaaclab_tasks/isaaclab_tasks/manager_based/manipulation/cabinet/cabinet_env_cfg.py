@@ -177,6 +177,19 @@ class EventCfg:
         },
     )
 
+
+    robot_joint_stiffness_and_damping = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+            "stiffness_distribution_params": (1.0, 1e5),
+            "damping_distribution_params": (1.0, 1e5),
+            "operation": "abs",
+            "distribution": "uniform",
+        },
+    )
+
     cabinet_physics_material = EventTerm(
         func=mdp.randomize_rigid_body_material,
         mode="startup",

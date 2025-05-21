@@ -3,7 +3,8 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-from isaaclab_assets.robots.anubis import ANUBIS_PD_CFG
+from isaaclab_assets.robots.anubis import ANUBIS_CFG
+from isaaclab_assets.robots.franka import FRANKA_PANDA_CFG
 
 from isaaclab.assets import ArticulationCfg
 from isaaclab.envs import DirectRLEnvCfg
@@ -11,6 +12,31 @@ from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.sim import SimulationCfg
 from isaaclab.utils import configclass
 
+@configclass
+class EventCfg:
+  robot_joint_stiffness_and_damping = EventTerm(
+      func=mdp.randomize_actuator_gains,
+      mode="reset",
+      params={
+          "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint.*"),
+          "stiffness_distribution_params": (1.0, 1e5),
+          "damping_distribution_params": (1.0, 1e5),
+          "operation": "abs",
+          "distribution": "uniform",
+      },
+  )
+  gripper_joint_stiffness_and_damping = EventTerm(
+      func=mdp.randomize_actuator_gains,
+      mode="reset",
+      params={
+          "asset_cfg": SceneEntityCfg("robot", joint_names="panda_finger_joint.*"),
+          "stiffness_distribution_params": (1.0, 1e4),
+          "damping_distribution_params": (1.0, 1e4),
+          "operation": "abs",
+          "distribution": "uniform",
+      },
+  )
+  
 
 @configclass
 class Real2simEnvCfg(DirectRLEnvCfg):
@@ -19,7 +45,15 @@ class Real2simEnvCfg(DirectRLEnvCfg):
     episode_length_s = 5.0
     # - spaces definition
     
-    action_space = 17
+    action_space = 7 # 17 for anubis
+    # +------------------------------------+
+    # |   Active Action Terms (shape: 7)   |
+    # +-------+----------------+-----------+
+    # | Index | Name           | Dimension |
+    # +-------+----------------+-----------+
+    # |   0   | arm_action     |         6 |
+    # |   1   | gripper_action |         1 |
+    # +-------+----------------+-----------+  For Franka
     #+-------------------------------------+
     #|   Active Action Terms (shape: 17)   |
     #+-------+-----------------+-----------+
@@ -30,9 +64,22 @@ class Real2simEnvCfg(DirectRLEnvCfg):
     #|   2   | gripperL_action |         1 |
     #|   3   | gripperR_action |         1 |
     #|   4   | base_action     |         3 |
-    #+-------+-----------------+-----------+
+    #+-------+-----------------+-----------+  For anubis
     
-    observation_space = 55
+    observation_space = 30 # 55 for anubis
+    
+    # +-----------------------------------------------------------+
+    # | Active Observation Terms in Group: 'policy' (shape: (30,)) |
+    # +----------+-------------------------------------+----------+
+    # |  Index   | Name                                |  Shape   |
+    # +----------+-------------------------------------+----------+
+    # |    0     | joint_pos                           |   (9,)   |
+    # |    1     | joint_vel                           |   (9,)   |
+    # |    2     | cabinet_joint_pos                   |   (1,)   |
+    # |    3     | cabinet_joint_vel                   |   (1,)   |
+    # |    4     | rel_ee_drawer_distance              |   (3,)   |
+    # |    5     | actions                             |   (7,)   |
+    # +----------+-------------------------------------+----------+  For Franka
 
     #+-----------------------------------------------------+
     #| Active Observation Terms in Group: 'policy' (shape: (55,)) |
@@ -42,24 +89,34 @@ class Real2simEnvCfg(DirectRLEnvCfg):
     #|      0       | joint_pos             |    (19,)     |
     #|      1       | joint_vel             |    (19,)     |
     #|      2       | actions               |    (17,)     |
-    #+--------------+-----------------------+--------------+
+    #+--------------+-----------------------+--------------+  For anubis
             
-    state_space = 55
+    state_space = 30
 
     # simulation
     # [TODO] Match dt with the real robot
     sim: SimulationCfg = SimulationCfg(dt=1 / 120, render_interval=decimation)
 
     # robot(s)
-    robot_cfg: ArticulationCfg = ANUBIS_PD_CFG.replace(prim_path="/World/envs/env_.*/Robot")
+    # robot_cfg: ArticulationCfg = ANUBIS_PD_CFG.replace(prim_path="/World/envs/env_.*/Robot")
+    robot_cfg: ArticulationCfg = FRANKA_PANDA_CFG.replace(prim_path="/World/envs/env_.*/Robot")
 
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=16, env_spacing=3.0, replicate_physics=False)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=2.0, replicate_physics=False)
 
-    # custom parameters/scales
+    # events
+    events: EventCfg = EventCfg()
+    
     # - controllable joint
-    cart_dof_name = "slider_to_cart"
-    pole_dof_name = "cart_to_pole"
+    panda_joint1 = "panda_joint1"
+    panda_joint2 = "panda_joint2"
+    panda_joint3 = "panda_joint3"
+    panda_joint4 = "panda_joint4"
+    panda_joint5 = "panda_joint5"
+    panda_joint6 = "panda_joint6"
+    panda_joint7 = "panda_joint7"
+    panda_finger_joint1 = "panda_finger_joint1"
+    panda_finger_joint2 = "panda_finger_joint2"
     
     # TODO Is this 1 correct?
     # - action scale

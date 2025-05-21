@@ -286,9 +286,6 @@ class Oculus_droid(DeviceBase):
         rot_action_gain=2,
         gripper_action_gain=3,
         rmat_reorder=[-2, -1, -3, 4],
-        pos_sensitivity: float = 0.03, 
-        rot_sensitivity: float = 0.01, 
-        base_sensitivity: float = 0.05
     ):
         self.oculus_reader = OculusReader()
         self.vr_to_global_mat = {"R": np.eye(4), "L": np.eye(4)}
@@ -342,6 +339,7 @@ class Oculus_droid(DeviceBase):
 
     def _update_internal_state(self, num_wait_sec=5, hz=50):
         last_read_time = time.time()
+        stage = 0 
         while True:
             time.sleep(1 / hz)
             
@@ -353,7 +351,8 @@ class Oculus_droid(DeviceBase):
                 continue
             
             if buttons["B"]:
-                self._additional_callbacks['B']()
+                stage += 1
+                self._additional_callbacks['B'](stage)
             
             if buttons["A"]:
                 time.sleep(1)
@@ -482,8 +481,8 @@ class Oculus_droid(DeviceBase):
         )
         if self._state["movement_enabled"]["L"]:
             action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
-            action_l[:3] *= self.pos_sensitivity   
-            action_l[3:6] *= self.rot_sensitivity 
+            action_l[:3] *= self.pos_action_gain
+            action_l[3:6] *= self.rot_action_gain
             action_l[6] *= 1.0       
         else:
             action_l = np.zeros(7)

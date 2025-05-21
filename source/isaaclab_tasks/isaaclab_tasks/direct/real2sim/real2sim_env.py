@@ -17,45 +17,10 @@ from isaaclab.utils.math import sample_uniform
 
 from .real2sim_env_cfg import Real2simEnvCfg
 
-@configclass
-class EventCfg:
-  robot_physics_material = EventTerm(
-      func=mdp.randomize_rigid_body_material,
-      mode="reset",
-      params={
-          "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
-          "static_friction_range": (0.7, 1.3),
-          "dynamic_friction_range": (1.0, 1.0),
-          "restitution_range": (1.0, 1.0),
-          "num_buckets": 250,
-      },
-  )
-  robot_joint_stiffness_and_damping = EventTerm(
-      func=mdp.randomize_actuator_gains,
-      mode="reset",
-      params={
-          "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
-          "stiffness_distribution_params": (0.75, 1.5),
-          "damping_distribution_params": (0.3, 3.0),
-          "operation": "scale",
-          "distribution": "log_uniform",
-      },
-  )
-  reset_gravity = EventTerm(
-      func=mdp.randomize_physics_scene_gravity,
-      mode="interval",
-      is_global_time=True,
-      interval_range_s=(36.0, 36.0),  # time_s = num_steps * (decimation * dt)
-      params={
-          "gravity_distribution_params": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.4]),
-          "operation": "add",
-          "distribution": "gaussian",
-      },
-  )
 
 class Real2simEnv(DirectRLEnv):
     cfg: Real2simEnvCfg
-    events: EventCfg = EventCfg()
+    
     def __init__(self, cfg: Real2simEnvCfg, render_mode: str | None = None, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
 
