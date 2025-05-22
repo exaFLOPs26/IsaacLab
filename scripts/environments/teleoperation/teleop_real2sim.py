@@ -13,12 +13,12 @@ import os
 from isaaclab.app import AppLauncher
 
 # add argparse arguments
-parser = argparse.ArgumentPaser(description="Teleoperation for real2sim")
+parser = argparse.ArgumentParser(description="Teleoperation for real2sim")
 
 parser.add_argument("--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations.")
-parser.add_argument("--num_envs", type=int, default=1024, help="Number of environments to simulate.")
+parser.add_argument("--num_envs", type=int, default=16, help="Number of environments to simulate.")
 parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
-parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+parser.add_argument("--task", type=str, default="Isaac-Real2Sim-Franka-IK-Rel-v0", help="Name of the task.")
 
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
@@ -37,7 +37,7 @@ import gymnasium as gym
 import torch
 import ipdb
 import omni.log
-
+import numpy as np
 from isaaclab.devices import Oculus_droid, Se3Keyboard_BMM
 from isaaclab.envs import ViewerCfg
 from isaaclab.envs.ui import ViewportCameraController
@@ -53,13 +53,13 @@ import omni.ui as ui
 import carb.input                                                             
 from carb.input import KeyboardEventType, KeyboardInput                       
 
-class PauseResetController(stage):
+class PauseResetController():
     def __init__(self):
         # SimulationContext singleton
         self.sim = SimulationContext.instance()                                
         self.paused = False
         self.win = None
-        self.stage = stage
+        self.stage = 0
 
         # Start sim synchronously
         self.sim.reset()                                                      
@@ -78,12 +78,11 @@ class PauseResetController(stage):
         # Populate the window
         with self.win.frame:
             with ui.VStack(spacing=10, alignment=ui.Alignment.CENTER):
-                
-                if self.stage % 2 == 1:
+                if self.stage % 2 == 0:
                     ui.Label("Stage 1: Arm movement", alignment=ui.Alignment.CENTER)
                     ui.Label("(Press A to reset)", alignment=ui.Alignment.CENTER)
                     
-                elif self.stage % 2 == 0:
+                elif self.stage % 2 == 1:
                     ui.Label("Stage 2: Gripper", alignment=ui.Alignment.CENTER)
                     ui.Label("(Press A to reset)", alignment=ui.Alignment.CENTER)
                     
@@ -98,6 +97,7 @@ class PauseResetController(stage):
         self.sim.reset()                                                         
         self.sim.play()                                                          
         self.paused = False
+        stage += 1
 
 # Get the simulation state of the end effector
 def get_ee_state(env, ee_name):
@@ -163,16 +163,14 @@ def main():
         args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
     )
     
-    #[TODO] check it is necessary
-    modify configuration
+    # modify configuration
     env_cfg.terminations.time_out = None
     
     # create environment
     env = gym.make(args_cli.task, cfg=env_cfg).unwrapped
-    stage = 0
     if args_cli.teleop_device.lower() == "oculus_droid":
         teleop_interface = Oculus_droid()
-        pause_reset = PauseResetController(stage)
+        pause_reset = PauseResetController()
         teleop_interface.add_callback("B", pause_reset._enter_pause)
         teleop_interface.add_callback("A", pause_reset._do_reset)
         

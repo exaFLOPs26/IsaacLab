@@ -84,7 +84,7 @@ def real2ruin(
     # For one arm
     sim_ee_r_state = get_ee_state(env, "ee_frame", gripper_value=0.0)
     real_ee_r_state = start_receiver()["cartesian_position"]
-    real_ee_r_state =  = real_ee_r_state[:3] + R.from_euler('xyz', real_ee_r_state[3:]).as_rotvec().tolist()
+    real_ee_r_state = real_ee_r_state[:3] + R.from_euler('xyz', real_ee_r_state[3:]).as_rotvec().tolist()
     
     # Convert to arrays
     sim_ee_r_state = np.array(sim_ee_r_state)
@@ -103,8 +103,8 @@ def real2ruin(
     # Angle of relative rotation (in radians)
     rot_error = rot_diff.magnitude()
     
-    if pos_error > 0.05 or rot_error > 0.1:
-        return True
+    return ((pos_error > thres_pos) or (rot_error > thres_rot))
+
     
 
 def command_resample(env: ManagerBasedRLEnv, command_name: str, num_resamples: int = 1) -> torch.Tensor:

@@ -211,7 +211,7 @@ class EventCfg:
 
     reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
 
-    reset_robot_joints = EventTerm(
+    reset_robot_joint1 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -221,7 +221,7 @@ class EventCfg:
         },
     )
     
-    reset_robot_joints = EventTerm(
+    reset_robot_joint2 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -230,7 +230,7 @@ class EventCfg:
             "velocity_range": (0.0, 0.0),
         },
     )
-    reset_robot_joints = EventTerm(
+    reset_robot_joint3 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -239,7 +239,7 @@ class EventCfg:
             "velocity_range": (0.0, 0.0),
         },
     )
-    reset_robot_joints = EventTerm(
+    reset_robot_joint4 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -248,7 +248,7 @@ class EventCfg:
             "velocity_range": (0.0, 0.0),
         },
     )
-    reset_robot_joints = EventTerm(
+    reset_robot_joint5 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -257,7 +257,7 @@ class EventCfg:
             "velocity_range": (0.0, 0.0),
         },
     )
-    reset_robot_joints = EventTerm(
+    reset_robot_joint6 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -266,7 +266,7 @@ class EventCfg:
             "velocity_range": (0.0, 0.0),
         },
     )
-    reset_robot_joints = EventTerm(
+    reset_robot_joiny7 = EventTerm(
         func=mdp.reset_initial_joint,
         mode="reset",
         params={
@@ -321,15 +321,16 @@ class RewardsCfg:
 @configclass
 class TerminationsCfg:
     """Termination terms for the MDP."""
-
-    time_out = DoneTerm(func=mdp.time_out, time_out=True)
-
     real2ruin = DoneTerm(
         func=mdp.real2ruin, 
         params={
             "thres_pos": 0.05,
             "thres_rot": 0.1,
             })
+    
+    time_out = DoneTerm(func=mdp.time_out, time_out=True)
+
+
 
 ##
 # Environment configuration
