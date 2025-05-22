@@ -1,8 +1,4 @@
-# Copyright (c) 2022-2025, The Isaac Lab Project Developers.
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
+# TODO: Terminate if sim is far from real
 
 from dataclasses import MISSING
 
@@ -164,9 +160,10 @@ class ObservationsCfg:
 @configclass
 class EventCfg:
     """Configuration for events."""
+    
     robot_physics_material = EventTerm(
         func=mdp.randomize_rigid_body_material,
-        mode="startup",
+        mode="reset",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
             "static_friction_range": (0.8, 1.25),
@@ -175,15 +172,26 @@ class EventCfg:
             "num_buckets": 16,
         },
     )
-
-
-    robot_joint_stiffness_and_damping = EventTerm(
+    
+     robot_joint_stiffness_and_damping = EventTerm(
         func=mdp.randomize_actuator_gains,
         mode="reset",
         params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint.*"),
             "stiffness_distribution_params": (1.0, 1e5),
             "damping_distribution_params": (1.0, 1e5),
+            "operation": "abs",
+            "distribution": "uniform",
+        },
+    )
+    
+    gripper_joint_stiffness_and_damping = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_finger_joint.*"),
+            "stiffness_distribution_params": (1.0, 1e4),
+            "damping_distribution_params": (1.0, 1e4),
             "operation": "abs",
             "distribution": "uniform",
         },
@@ -204,13 +212,72 @@ class EventCfg:
     reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
 
     reset_robot_joints = EventTerm(
-        func=mdp.reset_joints_by_offset,
+        func=mdp.reset_initial_joint,
         mode="reset",
         params={
-            "position_range": (-0.1, 0.1),
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint1"),
+            "position_range": (0.0, 0.0),
             "velocity_range": (0.0, 0.0),
         },
     )
+    
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint2"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint3"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint4"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint5"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint6"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    reset_robot_joints = EventTerm(
+        func=mdp.reset_initial_joint,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint7"),
+            "position_range": (0.0, 0.0),
+            "velocity_range": (0.0, 0.0),
+        },
+    )
+    
+    # TODO gripper joints
+
 
 
 @configclass
@@ -257,6 +324,12 @@ class TerminationsCfg:
 
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
 
+    real2ruin = DoneTerm(
+        func=mdp.real2ruin, 
+        params={
+            "thres_pos": 0.05,
+            "thres_rot": 0.1,
+            })
 
 ##
 # Environment configuration

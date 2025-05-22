@@ -17,6 +17,9 @@ from isaaclab.utils.math import sample_uniform
 
 from .real2sim_env_cfg import Real2simEnvCfg
 
+import socket
+import json
+
 
 class Real2simEnv(DirectRLEnv):
     cfg: Real2simEnvCfg
@@ -29,6 +32,20 @@ class Real2simEnv(DirectRLEnv):
 
         self.joint_pos = self.robot.data.joint_pos
         self.joint_vel = self.robot.data.joint_vel
+        
+        HOST = 'localhost'  # or '' to listen on all interfaces
+        PORT = 9999
+
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind((HOST, PORT))
+        server.listen(1)
+        print("Waiting for real teleop to connect...")
+
+        conn, addr = server.accept()
+        print(f"Connected by {addr}")
+
+        buffer = ""
+        
 
     def _setup_scene(self):
         self.robot = Articulation(self.cfg.robot_cfg)
@@ -90,7 +107,24 @@ class Real2simEnv(DirectRLEnv):
             env_ids = self.robot._ALL_INDICES
         super()._reset_idx(env_ids)
 
+        # reset the robot
+        data = conn.recv(1024).decode('utf-8')
+        if not data:
+            break
+        buffer += data
+        while '\n' in buffer:
+            line, buffer = buffer.split('\n', 1)
+            try:
+                realrobot = json.loads(line)
+                # Do something with the message
+                print("Received:", realrobot)
+            except json.JSONDecodeError:
+                print("Failed to parse:", line)
+        
+        initial_joint_pos = realrobot["joint_positions"]
+        
         joint_pos = self.robot.data.default_joint_pos[env_ids]
+        
         joint_pos[:, self._pole_dof_idx] += sample_uniform(
             self.cfg.initial_pole_angle_range[0] * math.pi,
             self.cfg.initial_pole_angle_range[1] * math.pi,

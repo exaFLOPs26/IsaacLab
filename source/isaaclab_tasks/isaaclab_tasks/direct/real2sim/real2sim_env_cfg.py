@@ -14,7 +14,7 @@ from isaaclab.utils import configclass
 
 @configclass
 class EventCfg:
-  robot_joint_stiffness_and_damping = EventTerm(
+    robot_initial_joint = EventTerm(
       func=mdp.randomize_actuator_gains,
       mode="reset",
       params={
@@ -25,18 +25,29 @@ class EventCfg:
           "distribution": "uniform",
       },
   )
-  gripper_joint_stiffness_and_damping = EventTerm(
-      func=mdp.randomize_actuator_gains,
-      mode="reset",
-      params={
-          "asset_cfg": SceneEntityCfg("robot", joint_names="panda_finger_joint.*"),
-          "stiffness_distribution_params": (1.0, 1e4),
-          "damping_distribution_params": (1.0, 1e4),
-          "operation": "abs",
-          "distribution": "uniform",
-      },
-  )
-  
+    robot_joint_stiffness_and_damping = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_joint.*"),
+            "stiffness_distribution_params": (1.0, 1e5),
+            "damping_distribution_params": (1.0, 1e5),
+            "operation": "abs",
+            "distribution": "uniform",
+        },
+    )
+    gripper_joint_stiffness_and_damping = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names="panda_finger_joint.*"),
+            "stiffness_distribution_params": (1.0, 1e4),
+            "damping_distribution_params": (1.0, 1e4),
+            "operation": "abs",
+            "distribution": "uniform",
+        },
+    )
+    
 
 @configclass
 class Real2simEnvCfg(DirectRLEnvCfg):
@@ -100,7 +111,7 @@ class Real2simEnvCfg(DirectRLEnvCfg):
     # robot(s)
     # robot_cfg: ArticulationCfg = ANUBIS_PD_CFG.replace(prim_path="/World/envs/env_.*/Robot")
     robot_cfg: ArticulationCfg = FRANKA_PANDA_CFG.replace(prim_path="/World/envs/env_.*/Robot")
-
+    
     # scene
     scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=2.0, replicate_physics=False)
 

@@ -18,7 +18,7 @@ parser = argparse.ArgumentPaser(description="Teleoperation for real2sim")
 parser.add_argument("--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations.")
 parser.add_argument("--num_envs", type=int, default=1024, help="Number of environments to simulate.")
 parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
-parser.add_argument("--task", type=str, default="Isaac-Real2sim-Direct-v0", help="Name of the task.")
+parser.add_argument("--task", type=str, default=None, help="Name of the task.")
 
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
@@ -100,7 +100,7 @@ class PauseResetController(stage):
         self.paused = False
 
 # Get the simulation state of the end effector
-def get_ee_state(env, ee_name, gripper_value=0.0):
+def get_ee_state(env, ee_name):
     # arm
     ee = env.scene[ee_name].data
     pos = ee.target_pos_source[0, 0]
@@ -210,7 +210,7 @@ def main():
             # single arm teleop
             if args_cli.teleop_device.lower() == "oculus_droid": 
                 # Right arm
-                ee_r_state = get_ee_state(env, "ee_frame", gripper_value=0.0)
+                ee_r_state = get_ee_state(env, "ee_frame")
 
                 obs_dict = {"left_arm": 0 , "right_arm": ee_r_state}
                 teleop_data = teleop_interface.advance_onearm(obs_dict)
@@ -218,8 +218,8 @@ def main():
               
             # Bimanual teleop  
             else:
-                ee_l_state = get_ee_state(env, "ee_L_frame", gripper_value=0.0)
-                ee_r_state = get_ee_state(env, "ee_R_frame", gripper_value=0.0)
+                ee_l_state = get_ee_state(env, "ee_L_frame")
+                ee_r_state = get_ee_state(env, "ee_R_frame")
 
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
 

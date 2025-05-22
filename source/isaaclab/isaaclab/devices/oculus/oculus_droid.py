@@ -358,7 +358,7 @@ class Oculus_droid(DeviceBase):
                 time.sleep(1)
                 while not buttons["A"]:
                     time.sleep(0.5)
-                time.sleep(1)
+                time.sleep()
                 self._additional_callbacks['A']()
             
             for cid in ["R", "L"]:
