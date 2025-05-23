@@ -50,21 +50,21 @@ FRANKA_PANDA_CFG = ArticulationCfg(
     actuators={
         "panda_shoulder": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[1-4]"],
-            effort_limit_sim=87.0,
-            velocity_limit_sim=2.175,
+            effort_limit_sim=1e5, # 87.0
+            velocity_limit_sim=1e5, # 2.175
             stiffness=80.0,
             damping=4.0,
         ),
         "panda_forearm": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[5-7]"],
-            effort_limit_sim=12.0,
-            velocity_limit_sim=2.61,
+            effort_limit_sim=1e5,  # 12.0
+            velocity_limit_sim=1e5, # 2.61
             stiffness=80.0,
             damping=4.0,
         ),
         "panda_hand": ImplicitActuatorCfg(
             joint_names_expr=["panda_finger_joint.*"],
-            effort_limit_sim=200.0,
+            effort_limit_sim=200.0, 
             velocity_limit_sim=0.2,
             stiffness=2e3,
             damping=1e2,
@@ -76,7 +76,7 @@ FRANKA_PANDA_CFG = ArticulationCfg(
 
 
 FRANKA_PANDA_HIGH_PD_CFG = FRANKA_PANDA_CFG.copy()
-# FRANKA_PANDA_HIGH_PD_CFG.spawn.rigid_props.disable_gravity = True
+FRANKA_PANDA_HIGH_PD_CFG.spawn.rigid_props.disable_gravity = True
 FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].stiffness = 100000.0 # 400.0
 FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].damping = 100.0 # 80.0
 FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].stiffness = 100000.0 # 400.0

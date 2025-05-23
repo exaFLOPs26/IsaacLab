@@ -129,6 +129,18 @@ class EventCfg:
             "asset_cfg": SceneEntityCfg("object", body_names="Object"),
         },
     )
+    
+    robot_joint_stiffness_and_damping = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+            "stiffness_distribution_params": (1.0, 1e5),
+            "damping_distribution_params": (1.0, 1e5),
+            "operation": "abs",
+            "distribution": "uniform",
+        },
+    )
 
 
 @configclass
@@ -170,6 +182,7 @@ class TerminationsCfg:
     object_dropping = DoneTerm(
         func=mdp.root_height_below_minimum, params={"minimum_height": -0.05, "asset_cfg": SceneEntityCfg("object")}
     )
+    # TODO: Get the best if time 15 and did not get killed
 
 
 @configclass
