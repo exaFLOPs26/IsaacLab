@@ -282,9 +282,9 @@ class Oculus_droid(DeviceBase):
         max_rot_vel=1,
         max_gripper_vel=1,
         spatial_coeff=1,
-        pos_action_gain=5,
-        rot_action_gain=2,
-        gripper_action_gain=3,
+        pos_action_gain=0.05,
+        rot_action_gain=0.002,
+        gripper_action_gain=0.03,
         rmat_reorder=[-2, -1, -3, 4],
     ):
         self.oculus_reader = OculusReader()
@@ -298,9 +298,7 @@ class Oculus_droid(DeviceBase):
         self.pos_action_gain = pos_action_gain
         self.rot_action_gain = rot_action_gain
         self.gripper_action_gain = gripper_action_gain
-        self.pos_sensitivity = pos_sensitivity
-        self.rot_sensitivity = rot_sensitivity
-        self.base_sensitivity = base_sensitivity
+        # self.base_sensitivity = base_sensitivity
 
         self.reset_orientation = {"R": True, "L": True}
         self.reset()
@@ -358,7 +356,7 @@ class Oculus_droid(DeviceBase):
                 time.sleep(1)
                 while not buttons["A"]:
                     time.sleep(0.5)
-                time.sleep()
+                time.sleep(3)
                 self._additional_callbacks['A']()
             
             for cid in ["R", "L"]:
@@ -437,12 +435,9 @@ class Oculus_droid(DeviceBase):
             quat_diff(robot_quat, self.robot_origin[cid]["quat"]),
         )
         euler_action = Rotation.from_quat(quat_action).as_rotvec() 
-        
-
-        # print("vr Right pos difference",(self.vr_state['R']["pos"] - self.vr_origin['R']["pos"]))
-        # print("vr Right euler difference", quat_to_euler(quat_diff(self.vr_state['R']["quat"], self.vr_origin['R']["quat"])))
 
         gripper_action = ((1 - self.vr_state[cid]["gripper"]) * 1.7 ) + robot_gripper -0.036 # it was - robot_gripper before
+
         # if cid == "L":
         #     print("robot_left_gripper", robot_gripper)
         #     print("vr_left_gripper", self.vr_state[cid]["gripper"])
@@ -461,7 +456,7 @@ class Oculus_droid(DeviceBase):
         # print("------------------------")
 
         lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
-        # ipdb.set_trace()
+
         return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
     
     def add_callback(self, button_name: str, func: Callable):
@@ -489,8 +484,8 @@ class Oculus_droid(DeviceBase):
 
         if self._state["movement_enabled"]["R"]:
             action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            action_r[:3] *= self.pos_sensitivity
-            action_r[3:6] *= self.rot_sensitivity
+            action_r[:3] *= self.pos_action_gain
+            action_r[3:6] *= self.rot_action_gain
             action_r[6] *= 1.0
         else:
             action_r = np.zeros(7)
@@ -513,8 +508,8 @@ class Oculus_droid(DeviceBase):
 
         if self._state["movement_enabled"]["R"]:
             action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            action_r[:3] *= self.pos_sensitivity
-            action_r[3:6] *= self.rot_sensitivity
+            action_r[:3] *= self.pos_action_gain
+            action_r[3:6] *= self.rot_action_gain
             action_r[6] *= 1.0
         else:
             action_r = np.zeros(7)

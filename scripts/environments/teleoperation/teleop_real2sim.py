@@ -196,10 +196,6 @@ def main():
     # reset environment
     env.reset()
     teleop_interface.reset()
-
-    # TODO randomize different variables for each stage
-    if pause_reset.stage == 0:
-        mdp.randomize_actuator_gains()
     
     # Simulation environment
     while simulation_app.is_running():

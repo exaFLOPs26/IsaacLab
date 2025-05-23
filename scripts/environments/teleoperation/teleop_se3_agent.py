@@ -66,6 +66,36 @@ import isaaclab_tasks  # noqa: F401
 from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
 from scipy.spatial.transform import Rotation
+import socket
+import json
+
+def start_receiver():
+    HOST = 'localhost'  # or '' to listen on all interfaces
+    PORT = 9999
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((HOST, PORT))
+    server.listen(1)
+    print("Waiting for real teleop to connect...")
+
+    conn, addr = server.accept()
+    print(f"Connected by {addr}")
+
+    buffer = ""
+
+    while True:
+        data = conn.recv(1024).decode('utf-8')
+        if not data:
+            break
+        buffer += data
+        while '\n' in buffer:
+            line, buffer = buffer.split('\n', 1)
+            try:
+                msg = json.loads(line)
+                # Do something with the message
+                return msg["robot_state"]
+            except json.JSONDecodeError:
+                print("Failed to parse:", line)
 
 def get_ee_state(env, ee_name, gripper_value=0.0):
     # arm
@@ -124,9 +154,15 @@ def pre_process_actions(
         # resolve gripper command
         delta_pose, gripper_command = teleop_data
         # convert to torch
+        print("gripper_command", gripper_command)
         delta_pose = torch.tensor(delta_pose, dtype=torch.float, device=device).repeat(num_envs, 1)
         gripper_vel = torch.zeros((delta_pose.shape[0], 1), dtype=torch.float, device=device)
-        gripper_vel[:] = -1 if gripper_command else 1
+        # gripper_vel[:] = -1 if gripper_command else 1
+        if gripper_command == 1:
+            gripper_vel[:] = 1
+        elif gripper_command == -1:
+            gripper_vel[:] = -1
+        print("gripper_vel", gripper_vel)
         # compute actions
         return torch.concat([delta_pose, gripper_vel], dim=1)
 
@@ -339,6 +375,9 @@ def main():
                 # compute actions based on environment
                 actions = pre_process_actions(teleop_data, env.num_envs, env.device)
                 # apply actions
+                # receive = start_receiver()
+                # print(receive)
+                
                 env.step(actions)
             else:
                 env.sim.render()
