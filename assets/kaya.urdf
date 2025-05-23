@@ -1,0 +1,1922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="kaya">
+  <joint name="axle_0_joint" type="continuous">
+    <origin xyz="-0.0980432 0.0006368 0.0405437" rpy="0. 0. -3.1415925"/>
+    <parent link="kaya"/>
+    <child link="axle_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="axle_1_joint" type="continuous">
+    <origin xyz="0.0493475 -0.084525 0.0405437" rpy="0. 0. -1.0471923"/>
+    <parent link="kaya"/>
+    <child link="axle_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="axle_2_joint" type="continuous">
+    <origin xyz="0.0495291 0.0856937 0.0405437" rpy="0. 0. 1.0472074"/>
+    <parent link="kaya"/>
+    <child link="axle_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_0_0_joint" type="continuous">
+    <origin xyz="0.010035 -0.000023 -0.021325" rpy="0. 0. 1.5707963"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_0_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_0_1_joint" type="continuous">
+    <origin xyz="0.010035 0.0202526 -0.0065939" rpy="0.0000001 -1.2566371 1.5707961"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_0_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_0_2_joint" type="continuous">
+    <origin xyz="0.010035 0.012508 0.0172414" rpy="-3.1415927 -0.6283185 -1.5707964"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_0_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_0_3_joint" type="continuous">
+    <origin xyz="0.010035 -0.012554 0.0172414" rpy="3.1415927 0.6283185 -1.5707964"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_0_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_0_4_joint" type="continuous">
+    <origin xyz="0.010035 -0.0202986 -0.0065939" rpy="0.0000002 1.2566367 1.5707966"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_0_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_1_0_joint" type="continuous">
+    <origin xyz="0.029077 0.012508 -0.0172534" rpy="-0. -0.6283184 1.5707963"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_1_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_1_1_joint" type="continuous">
+    <origin xyz="0.029077 0.0202526 0.0065819" rpy="3.1415927 -1.2566371 -1.5707964"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_1_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_1_2_joint" type="continuous">
+    <origin xyz="0.029077 -0.000023 0.021313" rpy="-3.1415927 0.0000001 -1.5707964"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_1_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_1_3_joint" type="continuous">
+    <origin xyz="0.029077 -0.0202986 0.0065819" rpy="3.1415927 1.2566371 -1.5707964"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_1_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_0_1_4_joint" type="continuous">
+    <origin xyz="0.029077 -0.012554 -0.0172534" rpy="-0. 0.6283188 1.5707961"/>
+    <parent link="axle_0"/>
+    <child link="roller_0_1_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_0_0_joint" type="continuous">
+    <origin xyz="0.010035 -0.000023 -0.021325" rpy="0. 0. 1.5707963"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_0_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_0_1_joint" type="continuous">
+    <origin xyz="0.010035 0.0202526 -0.0065939" rpy="0. -1.2566373 1.5707959"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_0_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_0_2_joint" type="continuous">
+    <origin xyz="0.010035 0.012508 0.0172414" rpy="-3.1415925 -0.6283185 -1.5707968"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_0_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_0_3_joint" type="continuous">
+    <origin xyz="0.010035 -0.012554 0.0172414" rpy="-3.1415927 0.6283187 -1.5707967"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_0_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_0_4_joint" type="continuous">
+    <origin xyz="0.010035 -0.0202986 -0.0065939" rpy="0.0000002 1.2566371 1.5707961"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_0_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_1_0_joint" type="continuous">
+    <origin xyz="0.029077 0.012508 -0.0172534" rpy="-0.0000001 -0.6283186 1.570796 "/>
+    <parent link="axle_1"/>
+    <child link="roller_1_1_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_1_1_joint" type="continuous">
+    <origin xyz="0.029077 0.0202526 0.0065819" rpy="-3.1415925 -1.2566372 -1.5707968"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_1_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_1_2_joint" type="continuous">
+    <origin xyz="0.029077 -0.000023 0.021313" rpy="3.1415927 0.0000001 -1.5707967"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_1_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_1_3_joint" type="continuous">
+    <origin xyz="0.029077 -0.0202986 0.0065819" rpy="-3.1415925 1.2566371 -1.5707968"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_1_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_1_1_4_joint" type="continuous">
+    <origin xyz="0.029077 -0.012554 -0.0172534" rpy="0. 0.6283187 1.5707959"/>
+    <parent link="axle_1"/>
+    <child link="roller_1_1_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_0_0_joint" type="continuous">
+    <origin xyz="0.010035 -0.000023 -0.021325" rpy="0. 0. 1.5707961"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_0_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_0_1_joint" type="continuous">
+    <origin xyz="0.010035 0.0202526 -0.0065939" rpy="-0.0000001 -1.2566373 1.5707961"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_0_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_0_2_joint" type="continuous">
+    <origin xyz="0.010035 0.012508 0.0172414" rpy="-3.1415925 -0.6283185 -1.5707965"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_0_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_0_3_joint" type="continuous">
+    <origin xyz="0.010035 -0.012554 0.0172414" rpy="-3.1415925 0.6283186 -1.5707965"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_0_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_0_4_joint" type="continuous">
+    <origin xyz="0.010035 -0.0202986 -0.0065939" rpy="-0.0000001 1.2566371 1.5707961"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_0_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_1_0_joint" type="continuous">
+    <origin xyz="0.029077 0.012508 -0.0172534" rpy="0.0000001 -0.6283187 1.5707961"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_1_0"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_1_1_joint" type="continuous">
+    <origin xyz="0.029077 0.0202526 0.0065819" rpy="3.1415923 -1.2566371 -1.5707961"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_1_1"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_1_2_joint" type="continuous">
+    <origin xyz="0.029077 -0.000023 0.021313" rpy="3.1415927 0.0000001 -1.5707965"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_1_2"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_1_3_joint" type="continuous">
+    <origin xyz="0.029077 -0.0202986 0.0065819" rpy="-3.1415923 1.2566371 -1.5707959"/>
+    <parent link="axle_2"/>
+    <child link="roller_2_1_3"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <joint name="roller_2_1_4_joint" type="continuous">
+    <origin xyz="0.029077 -0.012554 -0.0172534" rpy="-0.0000001 0.6283187 1.570796 "/>
+    <parent link="axle_2"/>
+    <child link="roller_2_1_4"/>
+    <axis xyz="1. 0. 0."/>
+  </joint>
+  <link name="axle_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.1648875"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0009967 -0.0000029 0.0000004" rpy="1.5707964 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Inside_1__1_Kaya_Wheel_Hub_Inside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0009967 0.0000588 0.0000645" rpy="1.5707964 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Outside_1__1_Kaya_Wheel_Hub_Outside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-2.4115047 -1.2566373 1.5707954"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_1__1__17_4775_004_Rev1_Smooth.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297055 -0.0093987" rpy="2.8278413 0.0162707 0.0501012"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_1__1__17_4775_005_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0184565 -0.0254195" rpy="1.5707966 -0.7200848 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_1__1__17_2584_007_Rev1_90116A020.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00028 0.0311845" rpy="-1.5707972 1.3721099 -0.0000008"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_1__1__17_4775_007_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0294883 -0.0097054" rpy="0.3137515 0.0162706 -0.050101 "/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_2__1__17_4775_005_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0253536 0.0225596" rpy="3.1415923 -1.2566376 1.5707965"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__1__17_4775_004_Rev1_Smooth_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0073955 -0.0330714" rpy="0.0000002 0.6283181 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__2__17_4775_004_Rev1_Smooth_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0252362 0.022921 " rpy="1.2666634 0.0799871 0.2492743"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__1__17_2584_009_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.01307 0.0311845" rpy="-0.0000018 1.5618638 -0.0000021"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__2__17_2584_009_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.0000588 -0.0314355" rpy="1.5707963 1.1565933 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_2__1__17_2584_007_Rev1_90116A020_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0136 0.0311845" rpy="-3.1415925 0.0000001 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__1__17_4775_004_Rev1_Smooth_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0291882 -0.0171527" rpy="0.0000002 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__2__17_4775_004_Rev1_Smooth_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.018574 0.0255486" rpy="1.5707949 -1.3566805 1.5707971"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_3__1__17_2584_007_Rev1_90116A020_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.01345 -0.0310555" rpy="-0.000001 -1.2666829 -3.1415918"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__1__17_2584_009_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="1.6679739 0.9390293 1.6910142"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__2__17_2584_009_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="0.730087 0.6283187 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_4__1__17_4775_004_Rev1_Smooth_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="1.5477877 -0.3133434 1.6453166"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__1__17_2584_009_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-1.5477874 -0.3133435 -1.6453168"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__2__17_2584_009_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.0000588 0.0315645" rpy="-1.5707964 0.0917663 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_4__1__17_2584_007_Rev1_90116A020_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-2.4115057 0.0000005 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_5__1__17_4775_004_Rev1_Smooth_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.029724 0.0094707" rpy="-3.0775468 0.3077738 -1.3621722"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_2__1__17_4775_007_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0076117 -0.032829 " rpy="1.5830964 -0.9424227 1.5555923"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_4__1__17_2584_009_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183636 0.0251464" rpy="-0.9418178 -0.042608 -0.0309805"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__1__17_4775_005_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0182202 -0.0252069" rpy="-0.8799761 0.3963038 0.3089058"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__2__17_4775_005_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0182202 0.0253359" rpy="-2.199775 -0.0426078 0.0309801"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__3__17_4775_005_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294883 0.0098345" rpy="2.8634458 -0.1479825 -0.4766417"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__4__17_4775_005_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0181959 0.0253536" rpy="-0.7613648 -0.623267 2.5920732"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_3__1__17_4775_007_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.0300171 -0.0096695" rpy="1.5707957 -0.1000433 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_5__1__17_2584_007_Rev1_90116A020_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0297055 0.0095278" rpy="0.2781471 -0.1479827 0.4766421"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_4__1__17_4775_005_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0292795 0.0173009" rpy="-1.9617366 0.8818141 -2.0612357"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__1__17_2584_009_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-0.0000018 -1.4999106 -3.1415913"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__2__17_2584_009_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.029479 -0.009734 " rpy="2.9202921 0.2248396 -2.3607376"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__1__17_4775_007_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294697 0.0098916" rpy="-0.0640457 0.3077734 1.3621719"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__2__17_4775_007_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0337125 0.0032955" rpy="1.4738052 -0.2992847 1.8895442"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_6__1__17_2584_009_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="-2.411506 1.2566365 1.5707958"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_6__1__17_4775_004_Rev1_Smooth_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0298995 -0.0096695" rpy="-1.5707963 0.728362 -1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_6__1__17_2584_007_Rev1_90116A020_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0181716 -0.0252421" rpy="2.8763223 -0.9158831 -1.2407783"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_5__1__17_4775_007_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="-1.6679734 0.9390296 -1.6910143"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__1__17_2584_009_Rev1_11.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0070881 -0.0332948" rpy="-2.4967365 -0.2107417 -0.1560534"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__2__17_2584_009_Rev1_12.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0298995 0.0097986" rpy="-1.5707963 -1.164872 1.5707955"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_7__1__17_2584_007_Rev1_90116A020_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0073043 0.0331814" rpy="1.9617363 0.8818139 2.0612357"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_8__1__17_2584_009_Rev1_13.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0184565 0.0255486" rpy="-1.5707963 -0.5282747 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__1__17_2584_007_Rev1_90116A020_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.018574 -0.0254195" rpy="1.5707955 0.536552 -1.570797 "/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__2__17_2584_007_Rev1_90116A020_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00022 0.0311845" rpy="1.5707959 -0.4973933 -0.0000002"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_5__1__17_4775_005_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183878 0.0251287" rpy="-2.3802276 -0.6232669 -2.5920737"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_6__1__17_4775_007_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="0.7300872 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_7__1__17_4775_004_Rev1_Smooth_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00022 -0.0310555" rpy="1.5707964 0.0526749 0.0000001"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_6__1__17_4775_005_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.0300171 0.0097986" rpy="-1.5707961 1.3484031 1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_9__1__17_2584_007_Rev1_90116A020_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0000588 0.0000645" rpy="-1.5707963 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_1__1__17_4775_003_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00025 -0.0310555" rpy="1.570796 0.8059403 3.1415923"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_7__1__17_4775_007_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0335951 -0.002805 " rpy="1.5678939 0.3141463 1.5614041"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_9__1__17_2584_009_Rev1_14.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0000588 0.0000645" rpy="1.5707964 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_2__1__17_4775_003_Rev5_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.028972 -0.0173952" rpy="-1.5830897 -0.9424229 -1.5556 "/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_10__1__17_2584_009_Rev1_15.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0338401 -0.0031974" rpy="-3.1415925 1.2566371 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_8__1__17_4775_004_Rev1_Smooth_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0183636 -0.0250173" rpy="-2.2616165 0.3963035 -0.3089059"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_7__1__17_4775_005_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0339576 -0.0035588" rpy="-1.2666631 0.0799867 -0.249274 "/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__1__17_2584_009_Rev1_16.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0255986 0.0221673" rpy="-1.5678945 0.3141464 -1.561404 "/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__2__17_2584_009_Rev1_17.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0194015 0.0000588 0.0000645" rpy="-1.5707963 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_001_Rev5_1__1__17_4775_001_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297148 -0.0093702" rpy="0.2213001 0.2248398 2.3607378"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_8__1__17_4775_007_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294956 -0.0169294" rpy="2.4967365 -0.2107416 0.1560526"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__1__17_2584_009_Rev1_18.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0254812 -0.0223997" rpy="-1.4738052 -0.299285 -1.8895448"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__2__17_2584_009_Rev1_19.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0184121 -0.024982 " rpy="0.2652705 -0.9158831 1.2407779"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_9__1__17_4775_007_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.01398 0.0311845" rpy="-0.0000002 0.2615384 0.0000002"/>
+      <geometry>
+        <mesh filename="meshes/axle_0_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_13__1__17_2584_009_Rev1_20.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.018622 -0. 0. " rpy="1.5707963 0. 1.5707963"/>
+      <geometry>
+        <cylinder radius="0.0155" length="0.0448"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019556 -0.000023 -0.000006" rpy="1.5707963 0. 1.5707963"/>
+      <geometry>
+        <cylinder radius="0.034" length="0.0292"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="axle_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.1648875"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0009967 -0.0000029 0.0000004" rpy="1.5707963 -0.6283185 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Inside_1__1_Kaya_Wheel_Hub_Inside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0009967 0.0000588 0.0000645" rpy="1.5707963 -0.6283185 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Outside_1__1_Kaya_Wheel_Hub_Outside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-2.4115045 -1.2566372 1.5707953"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_1__1__17_4775_004_Rev1_Smooth.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297055 -0.0093987" rpy="2.8278413 0.0162707 0.0501013"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_1__1__17_4775_005_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0184565 -0.0254195" rpy="1.5707964 -0.7200848 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_1__1__17_2584_007_Rev1_90116A020.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00028 0.0311845" rpy="-1.5707971 1.3721099 -0.0000007"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_1__1__17_4775_007_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0294883 -0.0097054" rpy="0.3137515 0.0162706 -0.050101 "/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_2__1__17_4775_005_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0253536 0.0225596" rpy="3.1415923 -1.2566376 1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__1__17_4775_004_Rev1_Smooth_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0073955 -0.0330714" rpy="0.0000002 0.6283181 -1.5707965"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__2__17_4775_004_Rev1_Smooth_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0252362 0.022921 " rpy="1.2666634 0.0799871 0.2492744"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__1__17_2584_009_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.01307 0.0311845" rpy="-0.000002 1.5618638 -0.0000022"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__2__17_2584_009_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.0000588 -0.0314355" rpy="1.5707964 1.1565933 1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_2__1__17_2584_007_Rev1_90116A020_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0136 0.0311845" rpy="-3.1415925 0.0000001 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__1__17_4775_004_Rev1_Smooth_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0291882 -0.0171527" rpy="0.0000002 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__2__17_4775_004_Rev1_Smooth_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.018574 0.0255486" rpy="1.5707948 -1.3566805 1.5707973"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_3__1__17_2584_007_Rev1_90116A020_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.01345 -0.0310555" rpy="-0.000001 -1.2666829 -3.1415918"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__1__17_2584_009_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="1.667974 0.9390292 1.6910143"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__2__17_2584_009_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="0.7300872 0.6283187 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_4__1__17_4775_004_Rev1_Smooth_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="1.5477875 -0.3133434 1.6453167"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__1__17_2584_009_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-1.5477874 -0.3133436 -1.6453167"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__2__17_2584_009_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.0000588 0.0315645" rpy="-1.5707964 0.0917663 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_4__1__17_2584_007_Rev1_90116A020_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-2.4115057 0.0000005 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_5__1__17_4775_004_Rev1_Smooth_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.029724 0.0094707" rpy="-3.0775468 0.3077738 -1.3621722"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_2__1__17_4775_007_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0076117 -0.032829 " rpy="1.5830963 -0.9424227 1.5555925"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_4__1__17_2584_009_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183636 0.0251464" rpy="-0.9418178 -0.042608 -0.0309804"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__1__17_4775_005_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0182202 -0.0252069" rpy="-0.879976 0.3963037 0.3089059"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__2__17_4775_005_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0182202 0.0253359" rpy="-2.199775 -0.0426078 0.0309802"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__3__17_4775_005_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294883 0.0098345" rpy="2.8634458 -0.1479825 -0.4766417"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__4__17_4775_005_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0181959 0.0253536" rpy="-0.7613646 -0.623267 2.5920732"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_3__1__17_4775_007_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.030017 -0.0096695" rpy="1.5707957 -0.1000433 1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_5__1__17_2584_007_Rev1_90116A020_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0297055 0.0095278" rpy="0.2781471 -0.1479826 0.4766422"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_4__1__17_4775_005_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0292794 0.0173009" rpy="-1.9617364 0.8818142 -2.0612357"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__1__17_2584_009_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-0.0000017 -1.4999106 -3.1415913"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__2__17_2584_009_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.029479 -0.009734 " rpy="2.9202921 0.2248396 -2.3607376"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__1__17_4775_007_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294697 0.0098916" rpy="-0.0640457 0.3077734 1.3621719"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__2__17_4775_007_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0337125 0.0032955" rpy="1.4738052 -0.2992845 1.8895442"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_6__1__17_2584_009_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="-2.4115055 1.2566364 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_6__1__17_4775_004_Rev1_Smooth_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0298995 -0.0096695" rpy="-1.570796 0.728362 -1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_6__1__17_2584_007_Rev1_90116A020_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0181716 -0.0252421" rpy="2.8763223 -0.9158831 -1.2407783"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_5__1__17_4775_007_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="-1.6679733 0.9390296 -1.691014 "/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__1__17_2584_009_Rev1_11.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0070881 -0.0332948" rpy="-2.4967365 -0.2107417 -0.1560533"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__2__17_2584_009_Rev1_12.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0298995 0.0097986" rpy="-1.5707964 -1.164872 1.5707958"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_7__1__17_2584_007_Rev1_90116A020_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0073043 0.0331814" rpy="1.9617366 0.8818138 2.0612357"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_8__1__17_2584_009_Rev1_13.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0184565 0.0255486" rpy="-1.5707964 -0.5282747 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__1__17_2584_007_Rev1_90116A020_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.018574 -0.0254195" rpy="1.5707957 0.536552 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__2__17_2584_007_Rev1_90116A020_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00022 0.0311845" rpy="1.5707958 -0.4973933 -0. "/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_5__1__17_4775_005_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183878 0.0251287" rpy="-2.3802276 -0.6232668 -2.5920737"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_6__1__17_4775_007_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="0.7300872 -0.6283184 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_7__1__17_4775_004_Rev1_Smooth_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00022 -0.0310555" rpy="1.5707964 0.0526749 0.0000002"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_6__1__17_4775_005_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.030017 0.0097986" rpy="-1.5707959 1.3484031 1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_9__1__17_2584_007_Rev1_90116A020_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0000588 0.0000645" rpy="-1.5707964 -0.6283185 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_1__1__17_4775_003_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00025 -0.0310555" rpy="1.5707963 0.8059403 3.1415923"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_7__1__17_4775_007_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0335951 -0.002805 " rpy="1.5678939 0.3141464 1.5614041"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_9__1__17_2584_009_Rev1_14.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0000588 0.0000645" rpy="1.5707963 -0.6283185 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_2__1__17_4775_003_Rev5_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.028972 -0.0173952" rpy="-1.58309 -0.9424229 -1.5555998"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_10__1__17_2584_009_Rev1_15.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0338401 -0.0031974" rpy="-3.1415925 1.2566371 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_8__1__17_4775_004_Rev1_Smooth_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0183636 -0.0250173" rpy="-2.2616165 0.3963035 -0.3089058"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_7__1__17_4775_005_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0339576 -0.0035588" rpy="-1.266663 0.0799868 -0.2492739"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__1__17_2584_009_Rev1_16.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0255986 0.0221673" rpy="-1.5678943 0.3141464 -1.5614039"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__2__17_2584_009_Rev1_17.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0194015 0.0000588 0.0000645" rpy="-1.5707964 -0.6283185 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_001_Rev5_1__1__17_4775_001_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297148 -0.0093702" rpy="0.2213001 0.2248397 2.3607378"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_8__1__17_4775_007_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294956 -0.0169294" rpy="2.4967365 -0.2107417 0.1560527"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__1__17_2584_009_Rev1_18.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0254812 -0.0223997" rpy="-1.4738052 -0.2992851 -1.8895447"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__2__17_2584_009_Rev1_19.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0184121 -0.024982 " rpy="0.2652705 -0.9158831 1.2407779"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_9__1__17_4775_007_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.01398 0.0311845" rpy="-0.0000001 0.2615384 0.0000002"/>
+      <geometry>
+        <mesh filename="meshes/axle_1_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_13__1__17_2584_009_Rev1_20.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.018622 -0. 0. " rpy="1.5707963 0. 1.5707963"/>
+      <geometry>
+        <cylinder radius="0.0155" length="0.0448"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019556 -0.000023 -0.000006" rpy="1.5707963 0. 1.5707963"/>
+      <geometry>
+        <cylinder radius="0.034" length="0.0292"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="axle_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.1648875"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0009967 -0.0000029 0.0000004" rpy="1.5707965 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Inside_1__1_Kaya_Wheel_Hub_Inside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0009967 0.0000588 0.0000645" rpy="1.5707965 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1_Kaya_Wheel_Hub_Outside_1__1_Kaya_Wheel_Hub_Outside.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-2.4115043 -1.2566372 1.5707949"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_1__1__17_4775_004_Rev1_Smooth.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297055 -0.0093987" rpy="2.8278413 0.0162707 0.0501012"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_1__1__17_4775_005_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0184565 -0.0254195" rpy="1.5707967 -0.7200848 -1.570797 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_1__1__17_2584_007_Rev1_90116A020.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00028 0.0311845" rpy="-1.5707973 1.3721099 -0.0000009"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_1__1__17_4775_007_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0294883 -0.0097054" rpy="0.3137515 0.0162705 -0.0501011"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_2__1__17_4775_005_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0253536 0.0225596" rpy="3.1415923 -1.2566376 1.5707965"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__1__17_4775_004_Rev1_Smooth_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0073955 -0.0330714" rpy="0.0000002 0.6283181 -1.5707966"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_2__2__17_4775_004_Rev1_Smooth_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0252362 0.022921 " rpy="1.2666633 0.0799872 0.2492743"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__1__17_2584_009_Rev1.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.01307 0.0311845" rpy="-0.0000017 1.5618638 -0.000002 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_1__2__17_2584_009_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.0000588 -0.0314355" rpy="1.570796 1.1565933 1.570796 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_2__1__17_2584_007_Rev1_90116A020_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0136 0.0311845" rpy="-3.1415925 0.0000001 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__1__17_4775_004_Rev1_Smooth_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0291882 -0.0171527" rpy="0.0000002 -0.6283185 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_3__2__17_4775_004_Rev1_Smooth_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.018574 0.0255486" rpy="1.5707952 -1.3566805 1.570797 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_3__1__17_2584_007_Rev1_90116A020_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.01345 -0.0310555" rpy="-0.0000011 -1.2666829 -3.1415915"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__1__17_2584_009_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="1.6679736 0.9390293 1.6910139"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_2__2__17_2584_009_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0291882 0.0172818" rpy="0.730087 0.6283187 -1.5707967"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_4__1__17_4775_004_Rev1_Smooth_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="1.5477877 -0.3133434 1.6453165"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__1__17_2584_009_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0338401 0.0033264" rpy="-1.5477873 -0.3133435 -1.645317 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_3__2__17_2584_009_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.0000588 0.0315645" rpy="-1.5707964 0.0917663 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_4__1__17_2584_007_Rev1_90116A020_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-2.4115057 0.0000005 1.5707961"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_5__1__17_4775_004_Rev1_Smooth_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.029724 0.0094707" rpy="-3.0775468 0.3077738 -1.3621724"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_2__1__17_4775_007_Rev1_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0076117 -0.032829 " rpy="1.5830966 -0.9424227 1.5555922"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_4__1__17_2584_009_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183636 0.0251464" rpy="-0.9418178 -0.042608 -0.0309806"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__1__17_4775_005_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0182202 -0.0252069" rpy="-0.8799761 0.3963037 0.3089057"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__2__17_4775_005_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0182202 0.0253359" rpy="-2.199775 -0.0426078 0.03098 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__3__17_4775_005_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294883 0.0098345" rpy="2.8634458 -0.1479825 -0.4766417"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_3__4__17_4775_005_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0181959 0.0253536" rpy="-0.7613646 -0.623267 2.5920732"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_3__1__17_4775_007_Rev1_3.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 0.030017 -0.0096695" rpy="1.5707957 -0.1000433 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_5__1__17_2584_007_Rev1_90116A020_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0297055 0.0095278" rpy="0.2781471 -0.1479827 0.4766421"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_4__1__17_4775_005_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0292794 0.0173009" rpy="-1.9617367 0.881814 -2.061236 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__1__17_2584_009_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0136 -0.0310555" rpy="-0.0000019 -1.4999106 -3.1415913"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_5__2__17_2584_009_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.029479 -0.009734 " rpy="2.9202921 0.2248396 -2.3607376"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__1__17_4775_007_Rev1_4.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294697 0.0098916" rpy="-0.0640457 0.3077734 1.3621718"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_4__2__17_4775_007_Rev1_5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0337125 0.0032955" rpy="1.4738053 -0.2992848 1.8895441"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_6__1__17_2584_009_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0253536 -0.0224306" rpy="-2.4115057 1.2566364 1.570796 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_6__1__17_4775_004_Rev1_Smooth_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0298995 -0.0096695" rpy="-1.5707964 0.728362 -1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_6__1__17_2584_007_Rev1_90116A020_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0181716 -0.0252421" rpy="2.8763223 -0.9158831 -1.2407783"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_5__1__17_4775_007_Rev1_6.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="-1.6679736 0.9390296 -1.6910144"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__1__17_2584_009_Rev1_11.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0070881 -0.0332948" rpy="-2.4967365 -0.2107418 -0.1560535"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_7__2__17_2584_009_Rev1_12.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 -0.0298995 0.0097986" rpy="-1.570796 -1.164872 1.5707954"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_7__1__17_2584_007_Rev1_90116A020_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0073043 0.0331814" rpy="1.9617362 0.8818141 2.0612354"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_8__1__17_2584_009_Rev1_13.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0214265 -0.0184565 0.0255486" rpy="-1.5707961 -0.5282747 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__1__17_2584_007_Rev1_90116A020_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.018574 -0.0254195" rpy="1.5707954 0.536552 -1.5707971"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_8__2__17_2584_007_Rev1_90116A020_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.00022 0.0311845" rpy="1.570796 -0.4973933 -0.0000003"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_5__1__17_4775_005_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 -0.0183878 0.0251287" rpy="-2.3802276 -0.6232668 -2.5920737"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_6__1__17_4775_007_Rev1_7.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0073955 0.0332005" rpy="0.7300873 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_7__1__17_4775_004_Rev1_Smooth_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00022 -0.0310555" rpy="1.5707964 0.0526749 0.0000001"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_6__1__17_4775_005_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0173765 0.030017 0.0097986" rpy="-1.5707964 1.3484031 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_007_Rev1_90116A020_9__1__17_2584_007_Rev1_90116A020_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0000588 0.0000645" rpy="-1.5707961 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_1__1__17_4775_003_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.00025 -0.0310555" rpy="1.5707959 0.8059403 3.141592 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_7__1__17_4775_007_Rev1_8.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0335951 -0.002805 " rpy="1.5678937 0.3141463 1.561404 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_9__1__17_2584_009_Rev1_14.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0000588 0.0000645" rpy="1.5707965 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_003_Rev5_2__1__17_4775_003_Rev5_2.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.028972 -0.0173952" rpy="-1.5830896 -0.9424229 -1.5556002"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_10__1__17_2584_009_Rev1_15.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0338401 -0.0031974" rpy="-3.1415925 1.2566371 1.5707963"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_004_Rev1_Smooth_8__1__17_4775_004_Rev1_Smooth_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0183636 -0.0250173" rpy="-2.2616167 0.3963035 -0.308906 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_005_Rev1_7__1__17_4775_005_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0339576 -0.0035588" rpy="-1.2666631 0.0799868 -0.249274 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__1__17_2584_009_Rev1_16.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.0255986 0.0221673" rpy="-1.5678945 0.3141464 -1.5614041"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_11__2__17_2584_009_Rev1_17.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0194015 0.0000588 0.0000645" rpy="-1.5707961 -0.6283185 -1.5707968"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_001_Rev5_1__1__17_4775_001_Rev5.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0297148 -0.0093702" rpy="0.2213001 0.2248397 2.3607378"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_8__1__17_4775_007_Rev1_9.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0294956 -0.0169294" rpy="2.4967365 -0.2107416 0.1560525"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__1__17_2584_009_Rev1_18.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0098765 0.0254812 -0.0223997" rpy="-1.4738051 -0.2992848 -1.889545 "/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_12__2__17_2584_009_Rev1_19.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 -0.0184121 -0.024982 " rpy="0.2652705 -0.9158831 1.2407779"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_4775_007_Rev1_9__1__17_4775_007_Rev1_10.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0289265 0.01398 0.0311845" rpy="-0.0000002 0.2615384 0.0000001"/>
+      <geometry>
+        <mesh filename="meshes/axle_2_visuals_Kaya_WheelAssembly_MX_12W_Drive_Wheel_ASM__1__1___25in_Omni_Wheel__1__1__17_2584_009_Rev1_13__1__17_2584_009_Rev1_20.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.018622 -0. 0. " rpy="1.5707963 0. 1.5707961"/>
+      <geometry>
+        <cylinder radius="0.0155" length="0.0448"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019556 -0.000023 -0.000006" rpy="1.5707963 0. 1.5707961"/>
+      <geometry>
+        <cylinder radius="0.034" length="0.0292"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kaya">
+    <visual>
+      <origin xyz="-0.0137672 0.0020368 0.0910447" rpy="0. 0. -1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/Kaya_Body_Mesh.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000frA.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000jEI.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000m4u.obj" scale="1. 1. 1."/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000.obj" scale="1. 1. 1."/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007572 0.0005368 0.1399847" rpy="-3.1415923 -1.2217305 -0.0000005"/>
+      <geometry>
+        <mesh filename="meshes/ID4_000m4u.obj" scale="1. 1. 1."/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0497672 0.0006368 0.0860447" rpy="0. 0. -1.5707964"/>
+      <geometry>
+        <mesh filename="meshes/base_link_collisions_mesh_0.obj" scale="1. 1. 1."/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0043518 -0.0003625 0.0526317" rpy="0. 0. -1.5707964"/>
+      <geometry>
+        <box size="0.077 0.114 0.0486"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0752202 0.0005318 0.0534477" rpy="0. 0. -1.5707964"/>
+      <geometry>
+        <box size="0.0328 0.038 0.0502"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0380268 -0.0647072 0.0534477" rpy="0. 0. 0.5236036"/>
+      <geometry>
+        <box size="0.0328 0.038 0.0502"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0380268 0.0659808 0.0534477" rpy="0. 0. 2.6180034"/>
+      <geometry>
+        <box size="0.0328 0.038 0.0502"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0732748 0.0006368 0.0547587" rpy="0. 0. -1.5707964"/>
+      <geometry>
+        <box size="0.029 0.009 0.0952"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0917238 0.0497148 0.0271237" rpy="0. 0. -1.9896764"/>
+      <geometry>
+        <box size="0.0904 0.0056 0.0394"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0917238 -0.0484412 0.0271237" rpy="0. 0. -1.1519164"/>
+      <geometry>
+        <box size="0.0904 0.0056 0.0394"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1187878 0.0962488 0.0204127" rpy="0. 0. -2.6284964"/>
+      <geometry>
+        <box size="0.0198 0.0056 0.0258"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1187878 -0.0949752 0.0204127" rpy="0. 0. -0.5130963"/>
+      <geometry>
+        <box size="0.0198 0.0056 0.0258"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_0_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. 0." rpy="0. 0. -0.0000001"/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_0_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. -0." rpy="0.0000001 0. 0.0000001"/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_0_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. -0." rpy="0. -0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_0_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. 0." rpy="-0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_0_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. 0." rpy="0. 0. -0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_1_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. -0." rpy="-0. -0. -0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_1_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. -0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_1_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_1_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. 0." rpy="-0. -0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_0_1_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="-0. -0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_0_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_0_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. -0." rpy="0. 0.0000003 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_0_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. -0." rpy="0. -0. -0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_0_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. -0." rpy="-0. 0.0000001 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_0_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. -0." rpy="-0. -0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_1_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. 0." rpy="0. 0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_1_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. -0.0000001 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_1_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. -0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_1_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. -0." rpy="-0. 0.0000001 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_1_1_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. -0." rpy="-0. -0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_0_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_0_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. -0. -0." rpy="-0. 0.0000002 -0.0000001"/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_0_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. -0." rpy="-0. -0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_0_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. 0." rpy="0. 0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_0_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. 0. 0." rpy="0. -0.0000002 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_1_0">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. -0." rpy="-0. 0.0000001 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_1_1">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. -0." rpy="-0. -0.0000001 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_1_2">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. -0." rpy="0. 0. 0."/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_1_3">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0. -0. 0." rpy="0. 0.0000002 0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="roller_2_1_4">
+    <inertial>
+      <origin xyz="0. 0. 0." rpy="0. 0. 0."/>
+      <mass value="0.0335103"/>
+      <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0. 0. 0." rpy="0. -0.0000001 -0. "/>
+      <geometry>
+        <sphere radius="0.02"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
