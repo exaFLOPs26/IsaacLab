@@ -191,7 +191,7 @@ class EventCfg:
         func=mdp.randomize_rigid_body_material,
         mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=['world', 'dummy_base_x', 'dummy_base_y', 'base_link', 'link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
+            "asset_cfg": SceneEntityCfg("robot", body_names=['OmniFL_wheel', 'OmniFR_wheel', 'OmniR_wheel', 'base_link', 'link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
             "static_friction_range": (0.8, 1.25),
             "dynamic_friction_range": (0.8, 1.25),
             "restitution_range": (0.0, 0.0),

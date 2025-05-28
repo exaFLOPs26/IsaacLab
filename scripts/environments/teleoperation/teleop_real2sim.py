@@ -51,7 +51,10 @@ from isaaclab_tasks.utils import parse_env_cfg
 from isaaclab.sim import SimulationContext                                 
 import omni.ui as ui                                                                        
 import carb.input                                                             
-from carb.input import KeyboardEventType, KeyboardInput                       
+from carb.input import KeyboardEventType, KeyboardInput     
+from real_state_subscriber import RealStateSubscriber                  
+import rclpy
+from rclpy.node import Node
 
 class PauseResetController():
     def __init__(self):
@@ -166,6 +169,16 @@ def main():
     # modify configuration
     env_cfg.terminations.time_out = None
     
+    rclpy.init()  # <<< Added
+    real_sub = RealStateSubscriber(topic='env_observation')  # <<< Added
+    sub_thread = threading.Thread(target=lambda: rclpy.spin(real_sub), daemon=True)  # <<< Added
+    sub_thread.start()  # <<< Added
+
+    # Expose subscriber to the mdp module so real2ruin can access it
+    import isaaclab_tasks.utils.mdp as mdp  # <<< Added
+    mdp.real2ruin_subscriber = real_sub  # <<< Added
+    
+    
     # create environment
     env = gym.make(args_cli.task, cfg=env_cfg).unwrapped
     if args_cli.teleop_device.lower() == "oculus_droid":
@@ -214,7 +227,7 @@ def main():
             else:
                 ee_l_state = get_ee_state(env, "ee_L_frame")
                 ee_r_state = get_ee_state(env, "ee_R_frame")
-
+                
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
 
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)

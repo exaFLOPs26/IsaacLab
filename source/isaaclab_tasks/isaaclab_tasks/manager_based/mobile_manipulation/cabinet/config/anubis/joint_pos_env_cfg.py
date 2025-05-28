@@ -17,7 +17,7 @@ from isaaclab_tasks.manager_based.mobile_manipulation.cabinet.cabinet_env_cfg im
 ##
 # Pre-defined configs
 ##
-from isaaclab_assets.robots.anubis import ANUBIS_CFG  # isort:skip
+from isaaclab_assets.robots.anubis_wheels import ANUBIS_CFG  # isort:skip
 
 @configclass
 class AnubisCabinetEnvCfg(CabinetEnvCfg):
@@ -73,7 +73,7 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
 
         self.actions.base_action = mdp.JointVelocityActionCfg(
             asset_name="robot",
-            joint_names=["dummy_base_.*"],
+            joint_names=["Omni.*"],
         )
         
         self.scene.object = RigidObjectCfg(

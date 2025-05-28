@@ -35,7 +35,7 @@ import gymnasium as gym
 import torch
 import ipdb
 import omni.log
-
+import numpy as np
 from isaaclab.devices import Se3Gamepad, Se3Keyboard, Se3SpaceMouse, Se3Keyboard_BMM, Oculus_mobile, Oculus_abs, Oculus_droid
 from isaaclab.envs import ViewerCfg
 from isaaclab.envs.ui import ViewportCameraController
@@ -108,7 +108,20 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
         # Concatenate the zeroed out poses with the velocities and base movement
         # return torch.concat([delta_pose_L_zeroed, delta_pose_R_zeroed, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
         return torch.concat([abs_pose_L, abs_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
-    
+
+def compute_wheel_velocities_torch(vx, vy, wz, wheel_radius, l):
+    theta = torch.tensor([0, 2 * torch.pi / 3, 4 * torch.pi / 3], device=vx.device)
+    M = torch.stack([
+        -torch.sin(theta),
+        torch.cos(theta),
+        torch.full_like(theta, l)
+    ], dim=1)  # Shape: (3, 3)
+
+    base_vel = torch.stack([vx, vy, wz], dim=-1)  # Shape: (B, 3)
+    wheel_velocities = (1 / wheel_radius) * base_vel @ M.T * 10  # Shape: (B, 3)
+    return wheel_velocities
+
+
 def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, delta_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
     # compute actions based on environment
@@ -124,24 +137,17 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
 
         gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
         gripper_vel_R[:] = -1.0 if gripper_command_R else 1.0
-        # compute actions
-
-        pose_L_zeroed = torch.zeros_like(delta_pose_L)  # Shape: (batch_size, 6)
-        pose_L_zeroed[:, 0:3] = delta_pose_L[:, 0:3]  # Position
-        # delta_pose_L_zeroed[:, 3:6] = delta_pose_L[:, 3:6]  # Rotation
-        pose_R_zeroed = torch.zeros_like(delta_pose_R)  # Shape: (batch_size, 6)
-        pose_R_zeroed[:, 0:3] = delta_pose_R[:, 0:3]  # Position
-        # delta_pose_R_zeroed[:, 3:6] = delta_pose_R[:, 3:6]  # Rotation
-
+        
+        delta_pose_base_wheel = compute_wheel_velocities_torch(
+            delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
+            wheel_radius=0.103, l=0.05
+        )  # Shape: (batch_size, 3)
 
         # Ensure gripper velocities and base poses have the correct shapes  
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
         gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
-        
-        # Concatenate the zeroed out poses with the velocities and base movement
-        # return torch.concat([delta_pose_L_zeroed, delta_pose_R_zeroed, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
 
-        return torch.concat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
+        return torch.concat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base_wheel], dim=1)
 
 
 def main():
@@ -238,6 +244,7 @@ def main():
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
 
             else:
+                # ipdb.set_trace()
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")

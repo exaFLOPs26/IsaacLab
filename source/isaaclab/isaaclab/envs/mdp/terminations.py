@@ -28,33 +28,8 @@ if TYPE_CHECKING:
 """
 MDP terminations.
 """
-def start_receiver():
-    HOST = 'localhost'  # or '' to listen on all interfaces
-    PORT = 9999
-
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((HOST, PORT))
-    server.listen(1)
-    print("Waiting for real teleop to connect...")
-
-    conn, addr = server.accept()
-    print(f"Connected by {addr}")
-
-    buffer = ""
-
-    while True:
-        data = conn.recv(1024).decode('utf-8')
-        if not data:
-            break
-        buffer += data
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            try:
-                msg = json.loads(line)
-                # Do something with the message
-                return msg["robot_state"]
-            except json.JSONDecodeError:
-                print("Failed to parse:", line)
+# This will be set by teleop.py
+real2ruin_subscriber: "RealStateSubscriber" = None  
 
 def get_ee_state(env, ee_name, gripper_value=0.0):
     # arm
@@ -80,33 +55,35 @@ def time_out(env: ManagerBasedRLEnv) -> torch.Tensor:
 
 def real2ruin(
     env: ManagerBasedRLEnv, 
-    thres_pos : int, 
-    thres_rot: int) -> torch.Tensor:
-    
-    # For one arm
-    sim_ee_r_state = get_ee_state(env, "ee_frame", gripper_value=0.0)
-    real_ee_r_state = start_receiver()["cartesian_position"]
-    real_ee_r_state = real_ee_r_state[:3] + R.from_euler('xyz', real_ee_r_state[3:]).as_rotvec().tolist()
-    
-    # Convert to arrays
-    sim_ee_r_state = np.array(sim_ee_r_state)
-    real_ee_r_state = np.array(real_ee_r_state)
+    thres_pos: float, 
+    thres_rot: float
+) -> torch.Tensor:
+    # 1) sim state
+    sim_ee = get_ee_state(env, "ee_frame", gripper_value=0.0).cpu().numpy().flatten()
 
-    # Position difference
-    pos_error = np.linalg.norm(sim_ee_r_state[:3] - real_ee_r_state[:3])
+    # 2) real state from ROS2 subscriber
+    sub = real2ruin_subscriber
+    real_obs = sub.get_latest() if sub is not None else None
+    if real_obs is None or "cartesian_position" not in real_obs:
+        # no data yet → don’t terminate
+        return torch.zeros(env.num_envs, dtype=torch.bool, device=env.device)
 
-    # Orientation difference
-    rot_sim = Rotation.from_rotvec(sim_ee_r_state[3:])
-    rot_real = Rotation.from_rotvec(real_ee_r_state[3:])
+    # you said cartesian_position is [x,y,z] and maybe orientation Euler xyz?
+    pos = real_obs["cartesian_position"]           # [x,y,z]
+    euler = real_obs.get("orientation_euler", [0,0,0])  # [roll,pitch,yaw]
+    real_rotvec = Rotation.from_euler('xyz', euler).as_rotvec().tolist()
 
-    # Relative rotation
-    rot_diff = rot_sim.inv() * rot_real
+    real_ee = np.array(pos + real_rotvec, dtype=np.float32)
 
-    # Angle of relative rotation (in radians)
-    rot_error = rot_diff.magnitude()
-    
-    return ((pos_error > thres_pos) or (rot_error > thres_rot))
+    # 3) compute errors
+    pos_err = np.linalg.norm(sim_ee[:3] - real_ee[:3])
+    rot_sim = Rotation.from_rotvec(sim_ee[3:])
+    rot_real = Rotation.from_rotvec(real_ee[3:])
+    rot_err = (rot_sim.inv() * rot_real).magnitude()
 
+    # 4) termination mask for each env (we assume single-env here; repeat if multi-env)
+    done = (pos_err > thres_pos) or (rot_err > thres_rot)
+    return torch.full((env.num_envs,), bool(done), dtype=torch.bool, device=env.device)
     
 
 def command_resample(env: ManagerBasedRLEnv, command_name: str, num_resamples: int = 1) -> torch.Tensor:

@@ -69,33 +69,6 @@ from scipy.spatial.transform import Rotation
 import socket
 import json
 
-def start_receiver():
-    HOST = 'localhost'  # or '' to listen on all interfaces
-    PORT = 9999
-
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((HOST, PORT))
-    server.listen(1)
-    print("Waiting for real teleop to connect...")
-
-    conn, addr = server.accept()
-    print(f"Connected by {addr}")
-
-    buffer = ""
-
-    while True:
-        data = conn.recv(1024).decode('utf-8')
-        if not data:
-            break
-        buffer += data
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            try:
-                msg = json.loads(line)
-                # Do something with the message
-                return msg["robot_state"]
-            except json.JSONDecodeError:
-                print("Failed to parse:", line)
 
 def get_ee_state(env, ee_name, gripper_value=0.0):
     # arm

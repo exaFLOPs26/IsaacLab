@@ -9,7 +9,7 @@ from . import joint_pos_env_cfg
 ##
 # Pre-defined configs
 ##
-from isaaclab_assets.robots.anubis import ANUBIS_PD_CFG  # isort:skip
+from isaaclab_assets.robots.anubis.wheels import ANUBIS_PD_CFG  # isort:skip
 
 
 @configclass
