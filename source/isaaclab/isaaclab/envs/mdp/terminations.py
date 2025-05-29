@@ -18,8 +18,6 @@ from typing import TYPE_CHECKING
 from isaaclab.assets import Articulation, RigidObject
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.sensors import ContactSensor
-import socket
-import json
 import numpy as np
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
@@ -53,37 +51,30 @@ def time_out(env: ManagerBasedRLEnv) -> torch.Tensor:
     """Terminate the episode when the episode length exceeds the maximum episode length."""
     return env.episode_length_buf >= env.max_episode_length
 
-def real2ruin(
-    env: ManagerBasedRLEnv, 
-    thres_pos: float, 
-    thres_rot: float
-) -> torch.Tensor:
+def real2ruin(env, thres_pos: float, thres_rot: float) -> torch.Tensor:
     # 1) sim state
-    sim_ee = get_ee_state(env, "ee_frame", gripper_value=0.0).cpu().numpy().flatten()
+    sim_ee = get_ee_state(env, "ee_frame", gripper_value=0.0)
+    sim_np = sim_ee.cpu().numpy().flatten()[:6]  # x,y,z + rotvec
 
-    # 2) real state from ROS2 subscriber
+    # 2) real state
     sub = real2ruin_subscriber
-    real_obs = sub.get_latest() if sub is not None else None
-    if real_obs is None or "cartesian_position" not in real_obs:
-        # no data yet → don’t terminate
+    real_obs = sub.get_latest() if sub else None
+    if not real_obs or "cartesian_position" not in real_obs or "quat" not in real_obs:
         return torch.zeros(env.num_envs, dtype=torch.bool, device=env.device)
 
-    # you said cartesian_position is [x,y,z] and maybe orientation Euler xyz?
-    pos = real_obs["cartesian_position"]           # [x,y,z]
-    euler = real_obs.get("orientation_euler", [0,0,0])  # [roll,pitch,yaw]
-    real_rotvec = Rotation.from_euler('xyz', euler).as_rotvec().tolist()
+    pos = real_obs["cartesian_position"][:3]
+    quat = real_obs["quat"]
+    real_rotvec = Rotation.from_quat(quat).as_rotvec()
+    real_np = np.array(list(pos) + real_rotvec.tolist(), dtype=np.float32)
 
-    real_ee = np.array(pos + real_rotvec, dtype=np.float32)
+    # 3) errors
+    pos_err = np.linalg.norm(sim_np[:3] - real_np[:3])
+    rot_err = (Rotation.from_rotvec(sim_np[3:]).inv() 
+               * Rotation.from_rotvec(real_np[3:])).magnitude()
 
-    # 3) compute errors
-    pos_err = np.linalg.norm(sim_ee[:3] - real_ee[:3])
-    rot_sim = Rotation.from_rotvec(sim_ee[3:])
-    rot_real = Rotation.from_rotvec(real_ee[3:])
-    rot_err = (rot_sim.inv() * rot_real).magnitude()
-
-    # 4) termination mask for each env (we assume single-env here; repeat if multi-env)
-    done = (pos_err > thres_pos) or (rot_err > thres_rot)
-    return torch.full((env.num_envs,), bool(done), dtype=torch.bool, device=env.device)
+    # 4) termination mask
+    done_flag = (pos_err > thres_pos) or (rot_err > thres_rot)
+    return torch.full((env.num_envs,), done_flag, dtype=torch.bool, device=env.device)
     
 
 def command_resample(env: ManagerBasedRLEnv, command_name: str, num_resamples: int = 1) -> torch.Tensor:

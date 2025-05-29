@@ -55,6 +55,8 @@ from carb.input import KeyboardEventType, KeyboardInput
 from real_state_subscriber import RealStateSubscriber                  
 import rclpy
 from rclpy.node import Node
+import threading
+import isaaclab_tasks.utils.mdp as mdp 
 
 class PauseResetController():
     def __init__(self):
@@ -169,14 +171,10 @@ def main():
     # modify configuration
     env_cfg.terminations.time_out = None
     
-    rclpy.init()  # <<< Added
-    real_sub = RealStateSubscriber(topic='env_observation')  # <<< Added
-    sub_thread = threading.Thread(target=lambda: rclpy.spin(real_sub), daemon=True)  # <<< Added
-    sub_thread.start()  # <<< Added
-
-    # Expose subscriber to the mdp module so real2ruin can access it
-    import isaaclab_tasks.utils.mdp as mdp  # <<< Added
-    mdp.real2ruin_subscriber = real_sub  # <<< Added
+    rclpy.init()
+    real_sub = RealStateSubscriber(topic='vrpolicy_obs_publisher')
+    threading.Thread(target=lambda: rclpy.spin(real_sub), daemon=True).start()
+    mdp.real2ruin_subscriber = real_sub
     
     
     # create environment
