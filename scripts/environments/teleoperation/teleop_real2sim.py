@@ -107,6 +107,7 @@ class PauseResetController():
 def get_ee_state(env, ee_name):
     # arm
     ee = env.scene[ee_name].data
+    ipdb.set_trace()
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
 
@@ -218,7 +219,6 @@ def main():
 
                 obs_dict = {"left_arm": 0 , "right_arm": ee_r_state}
                 teleop_data = teleop_interface.advance_onearm(obs_dict)
-                print("teleop_data", teleop_data)
               
             # Bimanual teleop  
             else:
@@ -226,7 +226,7 @@ def main():
                 ee_r_state = get_ee_state(env, "ee_R_frame")
                 
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
-
+                
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
 
                 pose_L = pose_L.astype("float32")
@@ -243,7 +243,7 @@ def main():
 
             else:
                 actions = pre_process_actions(teleop_data, env.num_envs, env.device)
-
+            print(actions)
             env.step(actions)
 
             if should_reset_recording_instance:

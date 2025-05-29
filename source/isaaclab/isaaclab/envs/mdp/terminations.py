@@ -59,6 +59,7 @@ def real2ruin(env, thres_pos: float, thres_rot: float) -> torch.Tensor:
     # 2) real state
     sub = real2ruin_subscriber
     real_obs = sub.get_latest() if sub else None
+    print(f"Real observation: {real_obs}")  # Debugging line
     if not real_obs or "cartesian_position" not in real_obs or "quat" not in real_obs:
         return torch.zeros(env.num_envs, dtype=torch.bool, device=env.device)
 
