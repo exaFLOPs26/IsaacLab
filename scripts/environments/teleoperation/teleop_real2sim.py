@@ -56,8 +56,7 @@ from real_state_subscriber import RealStateSubscriber
 import rclpy
 from rclpy.node import Node
 import threading
-import isaaclab_tasks.utils.mdp as mdp 
-
+from isaaclab.envs.mdp.terminations import real2ruin_subscriber
 class PauseResetController():
     def __init__(self):
         # SimulationContext singleton
@@ -174,7 +173,7 @@ def main():
     rclpy.init()
     real_sub = RealStateSubscriber(topic='vrpolicy_obs_publisher')
     threading.Thread(target=lambda: rclpy.spin(real_sub), daemon=True).start()
-    mdp.real2ruin_subscriber = real_sub
+    real2ruin_subscriber = real_sub
     
     
     # create environment
