@@ -105,23 +105,24 @@ class PauseResetController():
 
 # Get the simulation state of the end effector
 def get_ee_state(env, ee_name):
-    # arm
     ee = env.scene[ee_name].data
-    ipdb.set_trace()
-    pos = ee.target_pos_source[0, 0]
-    rot = ee.target_quat_source[0, 0]
 
-    # euler = torch.from_numpy(
-    #     Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
-    # ).to(dtype=rot.dtype, device=rot.device)
-    
-    # Gripper
+    # Get pos and rot for all environments (assuming [num_envs, ...] shape)
+    pos = ee.target_pos_source[:, 0]  # Shape: [num_envs, 3]
+    rot = ee.target_quat_source[:, 0]  # Shape: [num_envs, 4]
+
+    # Gripper distance for each environment
     if ee_name == "ee_L_frame":
-        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -2:]
+        # shape: [num_envs, 2, 3]
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[:, -2:]
     else:
-        body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
-    gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
-    return torch.cat((pos, rot, gripper_dist.unsqueeze(0))).unsqueeze(0)
+        body_pos = env.scene._articulations['robot'].data.body_pos_w[:, -4:-2]
+
+    # Compute gripper distance for each env
+    gripper_dist = torch.norm(body_pos[:, 0] - body_pos[:, 1], dim=1) * -1 * 20.8 + 0.05  # shape: [num_envs]
+
+    # Concatenate everything: [num_envs, 3 + 4 + 1] = [num_envs, 8]
+    return torch.cat((pos, rot, gripper_dist.unsqueeze(1)), dim=1)
 
 
 def pre_process_actions_mobile(delta_pose_L: torch.Tensor, gripper_command_L: bool, delta_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
@@ -136,29 +137,28 @@ def pre_process_actions_mobile(delta_pose_L: torch.Tensor, gripper_command_L: bo
     return torch.cat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
 
 def pre_process_actions(
-    teleop_data: tuple[np.ndarray, bool] | list[tuple[np.ndarray, np.ndarray, np.ndarray]], num_envs: int, device: str
+    teleop_data: tuple[np.ndarray, np.ndarray],  # adjust type hint if needed
+    num_envs: int, 
+    device: str
 ) -> torch.Tensor:
-    """Convert teleop data to the format expected by the environment action space.
-
-    Args:
-        teleop_data: Data from the teleoperation device.
-        num_envs: Number of environments.
-        device: Device to create tensors on.
-
-    Returns:
-        Processed actions as a tensor.
-    """
-    # compute actions based on environment
-    
-    
-    # resolve gripper command
     delta_pose, gripper_command = teleop_data
-    # convert to torch
-    delta_pose = torch.tensor(delta_pose, dtype=torch.float, device=device).repeat(num_envs, 1)
-    gripper_vel = torch.zeros((delta_pose.shape[0], 1), dtype=torch.float, device=device)
-    gripper_vel[:] = -1 if gripper_command else 1
-    # compute actions
-    return torch.concat([delta_pose, gripper_vel], dim=1)
+
+    # Ensure delta_pose is shape (num_envs, 6)
+    delta_pose = torch.tensor(delta_pose, dtype=torch.float, device=device)
+
+    # Ensure gripper_command is shape (num_envs, 1)
+    gripper_command = torch.tensor(gripper_command, dtype=torch.float, device=device).view(-1, 1)
+
+    # Map command to velocity (custom logic – change as needed)
+    gripper_vel = torch.where(
+        gripper_command > 0.5,
+        torch.tensor(1.0, device=device),   # True → 1.0
+        torch.tensor(-1.0, device=device)   # False → -1.0
+    )
+    return torch.cat([delta_pose, gripper_vel], dim=1)
+
+
+
 
 def main():
     """Main function for real2sim teleoperation."""
@@ -216,8 +216,8 @@ def main():
             if args_cli.teleop_device.lower() == "oculus_droid": 
                 # Right arm
                 ee_r_state = get_ee_state(env, "ee_frame")
-
                 obs_dict = {"left_arm": 0 , "right_arm": ee_r_state}
+                print("obs_dict", obs_dict)
                 teleop_data = teleop_interface.advance_onearm(obs_dict)
               
             # Bimanual teleop  
@@ -243,7 +243,6 @@ def main():
 
             else:
                 actions = pre_process_actions(teleop_data, env.num_envs, env.device)
-            print(actions)
             env.step(actions)
 
             if should_reset_recording_instance:

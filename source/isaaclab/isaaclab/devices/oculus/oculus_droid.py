@@ -410,54 +410,44 @@ class Oculus_droid(DeviceBase):
         return lin_vel, rot_vel, gripper_vel
 
     def _calculate_arm_action(self, cid, state_dict):
+        # state_dict: shape [num_envs, 8]
+        num_envs = state_dict.shape[0]
+        actions = []
+
         if self.update_sensor[cid]:
             self._process_reading(cid)
             self.update_sensor[cid] = False
-        state_dict = state_dict[0]  # This gives you a 1D tensor with shape (7,)
 
-        robot_pos = state_dict[:3].cpu().numpy()  # Position (x, y, z)
-        # robot_euler = state_dict[3:6].cpu().numpy()  # Euler angles (roll, pitch, yaw)
-        # robot_quat = euler_to_quat(robot_euler)  # Quaternion from Euler angles
-        robot_quat = state_dict[3:7].cpu().numpy()
-        robot_gripper = state_dict[7].item()  # Gripper state (scalar)
+        for env_idx in range(num_envs):
+            single_state = state_dict[env_idx]
 
-        if self.reset_origin[cid]:
-            self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
-            self.vr_origin[cid] = {"pos": self.vr_state[cid]["pos"], "quat": self.vr_state[cid]["quat"]}
-            self.reset_origin[cid] = False
+            robot_pos = single_state[:3].cpu().numpy()
+            robot_quat = single_state[3:7].cpu().numpy()
+            robot_gripper = single_state[7].item()
 
-        pos_action = (self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]) - (
-            robot_pos - self.robot_origin[cid]["pos"]
-        )
+            if self.reset_origin[cid]:
+                self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
+                self.vr_origin[cid] = {"pos": self.vr_state[cid]["pos"], "quat": self.vr_state[cid]["quat"]}
+                self.reset_origin[cid] = False
 
-        quat_action = quat_diff(
-            quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"]),
-            quat_diff(robot_quat, self.robot_origin[cid]["quat"]),
-        )
-        euler_action = Rotation.from_quat(quat_action).as_rotvec() 
+            pos_action = (self.vr_state[cid]["pos"] - self.vr_origin[cid]["pos"]) - (
+                robot_pos - self.robot_origin[cid]["pos"]
+            )
 
-        gripper_action = ((1 - self.vr_state[cid]["gripper"]) * 1.7 ) + robot_gripper -0.036 # it was - robot_gripper before
+            quat_action = quat_diff(
+                quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"]),
+                quat_diff(robot_quat, self.robot_origin[cid]["quat"]),
+            )
+            euler_action = Rotation.from_quat(quat_action).as_rotvec()
 
-        # if cid == "L":
-        #     print("robot_left_gripper", robot_gripper)
-        #     print("vr_left_gripper", self.vr_state[cid]["gripper"])
-        #     print("left_gripper_action", gripper_action)
-        # if cid == "R":
-        #     print("robot_right_gripper", robot_gripper)
-        #     print("vr_right_gripper", self.vr_state[cid]["gripper"])
-        #     print("right_gripper_action", gripper_action)
-        # pos_action *= self.pos_action_gain
-        # euler_action *= self.rot_action_gain
-        # gripper_action *= self.gripper_action_gain
-        # print("------------------------")
-        # print("pos_action", pos_action)
-        # print("euler_action", euler_action)
-        # print("gripper_action", gripper_action)
-        # print("------------------------")
+            gripper_action = ((1 - self.vr_state[cid]["gripper"]) * 1.7) + robot_gripper - 0.036
 
-        lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
+            lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
+            action = np.concatenate([lin_vel, rot_vel, [gripper_vel]])
+            actions.append(action)
 
-        return np.concatenate([lin_vel, rot_vel, [gripper_vel]])
+        return np.stack(actions)  # shape: [num_envs, 7]
+
     
     def add_callback(self, button_name: str, func: Callable):
         """Register fn() to be called whenever button_name is pressed."""
@@ -499,25 +489,27 @@ class Oculus_droid(DeviceBase):
         )    
 
     def advance_onearm(self, obs_dict):
+        num_envs = obs_dict["right_arm"].shape[0]
 
         if self._state["poses"] == {}:
             return (
-            np.zeros(6),  # pose_R
-            0.0,          # gripper_command_R
-        )
+                np.zeros((num_envs, 6)),  # pose_R
+                np.zeros(num_envs),       # gripper_command_R
+            )
 
         if self._state["movement_enabled"]["R"]:
-            action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            action_r[:3] *= self.pos_action_gain
-            action_r[3:6] *= self.rot_action_gain
-            action_r[6] *= 1.0
+            action_r = self._calculate_arm_action("R", obs_dict["right_arm"])  # shape [num_envs, 7]
+            action_r[:, :3] *= self.pos_action_gain
+            action_r[:, 3:6] *= self.rot_action_gain
+            action_r[:, 6] *= 1.0
         else:
-            action_r = np.zeros(7)
-        
+            action_r = np.zeros((num_envs, 7))  # return no movement
+
         return (
-        action_r[:6],  # pose_R
-        action_r[6],   # gripper_command_R
-        ) 
+            action_r[:, :6],  # pose_R: [num_envs, 6]
+            action_r[:, 6],   # gripper_command_R: [num_envs]
+        )
+
 
     def get_info(self):
         return {
