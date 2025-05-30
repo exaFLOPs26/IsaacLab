@@ -334,6 +334,7 @@ class ActionManager(ManagerBase):
         # split the actions and apply to each tensor
         idx = 0
         for term in self._terms.values():
+            # ipdb.set_trace()
             term_actions = action[:, idx : idx + term.action_dim]
             term.process_actions(term_actions)
             idx += term.action_dim

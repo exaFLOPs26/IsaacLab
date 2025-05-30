@@ -23,7 +23,7 @@ ANUBIS_CFG = ArticulationCfg(
             stabilization_threshold=0.5,
         ),
         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-            enabled_self_collisions=True,
+            enabled_self_collisions=False,
             solver_position_iteration_count=8,
             solver_velocity_iteration_count=0,
             # fix_root_link=True,
@@ -32,9 +32,9 @@ ANUBIS_CFG = ArticulationCfg(
     init_state=ArticulationCfg.InitialStateCfg(
         joint_pos={
             # base
-            "OmniR": 0.0,
-            "OmniFR": 0.0,
-            "OmniFL": 0.0,
+            # "OmniR": 0.0,
+            # "OmniFR": 0.0,
+            # "OmniFL": 0.0,
 
             # arm <-> base (rad)
             "arm1_base_link_joint": 0.0,

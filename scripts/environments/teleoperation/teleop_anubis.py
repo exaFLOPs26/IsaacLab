@@ -13,7 +13,7 @@ parser.add_argument(
     "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
 )
 parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
-parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
+parser.add_argument("--teleop_device", type=str, default="keyboard_bmm", help="Device for interacting with environment")
 parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
 # append AppLauncher cli args
@@ -118,7 +118,7 @@ def compute_wheel_velocities_torch(vx, vy, wz, wheel_radius, l):
     ], dim=1)  # Shape: (3, 3)
 
     base_vel = torch.stack([vx, vy, wz], dim=-1)  # Shape: (B, 3)
-    wheel_velocities = (1 / wheel_radius) * base_vel @ M.T * 10  # Shape: (B, 3)
+    wheel_velocities = (1 / wheel_radius) * base_vel @ M.T  # Shape: (B, 3)
     return wheel_velocities
 
 
@@ -146,8 +146,17 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         # Ensure gripper velocities and base poses have the correct shapes  
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
         gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
+        
+        action = torch.concat([
+            delta_pose_L, delta_pose_R,
+            gripper_vel_L, gripper_vel_R,
+            delta_pose_base_wheel
+        ], dim=1)  # Shape: (batch_size, 17)
+        dummy_zeros = torch.zeros(action.shape[0], 30, device=action.device)
+        
+        return torch.concat([action, dummy_zeros], dim=1) 
 
-        return torch.concat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base_wheel], dim=1)
+        # return torch.concat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base_wheel], dim=1)
 
 
 def main():
@@ -181,7 +190,7 @@ def main():
         )
     elif args_cli.teleop_device.lower() == "keyboard_bmm":
         teleop_interface = Se3Keyboard_BMM(
-            pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.08 * args_cli.sensitivity, base_sensitivity = 0.5 * args_cli.sensitivity
+            pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.08 * args_cli.sensitivity, base_sensitivity = 0.4 * args_cli.sensitivity
         )
     elif args_cli.teleop_device.lower() == "oculus_mobile":
         teleop_interface = Oculus_mobile(

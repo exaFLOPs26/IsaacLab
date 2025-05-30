@@ -191,7 +191,7 @@ class EventCfg:
         func=mdp.randomize_rigid_body_material,
         mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=['OmniFL_wheel', 'OmniFR_wheel', 'OmniR_wheel', 'base_link', 'link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
+            "asset_cfg": SceneEntityCfg("robot", body_names=['link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
             "static_friction_range": (0.8, 1.25),
             "dynamic_friction_range": (0.8, 1.25),
             "restitution_range": (0.0, 0.0),
@@ -213,14 +213,14 @@ class EventCfg:
 
     reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
 
-    reset_robot_joints = EventTerm(
-        func=mdp.reset_joints_by_offset,
-        mode="reset",
-        params={
-            "position_range": (-0.0, 0.0),
-            "velocity_range": (0.0, 0.0),
-        },
-    )
+    # reset_robot_joints = EventTerm(
+    #     func=mdp.reset_joints_by_offset,
+    #     mode="reset",
+    #     params={
+    #         "position_range": (-0.0, 0.0),
+    #         "velocity_range": (0.0, 0.0),
+    #     },
+    # )
     reset_object_position = EventTerm(
         func=mdp.reset_root_state_uniform,
         mode="reset",
