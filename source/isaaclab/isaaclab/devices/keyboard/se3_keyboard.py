@@ -244,8 +244,6 @@ class Se3Keyboard_BMM(DeviceBase):
         self._delta_pos_right = np.zeros(3)
         self._delta_rot_right = np.zeros(3)
         self._delta_base = np.zeros(3)
-        self._base_z_accum = 0.0
-        self._key_hold_start = {}  # Reset key hold tracking
 
     def __str__(self) -> str:
         """Returns: A string containing the information of joystick."""
@@ -287,12 +285,6 @@ class Se3Keyboard_BMM(DeviceBase):
     def _on_keyboard_event(self, event, *args, **kwargs):
         """Subscriber callback to handle keyboard events."""
         # apply the command when pressed
-
-        key = str(event.input)[-1]
-        # ipdb.set_trace()
-        now = time.time()
-
-
         if event.type == carb.input.KeyboardEventType.KEY_PRESS:
             # if event.input.name == "Y":
             #     self.reset()
@@ -300,11 +292,11 @@ class Se3Keyboard_BMM(DeviceBase):
             # Toggle right-left arm
             if event.input.name == "Y":
                 self.arm_number = 1 - self.arm_number  # Toggle between 0 and 1
+                
             # Toggle bimanual mode
             elif event.input.name == "B":
                 self.bimanual_mode = 1 - self.bimanual_mode
                 
-
             # Position control
             elif event.input.name in ["W", "S", "A", "D", "Q", "E"]:
                 if self.arm_number == 0:
@@ -329,39 +321,38 @@ class Se3Keyboard_BMM(DeviceBase):
             elif event.input.name in ["U", "O"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
-                    self._delta_pos_right += (self._INPUT_KEY_MAPPING[event.input.name] / self.base_sensitivity * self.pos_sensitivity)
+                    self._delta_pos_right += self._INPUT_KEY_MAPPING[event.input.name] 
                 else:
                     print("Base movement")
                     self._delta_base += self._INPUT_KEY_MAPPING[event.input.name]
-                    self._key_hold_start[key] = now
                     
             elif event.input.name in ["I"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right += self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base += np.asarray([ math.cos(self._base_z_accum / 1.25 ),  math.sin(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base += self._INPUT_KEY_MAPPING[event.input.name]
             
             elif event.input.name in ["K"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right += self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base += np.asarray([ -math.cos(self._base_z_accum / 1.25),  -math.sin(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base += self._INPUT_KEY_MAPPING[event.input.name]
             
             elif event.input.name in ["J"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right += self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base += np.asarray([ -math.sin(self._base_z_accum / 1.25),  math.cos(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base += self._INPUT_KEY_MAPPING[event.input.name]
             
             elif event.input.name in ["L"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right += self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base += np.asarray([ math.sin(self._base_z_accum / 1.25),  -math.cos(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base += self._INPUT_KEY_MAPPING[event.input.name]
         
         # remove the command when un-pressed
         if event.type == carb.input.KeyboardEventType.KEY_RELEASE:
@@ -385,40 +376,34 @@ class Se3Keyboard_BMM(DeviceBase):
             elif event.input.name in ["U", "O"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
-                    self._delta_pos_right -= (self._INPUT_KEY_MAPPING[event.input.name] / self.base_sensitivity * self.pos_sensitivity)
+                    self._delta_pos_right -= self._INPUT_KEY_MAPPING[event.input.name]
                 else:
                     self._delta_base -= self._INPUT_KEY_MAPPING[event.input.name]
-                    if key in self._key_hold_start:
-                        duration = now - self._key_hold_start[key]
-                        direction = 1.0 if key == "U" else -1.0
-                        delta = direction * self.base_sensitivity * duration
-                        self._base_z_accum += delta
-                        del self._key_hold_start[key]
                     
             elif event.input.name in ["I"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right -= self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base -= np.asarray([ math.cos(self._base_z_accum / 1.25),  math.sin(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base -= self._INPUT_KEY_MAPPING[event.input.name]
             elif event.input.name in ["K"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right -= self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base -= np.asarray([ -math.cos(self._base_z_accum / 1.25),  -math.sin(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base -= self._INPUT_KEY_MAPPING[event.input.name]
             elif event.input.name in ["J"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right -= self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base -= np.asarray([ -math.sin(self._base_z_accum / 1.25),  math.cos(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base -= self._INPUT_KEY_MAPPING[event.input.name]
             elif event.input.name in ["L"]:
                 if self.bimanual_mode == 1:
                     self.arm_number = 1
                     self._delta_pos_right -= self._INPUT_KEY_MAPPING[event.input.name]
                 else:
-                    self._delta_base -= np.asarray([ math.sin(self._base_z_accum / 1.25),  -math.cos(self._base_z_accum / 1.25), 0.0]) * self.base_sensitivity
+                    self._delta_base -= self._INPUT_KEY_MAPPING[event.input.name]
             # 1.25 differ by hardware
         # additional callbacks
         if event.type == carb.input.KeyboardEventType.KEY_PRESS:
@@ -444,10 +429,10 @@ class Se3Keyboard_BMM(DeviceBase):
             "C": np.asarray([0.0, 0.0, 1.0]) * self.rot_sensitivity,
             "V": np.asarray([0.0, 0.0, -1.0]) * self.rot_sensitivity,
             # Right arm
-            "I": np.asarray([1.0, 0.0, 0.0]) * self.pos_sensitivity,
-            "K": np.asarray([-1.0, 0.0, 0.0]) * self.pos_sensitivity,
-            "J": np.asarray([0.0, 1.0, 0.0]) * self.pos_sensitivity,
-            "L": np.asarray([0.0, -1.0, 0.0]) * self.pos_sensitivity,
+            "I": np.asarray([-1.0, -1.0, 0.0]) * self.pos_sensitivity,
+            "K": np.asarray([1.0, 1.0, 0.0]) * self.pos_sensitivity,
+            "J": np.asarray([-1.0, 1.0, 0.0]) * self.pos_sensitivity,
+            "L": np.asarray([1.0, -1.0, 0.0]) * self.pos_sensitivity,
 
             # "M": np.asarray([1.0, 0.0, 0.0]) * self.rot_sensitivity,
             # "N": np.asarray([-1.0, 0.0, 0.0]) * self.rot_sensitivity,

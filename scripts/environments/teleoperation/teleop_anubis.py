@@ -138,10 +138,12 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
         gripper_vel_R[:] = -1.0 if gripper_command_R else 1.0
         
+        # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
             delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
             wheel_radius=0.103, l=0.05
         )  # Shape: (batch_size, 3)
+        print("delta_pose_base_wheel", delta_pose_base_wheel)
 
         # Ensure gripper velocities and base poses have the correct shapes  
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
@@ -190,7 +192,7 @@ def main():
         )
     elif args_cli.teleop_device.lower() == "keyboard_bmm":
         teleop_interface = Se3Keyboard_BMM(
-            pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.08 * args_cli.sensitivity, base_sensitivity = 0.4 * args_cli.sensitivity
+            pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.08 * args_cli.sensitivity, base_sensitivity = 0.7 * args_cli.sensitivity
         )
     elif args_cli.teleop_device.lower() == "oculus_mobile":
         teleop_interface = Oculus_mobile(
@@ -269,7 +271,6 @@ def main():
             else: # Delta
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             # apply actions
-            print("actions", actions)
             env.step(actions)
 
             if should_reset_recording_instance:
