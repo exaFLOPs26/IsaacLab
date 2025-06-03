@@ -22,5 +22,3 @@ class RealStateSubscriber(Node):
     def get_latest(self) -> dict | None:
         with self._lock:
             return self._latest
-
-

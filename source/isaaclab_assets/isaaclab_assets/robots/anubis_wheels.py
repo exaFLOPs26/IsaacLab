@@ -7,7 +7,7 @@ from isaaclab.assets.articulation import ArticulationCfg
 ##
 # Configuration
 ##
-
+# TODO: Why is anubis too bumpy? Check also in Isaacsim and if not, fix here.
 ANUBIS_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
         usd_path="/root/IsaacLab/source/isaaclab_assets/data/Robots/MM/anubis/anubis_omni.usd",

@@ -57,6 +57,7 @@ import rclpy
 from rclpy.node import Node
 import threading
 from isaaclab.envs.mdp.terminations import real2ruin_subscriber
+
 class PauseResetController():
     def __init__(self):
         # SimulationContext singleton
@@ -158,8 +159,6 @@ def pre_process_actions(
     return torch.cat([delta_pose, gripper_vel], dim=1)
 
 
-
-
 def main():
     """Main function for real2sim teleoperation."""
     
@@ -175,7 +174,6 @@ def main():
     real_sub = RealStateSubscriber(topic='vrpolicy_obs_publisher')
     threading.Thread(target=lambda: rclpy.spin(real_sub), daemon=True).start()
     real2ruin_subscriber = real_sub
-    
     
     # create environment
     env = gym.make(args_cli.task, cfg=env_cfg).unwrapped

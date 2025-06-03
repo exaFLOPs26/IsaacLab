@@ -30,40 +30,11 @@ from isaaclab.actuators import ImplicitActuator
 from isaaclab.assets import Articulation, DeformableObject, RigidObject
 from isaaclab.managers import EventTermCfg, ManagerTermBase, SceneEntityCfg
 from isaaclab.terrains import TerrainImporter
-import socket
+
 import json
 import numpy as np
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedEnv
-
-def start_receiver():
-    HOST = 'localhost'  # or '' to listen on all interfaces
-    PORT = 9999
-
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((HOST, PORT))
-    server.listen(1)
-    print("Waiting for real teleop to connect...")
-
-    conn, addr = server.accept()
-    print(f"Connected by {addr}")
-
-    buffer = ""
-
-    while True:
-        data = conn.recv(1024).decode('utf-8')
-        if not data:
-            break
-        buffer += data
-        while '\n' in buffer:
-            line, buffer = buffer.split('\n', 1)
-            try:
-                msg = json.loads(line)
-                # Do something with the message
-                return msg["robot_state"]
-            except json.JSONDecodeError:
-                print("Failed to parse:", line)
-
 
 def randomize_rigid_body_scale(
     env: ManagerBasedEnv,
@@ -1084,6 +1055,52 @@ def reset_initial_joint(
     joint_vel = joint_vel.clamp_(-joint_vel_limits, joint_vel_limits)
 
     # set into the physics simulation (env_ids is None for all envs)
+    asset.write_joint_state_to_sim(joint_pos, joint_vel, env_ids=env_ids)
+
+
+def reset_initial_joint(
+    env: ManagerBasedEnv,
+    env_ids: torch.Tensor,
+    position_range: tuple[float, float],
+    velocity_range: tuple[float, float],
+    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+):
+    """Reset the robot joints using real robot state from ROS 2 + random noise."""
+    from isaaclab.envs.mdp.terminations import real2ruin_subscriber
+
+    asset: Articulation = env.scene[asset_cfg.name]
+
+    # 🔄 Get the latest message from the ROS 2 subscriber
+    sub = real2ruin_subscriber
+    real_obs = sub.get_latest() if sub else None
+    print(f"Reset joint: real_obs: {real_obs}")  # Debugging
+
+    if not real_obs or "joint_positions" not in real_obs or "joint_velocities" not in real_obs:
+        print("Warning: Missing real joint state; falling back to zeros")
+        joint_pos = torch.zeros_like(asset.data.default_joint_pos[env_ids])
+        joint_vel = torch.zeros_like(asset.data.default_joint_vel[env_ids])
+    else:
+        # Get robot index
+        joint_id = int(''.join(filter(str.isdigit, asset_cfg.name))) - 1
+        joint_pos_np = np.array(real_obs["joint_positions"][joint_id], dtype=np.float32)
+        joint_vel_np = np.array(real_obs["joint_velocities"][joint_id], dtype=np.float32)
+
+        joint_pos = torch.tensor(joint_pos_np, device=asset.device)
+        joint_vel = torch.tensor(joint_vel_np, device=asset.device)
+
+    # Add noise
+    joint_pos += math_utils.sample_uniform(*position_range, joint_pos.shape, joint_pos.device)
+    joint_vel += math_utils.sample_uniform(*velocity_range, joint_vel.shape, joint_vel.device)
+
+    # Clamp joint pos to limits
+    joint_pos_limits = asset.data.soft_joint_pos_limits[env_ids]
+    joint_pos = joint_pos.clamp_(joint_pos_limits[..., 0], joint_pos_limits[..., 1])
+
+    # Clamp joint vel to limits
+    joint_vel_limits = asset.data.soft_joint_vel_limits[env_ids]
+    joint_vel = joint_vel.clamp_(-joint_vel_limits, joint_vel_limits)
+
+    # Apply to simulation
     asset.write_joint_state_to_sim(joint_pos, joint_vel, env_ids=env_ids)
 
 
