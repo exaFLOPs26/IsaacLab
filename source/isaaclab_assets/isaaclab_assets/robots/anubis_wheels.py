@@ -28,7 +28,7 @@ ANUBIS_CFG = ArticulationCfg(
             solver_velocity_iteration_count=0,
             # fix_root_link=True,
         ),
-    ),
+    ), # --/renderer/shadercache/driverDiskCache/flush=true
     init_state=ArticulationCfg.InitialStateCfg(
         joint_pos={
             # base
@@ -63,15 +63,15 @@ ANUBIS_CFG = ArticulationCfg(
     actuators={
         "base": ImplicitActuatorCfg(
             joint_names_expr=["OmniR", "OmniFR", "OmniFL"],
-            effort_limit_sim=1e4,
-            velocity_limit_sim=100.0,
+            effort_limit_sim=1e10,
+            velocity_limit_sim=1e10,
             stiffness=0.0,
             damping=1000000.0,  # tip:: For velocity control of the base with dummy mechanism, we recommend setting high damping gains to the joints. This ensures that the base remains unperturbed from external disturbances, such as an arm mounted on the base.
         ),
         "dummy_spheres": ImplicitActuatorCfg(
             joint_names_expr=["OmniR_roller_.*", "OmniFR_roller_.*", "OmniFL_roller_.*"],
-            effort_limit_sim=1e4,
-            velocity_limit_sim=100.0,
+            effort_limit_sim=1e10,
+            velocity_limit_sim=1e10,
             stiffness=0.0,
             damping=0.000001, 
         ),

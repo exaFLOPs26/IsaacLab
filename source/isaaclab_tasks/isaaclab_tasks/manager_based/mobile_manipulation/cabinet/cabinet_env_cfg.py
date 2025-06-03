@@ -4,6 +4,7 @@ from dataclasses import MISSING
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg, DeformableObjectCfg, RigidObjectCfg
+from isaaclab.terrains import TerrainImporterCfg
 from isaaclab.actuators.actuator_cfg import ImplicitActuatorCfg
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
@@ -54,12 +55,22 @@ class CabinetSceneCfg(InteractiveSceneCfg):
     object: RigidObjectCfg | DeformableObjectCfg = MISSING
     
     # plane
-    plane = AssetBaseCfg(
-        prim_path="/World/GroundPlane",
+    house = AssetBaseCfg(
+        prim_path="/World/House",
         init_state=AssetBaseCfg.InitialStateCfg(),
-        spawn=sim_utils.GroundPlaneCfg(),
-        collision_group=-1,
+        spawn=sim_utils.UsdFileCfg(
+            usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Env/house.usd",
+            activate_contact_sensors=False,
+            scale=(1.0, 1.0, 1.0), 
+        )
     )
+    
+    # plane = AssetBaseCfg(
+    #     prim_path="/World/GroundPlane",
+    #     init_state=AssetBaseCfg.InitialStateCfg(),
+    #     spawn=sim_utils.GroundPlaneCfg(),
+    #     collision_group=-1,
+    # )
 
     # lights
     light = AssetBaseCfg(
@@ -95,7 +106,7 @@ class CabinetSceneCfg(InteractiveSceneCfg):
             scale=(1.5, 1.5, 1.2), 
         ),
         init_state=ArticulationCfg.InitialStateCfg(
-            pos=(1.5, 0, 0.475),
+            pos=(1.5, 3, 0.475),
             rot=(0.0, 0.0, 0.0, 1.0),
             joint_pos={
                 "door_left_joint": 0.0,

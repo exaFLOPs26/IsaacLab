@@ -429,10 +429,10 @@ class Se3Keyboard_BMM(DeviceBase):
             "C": np.asarray([0.0, 0.0, 1.0]) * self.rot_sensitivity,
             "V": np.asarray([0.0, 0.0, -1.0]) * self.rot_sensitivity,
             # Right arm
-            "I": np.asarray([-1.0, -1.0, 0.0]) * self.pos_sensitivity,
-            "K": np.asarray([1.0, 1.0, 0.0]) * self.pos_sensitivity,
-            "J": np.asarray([-1.0, 1.0, 0.0]) * self.pos_sensitivity,
-            "L": np.asarray([1.0, -1.0, 0.0]) * self.pos_sensitivity,
+            "I": np.asarray([-1.0, 0.0, 0.0]) * self.pos_sensitivity,
+            "K": np.asarray([1.0, 0.0, 0.0]) * self.pos_sensitivity,
+            "J": np.asarray([0.0, 1.0, 0.0]) * self.pos_sensitivity,
+            "L": np.asarray([0.0, -1.0, 0.0]) * self.pos_sensitivity,
 
             # "M": np.asarray([1.0, 0.0, 0.0]) * self.rot_sensitivity,
             # "N": np.asarray([-1.0, 0.0, 0.0]) * self.rot_sensitivity,
@@ -442,7 +442,7 @@ class Se3Keyboard_BMM(DeviceBase):
             # ";": np.asarray([0.0, 0.0, -1.0]) * self.rot_sensitivity,
 
             # Mobile base
-            "U": np.asarray([0.0, 0.0, 1.0]) * self.base_sensitivity,
-            "O": np.asarray([0.0, 0.0, -1.0]) * self.base_sensitivity,
+            "U": np.asarray([0.0, 0.0, 0.1]) * self.base_sensitivity,
+            "O": np.asarray([0.0, 0.0, -0.1]) * self.base_sensitivity,
 
         }

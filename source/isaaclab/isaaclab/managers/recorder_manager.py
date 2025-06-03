@@ -440,6 +440,8 @@ class RecorderManager(ManagerBase):
                         target_dataset_file_handler = self._failed_episode_dataset_file_handler
                 if target_dataset_file_handler is not None:
                     target_dataset_file_handler.write_episode(self._episodes[env_id])
+                    import ipdb
+                    ipdb.set_trace() # check self._episodes[env_id]
                     need_to_flush = True
                 # Update episode count
                 if episode_succeeded:

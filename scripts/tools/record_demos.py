@@ -109,7 +109,6 @@ from isaaclab_tasks.utils.parse_cfg import parse_env_cfg
 
 import ipdb
 
-
 class RateLimiter:
     """Convenience class for enforcing rates in loops."""
 
@@ -141,6 +140,18 @@ class RateLimiter:
         if self.last_time < time.time():
             while self.last_time < time.time():
                 self.last_time += self.sleep_duration
+
+def compute_wheel_velocities_torch(vx, vy, wz, wheel_radius, l):
+    theta = torch.tensor([0, 2 * torch.pi / 3, 4 * torch.pi / 3], device=vx.device)
+    M = torch.stack([
+        -torch.sin(theta),
+        torch.cos(theta),
+        torch.full_like(theta, l)
+    ], dim=1)  # Shape: (3, 3)
+
+    base_vel = torch.stack([vx, vy, wz], dim=-1)  # Shape: (B, 3)
+    wheel_velocities = (1 / wheel_radius) * base_vel @ M.T  # Shape: (B, 3)
+    return wheel_velocities
 
 
 def pre_process_actions(
@@ -197,23 +208,27 @@ def pre_process_actions(
 
         gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
         gripper_vel_R[:] = -1.0 if gripper_command_R else 1.0
-        # compute actions
-
-        delta_pose_L_zeroed = torch.zeros_like(delta_pose_L)  # Shape: (batch_size, 6)
-        delta_pose_L_zeroed[:, 0:3] = delta_pose_L[:, 0:3]  # Position
-        # delta_pose_L_zeroed[:, 3:6] = delta_pose_L[:, 3:6]  # Rotation
-        delta_pose_R_zeroed = torch.zeros_like(delta_pose_R)  # Shape: (batch_size, 6)
-        delta_pose_R_zeroed[:, 0:3] = delta_pose_R[:, 0:3]  # Position
-        # delta_pose_R_zeroed[:, 3:6] = delta_pose_R[:, 3:6]  # Rotation
+        
+        # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
+        delta_pose_base_wheel = compute_wheel_velocities_torch(
+            delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
+            wheel_radius=0.103, l=0.05
+        )  # Shape: (batch_size, 3)
+        print("delta_pose_base_wheel", delta_pose_base_wheel)
 
         # Ensure gripper velocities and base poses have the correct shapes  
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
         gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
         
-        # Concatenate the zeroed out poses with the velocities and base movement
-        # return torch.concat([delta_pose_L_zeroed, delta_pose_R_zeroed, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
-
-        return torch.concat([delta_pose_L, delta_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
+        action = torch.concat([
+            delta_pose_L, delta_pose_R,
+            gripper_vel_L, gripper_vel_R,
+            delta_pose_base_wheel
+        ], dim=1)  # Shape: (batch_size, 17)
+        
+        dummy_zeros = torch.zeros(action.shape[0], 30, device=action.device)
+        
+        return torch.concat([action, dummy_zeros], dim=1) 
     else:
         # resolve gripper command
         delta_pose, gripper_command = teleop_data
@@ -223,7 +238,6 @@ def pre_process_actions(
         gripper_vel[:] = -1 if gripper_command else 1
         # compute actions
         return torch.concat([delta_pose, gripper_vel], dim=1)
-
 
 def main():
     """Collect demonstrations from the environment using teleop interfaces."""
@@ -315,7 +329,7 @@ def main():
         """
         nonlocal running_recording_instance
         running_recording_instance = False
-
+    # TODO Add Oculus DROID
     def create_teleop_device(device_name: str, env: gym.Env):
         """Create and configure teleoperation device for robot control.
 
@@ -344,7 +358,7 @@ def main():
                 pos_sensitivity=1.0,
                 rot_sensitivity=0.8,
                 base_sensitivity=0.5,
-                )
+            )
         elif device_name == "spacemouse":
             return Se3SpaceMouse(pos_sensitivity=0.2, rot_sensitivity=0.5)
         elif "dualhandtracking_abs" in device_name and "GR1T2" in env.cfg.env_name:
@@ -448,7 +462,8 @@ def main():
                 if bool(success_term.func(env, **success_term.params)[0]):
                     success_step_count += 1
                     if success_step_count >= args_cli.num_success_steps:
-                        env.recorder_manager.record_pre_reset([0], force_export_or_skip=False)
+                        # recorder_manager : isaaclab.managers.recorder_manager
+                        env.recorder_manager.record_pre_reset([0], force_export_or_skip=False) # 366
                         env.recorder_manager.set_success_to_episodes(
                             [0], torch.tensor([[True]], dtype=torch.bool, device=env.device)
                         )

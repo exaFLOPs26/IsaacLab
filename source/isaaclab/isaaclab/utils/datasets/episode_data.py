@@ -20,6 +20,9 @@ class EpisodeData:
         self._env_id = None
         self._success = None
 
+    # e.data = {"a": 1} calls the @data.setter
+    # e.data calls the @property getter
+    
     @property
     def data(self):
         """Returns the episode data."""
