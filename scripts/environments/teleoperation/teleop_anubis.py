@@ -142,7 +142,7 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         delta_pose_base_wheel = compute_wheel_velocities_torch(
             delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
             wheel_radius=0.103, l=0.05
-        ) * 50 # Shape: (batch_size, 3)
+        ) * 100 # Shape: (batch_size, 3)
         delta_pose_base_wheel = delta_pose_base_wheel[:, [2, 1, 0]]
 
         # Ensure gripper velocities and base poses have the correct shapes  
