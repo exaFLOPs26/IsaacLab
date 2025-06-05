@@ -285,7 +285,7 @@ class Oculus_droid(DeviceBase):
         pos_action_gain=0.05,
         rot_action_gain=0.002,
         gripper_action_gain=0.03,
-        base_sensitivity=0.1,
+        base_sensitivity=0.001,
         base_rot_sensitivity=1,
         rmat_reorder=[-2, -1, -3, 4],
     ):
@@ -503,8 +503,8 @@ class Oculus_droid(DeviceBase):
         
         # xy
         raw_x, raw_y = self._state["buttons"]['leftJS']
-        action_base[:, 0] = raw_x * self.base_sensitivity
-        action_base[:, 1] = raw_y * self.base_sensitivity
+        action_base[:, 1] = raw_x * self.base_sensitivity
+        action_base[:, 0] = raw_y * self.base_sensitivity
         
         
         return (

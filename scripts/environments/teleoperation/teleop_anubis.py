@@ -129,10 +129,18 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         
         # resolve gripper command
         gripper_vel_L = torch.zeros(delta_pose_L.shape[0], 1, device=delta_pose_L.device)
-        gripper_vel_L[:] = 1.0 if gripper_command_L else -1.0
+        gripper_vel_L[:] = torch.where(
+                                gripper_command_L > 0.5,
+                                torch.tensor(1.0),   # True → 1.0
+                                torch.tensor(-1.0)   # False → -1.0
+                            )
 
         gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
-        gripper_vel_R[:] = 1.0 if gripper_command_R else -1.0
+        gripper_vel_R[:] = torch.where(
+                                gripper_command_R > 0.5,
+                                torch.tensor(1.0),   # True → 1.0
+                                torch.tensor(-1.0)   # False → -1.0
+                            )
         
         # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
