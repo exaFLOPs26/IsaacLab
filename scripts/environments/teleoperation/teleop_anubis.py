@@ -150,7 +150,7 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
             delta_pose_base_wheel
         ], dim=1)  # Shape: (batch_size, 17)
         
-        dummy_zeros = torch.zeros(action.shape[0], 30, device=action.device)
+        dummy_zeros = torch.zeros(action.shape[0], 60, device=action.device)
         
         return torch.concat([action, dummy_zeros], dim=1) 
 

@@ -283,7 +283,7 @@ class Oculus_droid(DeviceBase):
         max_gripper_vel=1,
         spatial_coeff=1,
         pos_action_gain=0.05,
-        rot_action_gain=0.002,
+        rot_action_gain=0.008,
         gripper_action_gain=0.03,
         base_sensitivity=0.2,
         base_rot_sensitivity=15,
