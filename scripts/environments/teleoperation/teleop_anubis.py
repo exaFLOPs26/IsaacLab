@@ -189,7 +189,7 @@ def main():
         )
     elif args_cli.teleop_device.lower() == "oculus_mobile":
         teleop_interface = Oculus_mobile(
-            pos_sensitivity=2.15 * args_cli.sensitivity, rot_sensitivity=1.0 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
+            pos_sensitivity=0.815 * args_cli.sensitivity, rot_sensitivity=0.4 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
         )
     elif args_cli.teleop_device.lower() == "oculus_abs":
         teleop_interface = Oculus_abs(

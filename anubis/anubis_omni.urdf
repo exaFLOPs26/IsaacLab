@@ -9,7 +9,7 @@
   		<!-- Inertial frame at link origin -->
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<!-- Mass of the base -->
-  	<mass value="30"/>
+  	<mass value="20"/>
     <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
   	<!-- Moments of inertia about the link frame axes -->
 	</inertial>
@@ -42,7 +42,7 @@
     <inertial>
   		<!-- Inertial frame at link origin -->
 		<origin xyz="0 0 0" rpy="0 0 0"/>
-  		<mass value="4"/>
+  		<mass value="1.5"/>
       <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
   		<!-- Moments of inertia about the link frame axes -->
 	</inertial>
@@ -582,7 +582,7 @@
   		<!-- Inertial frame at link origin -->
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<!-- Mass of the base -->
-  		<mass value="4"/>
+  		<mass value="1.5"/>
       <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
   		<!-- Moments of inertia about the link frame axes -->
 	</inertial>
@@ -1120,7 +1120,7 @@
   		<!-- Inertial frame at link origin -->
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<!-- Mass of the base -->
-  		<mass value="4"/>
+  		<mass value="1.5"/>
       <inertia ixx="0.001" ixy="0." ixz="0." iyy="0.001" iyz="0." izz="0.001"/>
   		<!-- Moments of inertia about the link frame axes -->
 	</inertial>
