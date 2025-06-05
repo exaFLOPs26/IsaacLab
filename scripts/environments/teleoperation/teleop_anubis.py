@@ -128,30 +128,21 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
     else:
         
         # resolve gripper command
-        gripper_vel_L = torch.zeros(delta_pose_L.shape[0], 1, device=delta_pose_L.device)
-        gripper_vel_L[:] = torch.where(
-                                gripper_command_L > 0.5,
-                                torch.tensor(1.0),   # True → 1.0
-                                torch.tensor(-1.0)   # False → -1.0
-                            )
-
-        gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
-        gripper_vel_R[:] = torch.where(
-                                gripper_command_R > 0.5,
-                                torch.tensor(1.0),   # True → 1.0
-                                torch.tensor(-1.0)   # False → -1.0
-                            )
-        
+        # Ensure commands are tensors
+        gripper_command_L = torch.as_tensor(gripper_command_L, device=delta_pose_L.device).unsqueeze(-1) 
+        gripper_command_R = torch.as_tensor(gripper_command_R, device=delta_pose_R.device).unsqueeze(-1) 
+        print(f"gripper_command_R: {gripper_command_R}")
+        # Create output tensors
         # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
             delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
             wheel_radius=0.103, l=0.05
-        ) * 10 # Shape: (batch_size, 3)
+        )# Shape: (batch_size, 3)
         delta_pose_base_wheel = delta_pose_base_wheel[:, [2, 1, 0]]
 
         # Ensure gripper velocities and base poses have the correct shapes  
-        gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
-        gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
+        gripper_vel_L = gripper_command_L.reshape(-1, 1)  # Shape: (batch_size, 1)
+        gripper_vel_R = gripper_command_R.reshape(-1, 1)  # Shape: (batch_size, 1)
         
         action = torch.concat([
             delta_pose_L, delta_pose_R,

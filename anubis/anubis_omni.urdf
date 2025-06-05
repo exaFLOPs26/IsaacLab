@@ -88,64 +88,65 @@
   <!-- Roller joints -->
   <joint name="OmniR_roller_0_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_0"/>
-    <origin xyz="0 0.073 0" rpy="0 0 0"/>
-    <axis  xyz="0 0 1"/>
+    <child link="OmniR_roller_0"/>
+    <origin xyz="0 0.065 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="OmniR_roller_1_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_1"/>
-    <origin xyz="0 0.0589 0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 -0.588 0.809"/>
+    <child link="OmniR_roller_1"/>
+    <origin xyz="0 0.0526 0.0380" rpy="0 0 0"/>
+    <axis xyz="0 -0.588 0.809"/>
   </joint>
   <joint name="OmniR_roller_2_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_2"/>
-    <origin xyz="0 0.0225 0.07030 " rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <child link="OmniR_roller_2"/>
+    <origin xyz="0 0.0201 0.0617" rpy="0 0 0"/>
+    <axis xyz="0 -0.940 0.342"/>
   </joint>
   <joint name="OmniR_roller_3_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_3"/>
-    <origin xyz="0 -0.0225 0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <child link="OmniR_roller_3"/>
+    <origin xyz="0 -0.0201 0.0617" rpy="0 0 0"/>
+    <axis xyz="0 -0.940 -0.342"/>
   </joint>
   <joint name="OmniR_roller_4_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_4"/>
-    <origin xyz="0 -0.0589 0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 -0.588 0.809"/>
+    <child link="OmniR_roller_4"/>
+    <origin xyz="0 -0.0526 0.0380" rpy="0 0 0"/>
+    <axis xyz="0 -0.588 -0.809"/>
   </joint>
   <joint name="OmniR_roller_5_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_5"/>
-    <origin xyz="0 -0.073 0" rpy="0 0 0"/>
-    <axis  xyz="0 0 1"/>
+    <child link="OmniR_roller_5"/>
+    <origin xyz="0 -0.065 0.0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
   </joint>
   <joint name="OmniR_roller_6_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_6"/>
-    <origin xyz="0 -0.0589 -0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 0.588 -0.809"/>
+    <child link="OmniR_roller_6"/>
+    <origin xyz="0 -0.0526 -0.0380" rpy="0 0 0"/>
+    <axis xyz="0 0.588 -0.809"/>
   </joint>
   <joint name="OmniR_roller_7_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_7"/>
-    <origin xyz="0 -0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <child link="OmniR_roller_7"/>
+    <origin xyz="0 -0.0201 -0.0617" rpy="0 0 0"/>
+    <axis xyz="0 0.940 -0.342"/>
   </joint>
   <joint name="OmniR_roller_8_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_8"/>
-    <origin xyz="0 0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <child link="OmniR_roller_8"/>
+    <origin xyz="0 0.0201 -0.0617" rpy="0 0 0"/>
+    <axis xyz="0 0.940 0.342"/>
   </joint>
   <joint name="OmniR_roller_9_joint" type="continuous">
     <parent link="OmniR_wheel"/>
-    <child  link="OmniR_roller_9"/>
-    <origin xyz="0 0.0589 -0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 0.588 -0.809"/>
+    <child link="OmniR_roller_9"/>
+    <origin xyz="0 0.0526 -0.0380" rpy="0 0 0"/>
+    <axis xyz="0 0.588 0.809"/>
   </joint>
+
 
 
   <joint name="OmniFL" type="continuous">
@@ -204,65 +205,66 @@
 
   <!-- Roller joints -->
   <joint name="OmniFL_roller_0_joint" type="continuous">
-    <parent link="OmniFL_wheel"/>
-    <child  link="OmniFL_roller_0"/>
-    <origin xyz="0 0.073 0" rpy="0 0 0"/>
-    <axis  xyz="0 0 1"/>
+  <parent link="OmniFL_wheel"/>
+  <child  link="OmniFL_roller_0"/>
+  <origin xyz="0 0.065 0.0" rpy="0 0 0"/>
+  <axis  xyz="0 0 1"/>
   </joint>
   <joint name="OmniFL_roller_1_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_1"/>
-    <origin xyz="0 0.0589 0.0430" rpy="0 0 0"/>
+    <origin xyz="0 0.0526 0.0380" rpy="0 0 0"/>
     <axis  xyz="0 -0.588 0.809"/>
   </joint>
   <joint name="OmniFL_roller_2_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_2"/>
-    <origin xyz="0 0.0225 0.07030 " rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <origin xyz="0 0.0201 0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 -0.940 0.342"/>
   </joint>
   <joint name="OmniFL_roller_3_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_3"/>
-    <origin xyz="0 -0.0225 0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <origin xyz="0 -0.0201 0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 -0.940 -0.342"/>
   </joint>
   <joint name="OmniFL_roller_4_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_4"/>
-    <origin xyz="0 -0.0589 0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 -0.588 0.809"/>
+    <origin xyz="0 -0.0526 0.0380" rpy="0 0 0"/>
+    <axis  xyz="0 -0.588 -0.809"/>
   </joint>
   <joint name="OmniFL_roller_5_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_5"/>
-    <origin xyz="0 -0.073 0" rpy="0 0 0"/>
-    <axis  xyz="0 0 1"/>
+    <origin xyz="0 -0.065 0.0" rpy="0 0 0"/>
+    <axis  xyz="0 0 -1"/>
   </joint>
   <joint name="OmniFL_roller_6_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_6"/>
-    <origin xyz="0 -0.0589 -0.0430" rpy="0 0 0"/>
+    <origin xyz="0 -0.0526 -0.0380" rpy="0 0 0"/>
     <axis  xyz="0 0.588 -0.809"/>
   </joint>
   <joint name="OmniFL_roller_7_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_7"/>
-    <origin xyz="0 -0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <origin xyz="0 -0.0201 -0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 0.940 -0.342"/>
   </joint>
   <joint name="OmniFL_roller_8_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_8"/>
-    <origin xyz="0 0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <origin xyz="0 0.0201 -0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 0.940 0.342"/>
   </joint>
   <joint name="OmniFL_roller_9_joint" type="continuous">
     <parent link="OmniFL_wheel"/>
     <child  link="OmniFL_roller_9"/>
-    <origin xyz="0 0.0589 -0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 0.588 -0.809"/>
+    <origin xyz="0 0.0526 -0.0380" rpy="0 0 0"/>
+    <axis  xyz="0 0.588 0.809"/>
   </joint>
+
 
 
   <joint name="OmniFR" type="continuous">
@@ -322,63 +324,64 @@
   <joint name="OmniFR_roller_0_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_0"/>
-    <origin xyz="0 0.073 0" rpy="0 0 0"/>
+    <origin xyz="0 0.065 0.0" rpy="0 0 0"/>
     <axis  xyz="0 0 1"/>
   </joint>
   <joint name="OmniFR_roller_1_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_1"/>
-    <origin xyz="0 0.0589 0.0430" rpy="0 0 0"/>
+    <origin xyz="0 0.0526 0.0380" rpy="0 0 0"/>
     <axis  xyz="0 -0.588 0.809"/>
   </joint>
   <joint name="OmniFR_roller_2_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_2"/>
-    <origin xyz="0 0.0225 0.07030 " rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <origin xyz="0 0.0201 0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 -0.940 0.342"/>
   </joint>
   <joint name="OmniFR_roller_3_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_3"/>
-    <origin xyz="0 -0.0225 0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 -0.939 -0.343"/>
+    <origin xyz="0 -0.0201 0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 -0.940 -0.342"/>
   </joint>
   <joint name="OmniFR_roller_4_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_4"/>
-    <origin xyz="0 -0.0589 0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 -0.588 0.809"/>
+    <origin xyz="0 -0.0526 0.0380" rpy="0 0 0"/>
+    <axis  xyz="0 -0.588 -0.809"/>
   </joint>
   <joint name="OmniFR_roller_5_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_5"/>
-    <origin xyz="0 -0.073 0" rpy="0 0 0"/>
-    <axis  xyz="0 0 1"/>
+    <origin xyz="0 -0.065 0.0" rpy="0 0 0"/>
+    <axis  xyz="0 0 -1"/>
   </joint>
   <joint name="OmniFR_roller_6_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_6"/>
-    <origin xyz="0 -0.0589 -0.0430" rpy="0 0 0"/>
+    <origin xyz="0 -0.0526 -0.0380" rpy="0 0 0"/>
     <axis  xyz="0 0.588 -0.809"/>
   </joint>
   <joint name="OmniFR_roller_7_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_7"/>
-    <origin xyz="0 -0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <origin xyz="0 -0.0201 -0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 0.940 -0.342"/>
   </joint>
   <joint name="OmniFR_roller_8_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_8"/>
-    <origin xyz="0 0.0225 -0.0703" rpy="0 0 0"/>
-    <axis  xyz="0 0.939 0.343"/>
+    <origin xyz="0 0.0201 -0.0617" rpy="0 0 0"/>
+    <axis  xyz="0 0.940 0.342"/>
   </joint>
   <joint name="OmniFR_roller_9_joint" type="continuous">
     <parent link="OmniFR_wheel"/>
     <child  link="OmniFR_roller_9"/>
-    <origin xyz="0 0.0589 -0.0430" rpy="0 0 0"/>
-    <axis  xyz="0 0.588 -0.809"/>
+    <origin xyz="0 0.0526 -0.0380" rpy="0 0 0"/>
+    <axis  xyz="0 0.588 0.809"/>
   </joint>
+
 
 
 

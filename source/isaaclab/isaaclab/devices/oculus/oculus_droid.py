@@ -285,8 +285,8 @@ class Oculus_droid(DeviceBase):
         pos_action_gain=0.05,
         rot_action_gain=0.002,
         gripper_action_gain=0.03,
-        base_sensitivity=0.001,
-        base_rot_sensitivity=1,
+        base_sensitivity=0.2,
+        base_rot_sensitivity=15,
         rmat_reorder=[-2, -1, -3, 4],
     ):
         self.oculus_reader = OculusReader()
@@ -404,12 +404,7 @@ class Oculus_droid(DeviceBase):
         lin_vel = lin_vel * min(1, self.max_lin_vel / (np.linalg.norm(lin_vel) + 1e-6))
         rot_vel = rot_vel * min(1, self.max_rot_vel / (np.linalg.norm(rot_vel) + 1e-6))
 
-        gripper_vel = np.clip(gripper_vel, -self.max_gripper_vel, self.max_gripper_vel)
-
-        if gripper_vel > -0.85:
-            gripper_vel = 1
-        elif gripper_vel < -0.85:
-            gripper_vel = -1
+        # gripper_vel = np.clip(gripper_vel, -self.max_gripper_vel, self.max_gripper_vel)
         
         return lin_vel, rot_vel, gripper_vel
 
@@ -442,7 +437,7 @@ class Oculus_droid(DeviceBase):
             )
             euler_action = Rotation.from_quat(quat_action).as_rotvec()
 
-            gripper_action = ((1 - self.vr_state[cid]["gripper"]) * 1.7) + robot_gripper - 0.036
+            gripper_action = -1.0 if self.vr_state[cid]["gripper"] > 0.5 else self.vr_state[cid]["gripper"]
 
             lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
             action = np.concatenate([lin_vel, rot_vel, [gripper_vel]])
@@ -504,7 +499,7 @@ class Oculus_droid(DeviceBase):
         # xy
         raw_x, raw_y = self._state["buttons"]['leftJS']
         action_base[:, 1] = raw_x * self.base_sensitivity
-        action_base[:, 0] = raw_y * self.base_sensitivity
+        action_base[:, 0] = raw_y * self.base_sensitivity * (-1)
         
         
         return (
