@@ -13,7 +13,7 @@ parser.add_argument(
     "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
 )
 parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
-parser.add_argument("--teleop_device", type=str, default="keyboard_bmm", help="Device for interacting with environment")
+parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
 parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
 # append AppLauncher cli args
@@ -51,10 +51,6 @@ def get_ee_state(env, ee_name, gripper_value=0.0):
     ee = env.scene[ee_name].data
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
-
-    euler = torch.from_numpy(
-        Rotation.from_quat(rot.cpu().numpy()).as_euler('xyz')
-    ).to(dtype=rot.dtype, device=rot.device)
     
     # Gripper
     if ee_name == "ee_L_frame":
@@ -62,7 +58,7 @@ def get_ee_state(env, ee_name, gripper_value=0.0):
     else:
         body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
     gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
-    return torch.cat((pos, euler, gripper_dist.unsqueeze(0))).unsqueeze(0)
+    return torch.cat((pos, rot, gripper_dist.unsqueeze(0))).unsqueeze(0)
 
 def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
@@ -133,16 +129,16 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         
         # resolve gripper command
         gripper_vel_L = torch.zeros(delta_pose_L.shape[0], 1, device=delta_pose_L.device)
-        gripper_vel_L[:] = -1.0 if gripper_command_L else 1.0
+        gripper_vel_L[:] = 1.0 if gripper_command_L else -1.0
 
         gripper_vel_R = torch.zeros(delta_pose_R.shape[0], 1, device=delta_pose_R.device)
-        gripper_vel_R[:] = -1.0 if gripper_command_R else 1.0
+        gripper_vel_R[:] = 1.0 if gripper_command_R else -1.0
         
         # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
             delta_pose_base[:, 0], delta_pose_base[:, 1], delta_pose_base[:, 2],
             wheel_radius=0.103, l=0.05
-        ) * 100 # Shape: (batch_size, 3)
+        ) * 10 # Shape: (batch_size, 3)
         delta_pose_base_wheel = delta_pose_base_wheel[:, [2, 1, 0]]
 
         # Ensure gripper velocities and base poses have the correct shapes  

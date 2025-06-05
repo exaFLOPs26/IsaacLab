@@ -417,14 +417,12 @@ class Oculus_droid(DeviceBase):
         # state_dict: shape [num_envs, 8]
         num_envs = state_dict.shape[0]
         actions = []
-
         if self.update_sensor[cid]:
             self._process_reading(cid)
             self.update_sensor[cid] = False
 
         for env_idx in range(num_envs):
             single_state = state_dict[env_idx]
-
             robot_pos = single_state[:3].cpu().numpy()
             robot_quat = single_state[3:7].cpu().numpy()
             robot_gripper = single_state[7].item()
@@ -459,60 +457,62 @@ class Oculus_droid(DeviceBase):
         print(f"Callback for {button_name} registered.")
     
     def advance(self, obs_dict):
-        
+        num_envs = obs_dict["right_arm"].shape[0]
+        action_l = np.zeros((num_envs, 7))  # [num_envs, 7] for left arm
+        action_r = np.zeros((num_envs, 7))  # [num_envs, 7] for right arm
+        action_base = np.zeros((num_envs,3))  
+
         if self._state["poses"] == {}:
             return (
-            np.zeros(6),  # pose_L
-            0.0,          # gripper_command_L
-            np.zeros(6),  # pose_R
-            0.0,          # gripper_command_R
-            np.zeros(3),  # delta_pose_base
-        )
+            action_l[:, :6],  # pose_L
+            action_l[:, 6],   # gripper_command_L
+            action_r[:, :6],  # pose_R
+            action_r[:, 6],   # gripper_command_R
+            action_base,      # delta_pose_base
+            ) 
         
         # Arm
         if self._state["movement_enabled"]["L"]:
             action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
-            action_l[:3] *= self.pos_action_gain
-            action_l[3:6] *= self.rot_action_gain
-            action_l[6] *= 1.0       
+            action_l[:, :3] *= self.pos_action_gain
+            action_l[:, 3:6] *= self.rot_action_gain
+            action_l[:, 6] *= 1.0     
         else:
-            action_l = np.zeros(7)
+            action_l = np.zeros((num_envs, 7)) 
 
         if self._state["movement_enabled"]["R"]:
             action_r = self._calculate_arm_action("R", obs_dict["right_arm"])
-            action_r[:3] *= self.pos_action_gain
-            action_r[3:6] *= self.rot_action_gain
-            action_r[6] *= 1.0
+            action_r[:, :3] *= self.pos_action_gain
+            action_r[:, 3:6] *= self.rot_action_gain
+            action_r[:, 6] *= 1.0
         else:
-            action_r = np.zeros(7)
-        
-        action_base = np.zeros(3)  
-        
+            action_r = np.zeros((num_envs, 7)) 
+         
         # Base
         
         # raw rotation
-        if buttons['rightJS'][0] < -0.7  and ('counterclockwise' not in self._key_hold_start):
-            action_base += self.base_sensitivity * self.base_rot_sensitivity
+        if self._state["buttons"]['rightJS'][0] < -0.7:
+            action_base[:, 2] += self.base_sensitivity * self.base_rot_sensitivity
 
         # check if the rightJS is moved to left
-        elif buttons['rightJS'][0] > 0.7 and ('clockwise' not in self._key_hold_start):
-            action_base -= self.base_sensitivity * self.base_rot_sensitivity
+        elif self._state["buttons"]['rightJS'][0] > 0.7:
+            action_base[:, 2] -= self.base_sensitivity * self.base_rot_sensitivity
 
-        elif buttons['rightJS'][0] == 0.0:
-                action_base = 0.0
+        elif self._state["buttons"]['rightJS'][0] == 0.0:
+                action_base[:, 2] = 0.0
         
         # xy
-        raw_x, raw_y = buttons['leftJS']
-        action_base[0] = raw_x * self.base_sensitivity
-        action_base[1] = raw_y * self.base_sensitivity
+        raw_x, raw_y = self._state["buttons"]['leftJS']
+        action_base[:, 0] = raw_x * self.base_sensitivity
+        action_base[:, 1] = raw_y * self.base_sensitivity
         
         
         return (
-        action_l[:6],  # pose_L
-        action_l[6],   # gripper_command_L
-        action_r[:6],  # pose_R
-        action_r[6],   # gripper_command_R
-        action_base,   # delta_pose_base
+        action_l[:, :6],  # pose_L
+        action_l[:, 6],   # gripper_command_L
+        action_r[:, :6],  # pose_R
+        action_r[:, 6],   # gripper_command_R
+        action_base,      # delta_pose_base
         )    
 
     def advance_onearm(self, obs_dict):
