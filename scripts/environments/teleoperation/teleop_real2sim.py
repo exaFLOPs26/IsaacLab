@@ -215,7 +215,6 @@ def main():
                 # Right arm
                 ee_r_state = get_ee_state(env, "ee_frame")
                 obs_dict = {"left_arm": 0 , "right_arm": ee_r_state}
-                print("obs_dict", obs_dict)
                 teleop_data = teleop_interface.advance_onearm(obs_dict)
               
             # Bimanual teleop  

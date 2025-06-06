@@ -46,9 +46,10 @@ from isaaclab_tasks.manager_based.manipulation.lift import mdp
 from isaaclab_tasks.utils import parse_env_cfg
 from scipy.spatial.transform import Rotation
 
-def get_ee_state(env, ee_name, gripper_value=0.0):
+def get_ee_state(env, ee_name):
     # arm
     ee = env.scene[ee_name].data
+    # ipdb.set_trace()
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
     
@@ -131,7 +132,6 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         # Ensure commands are tensors
         gripper_command_L = torch.as_tensor(gripper_command_L, device=delta_pose_L.device).unsqueeze(-1) 
         gripper_command_R = torch.as_tensor(gripper_command_R, device=delta_pose_R.device).unsqueeze(-1) 
-        print(f"gripper_command_R: {gripper_command_R}")
         # Create output tensors
         # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
@@ -239,13 +239,13 @@ def main():
         # run everything in inference mode
         with torch.inference_mode():
             if args_cli.teleop_device.lower() == "oculus_droid":
-                # Left arm
-                ee_l_state = get_ee_state(env, "ee_L_frame", gripper_value=0.0)
-                ee_r_state = get_ee_state(env, "ee_R_frame", gripper_value=0.0)
+                # Get End-Effector states
+                ee_l_state = get_ee_state(env, "ee_L_frame")
+                ee_r_state = get_ee_state(env, "ee_R_frame")
 
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
 
-                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
+                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(env, obs_dict)
 
             else:
                 # ipdb.set_trace()

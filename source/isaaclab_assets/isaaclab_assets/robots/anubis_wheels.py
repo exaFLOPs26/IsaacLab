@@ -10,17 +10,17 @@ from isaaclab.assets.articulation import ArticulationCfg
 # TODO: Why is anubis too bumpy? Check also in Isaacsim and if not, fix here.
 ANUBIS_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path="/root/IsaacLab/source/isaaclab_assets/data/Robots/MM/anubis/anubis_omni.usd",
+        usd_path="/root/IsaacLab/source/isaaclab_assets/data/Robots/MM/anubis/anubis_omni_200.usd",
         activate_contact_sensors=False,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             rigid_body_enabled=True,
             kinematic_enabled=False,
             disable_gravity=False,
-            max_linear_velocity=1200000.0,
-            max_angular_velocity=1200000.0,
-            max_depenetration_velocity=100000000.0,
-            max_contact_impulse=100000000.0,
-            stabilization_threshold=10.0,
+            max_linear_velocity=12.0,
+            max_angular_velocity=12.0,
+            max_depenetration_velocity=10.0,
+            max_contact_impulse=10.0,
+            stabilization_threshold=0.1,
         ),
         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
             enabled_self_collisions=False,

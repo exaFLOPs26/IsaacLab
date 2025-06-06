@@ -282,8 +282,8 @@ class Oculus_droid(DeviceBase):
         max_rot_vel=1,
         max_gripper_vel=1,
         spatial_coeff=1,
-        pos_action_gain=0.08,
-        rot_action_gain=0.008,
+        pos_action_gain=0.1,
+        rot_action_gain=0.00001,
         gripper_action_gain=0.03,
         base_sensitivity=0.4,
         base_rot_sensitivity=15,
@@ -402,7 +402,7 @@ class Oculus_droid(DeviceBase):
 
     def _limit_velocity(self, lin_vel, rot_vel, gripper_vel):
         lin_vel = lin_vel * min(1, self.max_lin_vel / (np.linalg.norm(lin_vel) + 1e-6))
-        rot_vel = rot_vel * min(1, self.max_rot_vel / (np.linalg.norm(rot_vel) + 1e-6))
+        # rot_vel = rot_vel * min(1, self.max_rot_vel / (np.linalg.norm(rot_vel) + 1e-6))
 
         # gripper_vel = np.clip(gripper_vel, -self.max_gripper_vel, self.max_gripper_vel)
         
@@ -420,7 +420,7 @@ class Oculus_droid(DeviceBase):
             single_state = state_dict[env_idx]
             robot_pos = single_state[:3].cpu().numpy()
             robot_quat = single_state[3:7].cpu().numpy()
-            robot_gripper = single_state[7].item()
+            # robot_gripper = single_state[7].item()
 
             if self.reset_origin[cid]:
                 self.robot_origin[cid] = {"pos": robot_pos, "quat": robot_quat}
@@ -431,16 +431,20 @@ class Oculus_droid(DeviceBase):
                 robot_pos - self.robot_origin[cid]["pos"]
             )
 
+            print("vr", Rotation.from_quat(quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"])).as_rotvec())
             quat_action = quat_diff(
                 quat_diff(self.vr_state[cid]["quat"], self.vr_origin[cid]["quat"]),
                 quat_diff(robot_quat, self.robot_origin[cid]["quat"]),
             )
-            euler_action = Rotation.from_quat(quat_action).as_rotvec()
-
+            
+            rotvec_action = Rotation.from_quat(quat_action).as_rotvec()
+            # print("rotvec_action", rotvec_action)
+            
             gripper_action = -1.0 if self.vr_state[cid]["gripper"] > 0.5 else self.vr_state[cid]["gripper"]
 
-            lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, euler_action, gripper_action)
+            lin_vel, rot_vel, gripper_vel = self._limit_velocity(pos_action, rotvec_action, gripper_action)
             action = np.concatenate([lin_vel, rot_vel, [gripper_vel]])
+
             actions.append(action)
 
         return np.stack(actions)  # shape: [num_envs, 7]
@@ -451,7 +455,7 @@ class Oculus_droid(DeviceBase):
         self._additional_callbacks[button_name] = func
         print(f"Callback for {button_name} registered.")
     
-    def advance(self, obs_dict):
+    def advance(self, env, obs_dict):
         num_envs = obs_dict["right_arm"].shape[0]
         action_l = np.zeros((num_envs, 7))  # [num_envs, 7] for left arm
         action_r = np.zeros((num_envs, 7))  # [num_envs, 7] for right arm
@@ -465,7 +469,7 @@ class Oculus_droid(DeviceBase):
             action_r[:, 6],   # gripper_command_R
             action_base,      # delta_pose_base
             ) 
-        
+
         # Arm
         if self._state["movement_enabled"]["L"]:
             action_l = self._calculate_arm_action("L", obs_dict["left_arm"])
@@ -484,7 +488,8 @@ class Oculus_droid(DeviceBase):
             action_r = np.zeros((num_envs, 7)) 
          
         # Base
-        
+        # env.scene.cfg.robot.spawn.articulation_props.fix_root_link = True does not work
+
         # raw rotation
         if self._state["buttons"]['rightJS'][0] < -0.7:
             action_base[:, 2] += self.base_sensitivity * self.base_rot_sensitivity
@@ -495,13 +500,12 @@ class Oculus_droid(DeviceBase):
 
         elif self._state["buttons"]['rightJS'][0] == 0.0:
                 action_base[:, 2] = 0.0
-        
+                
         # xy
         raw_x, raw_y = self._state["buttons"]['leftJS']
         action_base[:, 1] = raw_x * self.base_sensitivity
         action_base[:, 0] = raw_y * self.base_sensitivity * (-1)
-        
-        
+            
         return (
         action_l[:, :6],  # pose_L
         action_l[:, 6],   # gripper_command_L

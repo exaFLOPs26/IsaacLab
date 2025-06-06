@@ -35,12 +35,12 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
             scale=1.0,
             use_default_offset=True,
             clip = {
-                "link1_joint": (-0.523599, 1.91986),
+                "arm1_base_joint": (-0.523599, 0.523599),
+                "link11_joint": (-0.523599, 1.91986),
                 "link12_joint": (0.174533, 2.79253),
                 "link13_joint": (-1.5708, 1.74533),
                 "link14_joint": (-1.5708, 1.57085),
                 "link15_joint": (-1.74533, 1.74533),
-                "arm1_base_joint": (-0.523599, 0.523599),
             }
         )
         self.actions.armL_action = mdp.JointPositionActionCfg(
