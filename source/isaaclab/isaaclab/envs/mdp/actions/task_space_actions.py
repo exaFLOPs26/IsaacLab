@@ -194,6 +194,13 @@ class DifferentialInverseKinematicsAction(ActionTerm):
         # obtain quantities from simulation
         ee_pos_w = self._asset.data.body_pos_w[:, self._body_idx]
         ee_quat_w = self._asset.data.body_quat_w[:, self._body_idx]
+        # import ipdb
+        # ipdb.set_trace()
+        # Virtual headset
+        # headset_index, _ = self._asset.find_bodies("headset")
+        # head_pos_w = self._asset.data.body_quat_w[:,headset_index]
+        # head_quat_w = self._asset.data.body_quat_w[:,headset_index]
+        
         root_pos_w = self._asset.data.root_pos_w
         root_quat_w = self._asset.data.root_quat_w
         # compute the pose of the body in the root frame

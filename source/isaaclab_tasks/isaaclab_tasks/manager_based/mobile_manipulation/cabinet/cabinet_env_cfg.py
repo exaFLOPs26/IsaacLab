@@ -55,22 +55,22 @@ class CabinetSceneCfg(InteractiveSceneCfg):
     object: RigidObjectCfg | DeformableObjectCfg = MISSING
     
     # plane
-    house = AssetBaseCfg(
-        prim_path="/World/House",
-        init_state=AssetBaseCfg.InitialStateCfg(),
-        spawn=sim_utils.UsdFileCfg(
-            usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Env/house.usd",
-            activate_contact_sensors=False,
-            scale=(1.0, 1.0, 1.0), 
-        )
-    )
-    
-    # plane = AssetBaseCfg(
-    #     prim_path="/World/GroundPlane",
+    # house = AssetBaseCfg(
+    #     prim_path="/World/House",
     #     init_state=AssetBaseCfg.InitialStateCfg(),
-    #     spawn=sim_utils.GroundPlaneCfg(),
-    #     collision_group=-1,
+    #     spawn=sim_utils.UsdFileCfg(
+    #         usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Env/house.usd",
+    #         activate_contact_sensors=False,
+    #         scale=(1.0, 1.0, 1.0), 
+    #     )
     # )
+    
+    plane = AssetBaseCfg(
+        prim_path="/World/GroundPlane",
+        init_state=AssetBaseCfg.InitialStateCfg(),
+        spawn=sim_utils.GroundPlaneCfg(),
+        collision_group=-1,
+    )
 
     # lights
     light = AssetBaseCfg(
