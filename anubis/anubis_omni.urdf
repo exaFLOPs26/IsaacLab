@@ -30,6 +30,15 @@
     </collision>
   </link>
 
+<!-- Virtual headset -->
+<joint name="vr_headset_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="vr_headset_frame"/>
+  <!-- Adjust xyz and rpy based on actual headset position and tilt -->
+  <origin xyz="0 0 1.5" rpy="-0.52 0 0"/> <!-- -30° pitch -->
+</joint>
+<link name="vr_headset_frame"/>
+
 <!-- OmniR","OmniFL","OmniFR -->
 
   <joint name="OmniR" type="continuous">
@@ -1656,6 +1665,11 @@
   </joint>
 
   <link name="arm1_base_link">
+      <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
+    </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -1683,7 +1697,7 @@
   <link name="link11">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0608351104988555" />
+            <mass value="0.608351104988555" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1959,6 +1973,11 @@
 
 
   <link name="arm2_base_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <mass value="1" />
+            <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
+    </inertial>
     <visual>
       <origin rpy="0 0 3.14159" xyz="-0.19 0 0"/>
       <geometry>
