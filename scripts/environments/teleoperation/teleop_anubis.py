@@ -13,9 +13,11 @@ parser.add_argument(
     "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
 )
 parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
-parser.add_argument("--teleop_device", type=str, default="oculus_droid", help="Device for interacting with environment")
+parser.add_argument("--teleop_device", type=str, default="oculus", help="Device for interacting with environment")
 parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
+parser.add_argument("--bimanual", type=bool, default=True, help="Whether to use bimanual teleoperation.")
+parser.add_argument("--EEF_control", type=str, default="abs", help="Control mode: 'delta' or 'abs'.")
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 args_cli = parser.parse_args()
@@ -101,10 +103,11 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
             abs_pose_L = ee_l_state
         if torch.all(abs_pose_R == 0):
             abs_pose_R = ee_r_state
+        dummy_zeros = torch.zeros((1, 60), device=abs_pose_R.device)
 
         # Concatenate the zeroed out poses with the velocities and base movement
         # return torch.concat([delta_pose_L_zeroed, delta_pose_R_zeroed, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
-        return torch.concat([abs_pose_L, abs_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
+        return torch.concat([abs_pose_L, abs_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base, dummy_zeros], dim=1)
 
 def compute_wheel_velocities_torch(vx, vy, wz, wheel_radius, l):
     theta = torch.tensor([0, 2 * torch.pi / 3, 4 * torch.pi / 3], device=vx.device)
@@ -191,12 +194,11 @@ def main():
         teleop_interface = Oculus_mobile(
             pos_sensitivity=0.815 * args_cli.sensitivity, rot_sensitivity=0.4 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
         )
-    elif args_cli.teleop_device.lower() == "oculus_abs":
-        teleop_interface = Oculus_abs(
-            pos_sensitivity=2.15 * args_cli.sensitivity, rot_sensitivity=1.0 * args_cli.sensitivity, base_sensitivity = 0.3 * args_cli.sensitivity
-        )
-    elif args_cli.teleop_device.lower() == "oculus_droid":
-        teleop_interface = Oculus_droid() 
+    elif args_cli.teleop_device.lower() == "oculus":
+        if args_cli.EEF_control.lower() == "delta":
+            teleop_interface = Oculus_droid()
+        elif args_cli.EEF_control.lower() == "abs":
+            teleop_interface = Oculus_abs()
     elif args_cli.teleop_device.lower() == "spacemouse":
         teleop_interface = Se3SpaceMouse(
             pos_sensitivity=0.000001 * args_cli.sensitivity, rot_sensitivity=0.000001 * args_cli.sensitivity
@@ -238,18 +240,27 @@ def main():
     while simulation_app.is_running():
         # run everything in inference mode
         with torch.inference_mode():
-            if args_cli.teleop_device.lower() == "oculus_droid":
-                # Get End-Effector states
+
+            # Bimanual teleoperation
+            if args_cli.bimanual == True:
                 ee_l_state = get_ee_state(env, "ee_L_frame")
                 ee_r_state = get_ee_state(env, "ee_R_frame")
-
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
-
-                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(env, obs_dict)
-
+                # print("obs_dict: ", obs_dict)
             else:
-                # ipdb.set_trace()
+                ee_r_state = get_ee_state(env, "ee_R_frame")
+                obs_dict = {"right_arm": ee_r_state}
+           
+            # Delta or absolute control
+            if args_cli.EEF_control.lower() == "delta":
+                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
+            
+            else: # abs
                 pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
+
+            print(f"pose_L: {pose_L}, gripper_command_L: {gripper_command_L}, pose_R: {pose_R}, gripper_command_R: {gripper_command_R}, delta_pose_base: {delta_pose_base}")
+
+            # pre-process actions
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")
             delta_pose_base = delta_pose_base.astype("float32")
@@ -257,13 +268,15 @@ def main():
             pose_L = torch.tensor(pose_L, device=env.device).repeat(env.num_envs, 1)
             pose_R = torch.tensor(pose_R, device=env.device).repeat(env.num_envs, 1)
             delta_pose_base = torch.tensor(delta_pose_base, device=env.device).repeat(env.num_envs, 1)
-            # pre-process actions
 
-            if "abs" in args_cli.task:
-                actions = pre_process_actions_abs(env,pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
-            else: # Delta
+            if args_cli.EEF_control.lower() == "delta":
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
+            else: # abs
+                actions = pre_process_actions_abs(env, pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
+            
+            
             # apply actions
+
             env.step(actions)
 
             if should_reset_recording_instance:

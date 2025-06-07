@@ -1,3 +1,6 @@
+
+
+
 # Environment configuration for the Anubis robot in the Cabinet task for teleoperation.
   
 from isaaclab.controllers.differential_ik_cfg import DifferentialIKControllerCfg
@@ -26,18 +29,18 @@ class AnubisCabinetEnvCfg(joint_pos_env_cfg.AnubisCabinetEnvCfg):
             asset_name="robot",
             joint_names=["link1.*", "arm1.*"],
             body_name="ee_link1",
-            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=True, ik_method="dls"),
+            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=False, ik_method="dls"),
             scale=1.0,
-            body_offset=DifferentialInverseKinematicsActionCfg.OffsetCfg(pos=[0.0, 0.0, 0.0]),
+            body_offset=DifferentialInverseKinematicsActionCfg.OffsetCfg(pos=[0.0, 0.0, 0.1034]),
         )
 
         self.actions.armL_action = DifferentialInverseKinematicsActionCfg(
             asset_name="robot",
             joint_names=["link2.*", "arm2.*"],
             body_name="ee_link2",
-            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=True, ik_method="dls"),
+            controller=DifferentialIKControllerCfg(command_type="pose", use_relative_mode=False, ik_method="dls"),
             scale=1.0,
-            body_offset=DifferentialInverseKinematicsActionCfg.OffsetCfg(pos=[0.0, 0.0, 0.0]),
+            body_offset=DifferentialInverseKinematicsActionCfg.OffsetCfg(pos=[0.0, 0.0, 0.1034]),
         )
 
 @configclass

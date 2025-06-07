@@ -282,9 +282,9 @@ class Oculus_droid(DeviceBase):
         max_rot_vel=1,
         max_gripper_vel=1,
         spatial_coeff=1,
-        pos_action_gain=0.1,
-        rot_action_gain=0.00001,
-        gripper_action_gain=0.03,
+        pos_action_gain=0.05,
+        rot_action_gain=0.01,
+        gripper_action_gain=0.3,
         base_sensitivity=0.4,
         base_rot_sensitivity=15,
         rmat_reorder=[-2, -1, -3, 4],
@@ -438,7 +438,7 @@ class Oculus_droid(DeviceBase):
             )
             
             rotvec_action = Rotation.from_quat(quat_action).as_rotvec()
-            # print("rotvec_action", rotvec_action)
+            print("rotvec_action", rotvec_action)
             
             gripper_action = -1.0 if self.vr_state[cid]["gripper"] > 0.5 else self.vr_state[cid]["gripper"]
 
@@ -455,12 +455,13 @@ class Oculus_droid(DeviceBase):
         self._additional_callbacks[button_name] = func
         print(f"Callback for {button_name} registered.")
     
-    def advance(self, env, obs_dict):
+    def advance(self, obs_dict):
         num_envs = obs_dict["right_arm"].shape[0]
         action_l = np.zeros((num_envs, 7))  # [num_envs, 7] for left arm
         action_r = np.zeros((num_envs, 7))  # [num_envs, 7] for right arm
         action_base = np.zeros((num_envs,3))  
 
+        # Check if the controller is on
         if self._state["poses"] == {}:
             return (
             action_l[:, :6],  # pose_L

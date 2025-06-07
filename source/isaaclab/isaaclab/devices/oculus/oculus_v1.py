@@ -231,51 +231,33 @@ class OculusReader:
 
 
 class Oculus_abs(DeviceBase):
-    """
-    Changes
-    1. Relative to Absolute
-    2. DROID setup
 
-    
+    def __init__(
+        self,
+        pos_sensitivity: float = 1.0 ,
+        rot_sensitivity: float = 1.0,
+        base_sensitivity: float = 0.4,
+        base_rot_sensitivity=15,
+        rmat_reorder=[-2, -1, -3, 4],
+        gripper_action_gain=0.3,
+    ):
 
-    The command comprises of three parts:
-
-    * delta control for mobile base: a 3D vector of (vx, vy, vz) in meters per second.
-    * abs pose for each arms: a 7D vector of position (x, y, z) and quaternion (w, x, y, z) in meters and radians.
-    * gripper for each arms: a binary command to open or close the gripper.
-    * RJ for resetting absolute pose of the arms.
-    * LG/RG for moving the arm (DROID setup)
-
-    Key bindings:
-        ============================== ================= 
-        Description                    Joystick event    
-        ============================== ================= 
-        Toggle gripperR (open/close)   RTr (index finger)
-        Toggle gripperL (open/close)   LTr (index finger)
-        Move along xy plane            leftJS xy position
-        Rotate along yaw               RightJS x         
-        Move right arm                 RG
-        Move left arm                  LG
-        ============================== ================= 
-    """
-    def __init__(self, pos_sensitivity: float = 1.0 , rot_sensitivity: float = 1.0, base_sensitivity: float = 1.0):
-        """
-        Args:
-            pos_sensitivity: Magnitude of input position command scaling for arms.
-            rot_sensitivity: Magnitude of input rotation command scaling for arms.
-            base_sensitivity: Magnitude of input command scaling for the mobile base.
-        """
+        # initialize OculusReader for joystick input
+        self.oculus_reader = OculusReader()
+        
         # sensitivities
         self.pos_sensitivity = pos_sensitivity
         self.rot_sensitivity = rot_sensitivity
         self.base_sensitivity = base_sensitivity
+        self.base_rot_sensitivity = base_rot_sensitivity
+        self.gripper_action_gain = gripper_action_gain
 
-        # initialize OculusReader for joystick input
-        self.oculus_reader = OculusReader()
+        # For mobile base movement threshold, tune this to taste
+        self._js_threshold = 0.1  
 
-        # set up yaw cumulative motion
-        self._key_hold_start = {}  # Track when rightJS is moved
-        self._base_z_accum = 0.0   # Accumulated vertical motion for base
+        # Gripper toggle
+        self._prev_LTr_state = False
+        self._prev_RTr_state = False
 
         # command buffers
         self._close_gripper_left = False
@@ -285,24 +267,8 @@ class Oculus_abs(DeviceBase):
         self._abs_pos_right = np.zeros(3)  # (x, y, z) for right arm
         self._abs_rot_right = np.zeros(4)  # quaternion (w, x, y, z) for right arm
         self._delta_base = np.zeros(3)  # (x, y, yaw) for mobile base
-        
-        # arm
-        self._origin_left = np.eye(4)
-        self._origin_right = np.eye(4)
 
 
-        # gripper
-        self._prev_LTr_state = False
-        self._prev_RTr_state = False
-
-        # xy
-        self._last_leftJS = (0.0, 0.0)
-        self._js_threshold = 0.1  # tune this to taste
-        
-        # yaw
-        self.rotation_divisor = 1.2037685675
-        self.base_rot_sensitivity = 10
-        
         # dictionary for additional callbacks
         self._additional_callbacks = dict()
 
@@ -319,8 +285,7 @@ class Oculus_abs(DeviceBase):
         self._abs_pos_right = np.zeros(3)
         self._abs_rot_right = np.zeros(4)
         self._delta_base = np.zeros(3)
-        self._base_z_accum = 0.0
-        self._key_hold_start = {}  # Reset key hold tracking
+
 
     def __str__(self) -> str:
         """Returns: A string containing the information of joystick."""
@@ -355,138 +320,47 @@ class Oculus_abs(DeviceBase):
         # fetch latest controller data
         transforms, buttons = self.oculus_reader.get_valid_transforms_and_buttons()  # returns dict with 'leftJS', 'rightJS'
 
-        # 1. grab current
+        # 1. Current data of joystick
         T_l = transforms["l"]
         T_r = transforms["r"]
 
-        # 2. arm absolute pose
-        self._abs_pos_left  = np.array(T_l[:3, 3] - self._origin_left[:3,3])
-        self._abs_pos_right = np.array(T_r[:3, 3] - self._origin_right[:3,3])
+        # 2. Arm absolute pose
+        self._abs_pos_left  = np.array(T_l[:3, 3])
+        self._abs_pos_right = np.array(T_r[:3, 3])
 
-        # 3. ROTATION DELTA: same as before, via delta‐matrix
+        # 3. Arm absolute quat
 
-        delta_rot_left = self._origin_left[:3, :3].T @ T_l[:3, :3]
-        self._abs_rot_left = Rotation.from_matrix(delta_rot_left).as_quat()
-
-        
-        delta_rot_right = self._origin_right[:3, :3].T @ T_r[:3, :3]
-        self._abs_rot_right = Rotation.from_matrix(delta_rot_right).as_quat()
-
-
-        # re‐order [z, x, y] and flip signs on first two
-        # self._abs_rot_left  = self._abs_rot_left[[2, 0, 1]] * np.array([-1, -1, 1])
-        # self._abs_rot_right = self._abs_rot_right[[2, 0, 1]] * np.array([-1, -1, 1])
-        
-        if buttons['RJ']:
-            self._origin_left = T_l.copy()
-            self._origin_right = T_r.copy()
+        self._abs_rot_left = Rotation.from_matrix(T_l[:3, :3]).as_quat()
+        self._abs_rot_right = Rotation.from_matrix(T_r[:3, :3]).as_quat()
 
         # Gripper
-        # Somewhere in your class, add:
 
-        # Then in your update loop or callback:
         if buttons['LTr'] and not self._prev_LTr_state:
             self._close_gripper_left = not self._close_gripper_left
         
-        # Update the previous state for the next cycle
         self._prev_LTr_state = buttons['LTr']
 
         if buttons['RTr'] and not self._prev_RTr_state:
             self._close_gripper_right = not self._close_gripper_right
-        # Update the previous state for the next cycle
         self._prev_RTr_state = buttons['RTr']
 
         # mobile base
 
-        # yaw
-        # check if the rightJS is moved to right
-        if buttons['rightJS'][0] < -0.7  and ('counterclockwise' not in self._key_hold_start):
+        # yaw rotation
+        if buttons['rightJS'][0] < -0.7:
             self._delta_base[2] += self.base_sensitivity * self.base_rot_sensitivity
-            self._key_hold_start['counterclockwise'] = time.time()
 
         # check if the rightJS is moved to left
-        elif buttons['rightJS'][0] > 0.7 and ('clockwise' not in self._key_hold_start):
+        elif buttons['rightJS'][0] > 0.7:
             self._delta_base[2] -= self.base_sensitivity * self.base_rot_sensitivity
-            self._key_hold_start['clockwise'] = time.time()
 
-        # check if the rightJS is returned to the center (similar to key realeased)
-        elif buttons['rightJS'][0] == 0.0 and (('counterclockwise' in self._key_hold_start) or ('clockwise' in self._key_hold_start)):
-            # remove the key from the dictionary
-            if 'counterclockwise' in self._key_hold_start:
-                duration = time.time() - self._key_hold_start['counterclockwise']
-                self._base_z_accum += self.base_sensitivity * duration
-                self._delta_base[2] = 0.0
-                del self._key_hold_start['counterclockwise']
+        elif buttons['rightJS'][0] == 0.0:
+            self._delta_base[2] = 0.0
                 
-                
-            if 'clockwise' in self._key_hold_start:
-                duration = time.time() - self._key_hold_start['clockwise']
-                self._base_z_accum -= self.base_sensitivity * duration
-                self._delta_base[2] = 0.0
-                del self._key_hold_start['clockwise']
-        
         # xy
-        if buttons['rightJS'][0] == 0.0:
-            raw_x, raw_y = buttons['leftJS']
-            new_js = (raw_x, raw_y)
-
-            # compute Euclidean change
-            dx = raw_x - self._last_leftJS[0]
-            dy = raw_y - self._last_leftJS[1]
-
-            # check if the leftJS is moved by the self._js_threshold
-            if (dx*dx + dy*dy)**0.6 > self._js_threshold:
-                theta = self._base_z_accum * self.base_rot_sensitivity / self.rotation_divisor
-                print(theta)
-                # 1) subtract out the old
-                ox, oy = self._last_leftJS
-                old_vec = (
-                    ox * np.asarray([
-                        math.cos((theta)),
-                        math.sin((theta)),
-                        0.0
-                    ]) +
-                    oy * np.asarray([
-                        -math.sin((theta)),
-                        math.cos((theta)),
-                        0.0
-                    ])
-                ) * self.base_sensitivity
-                self._delta_base -= old_vec[[1,0,2]]* np.array([1, -1, 1])
-
-                # 2) add in the new
-                new_vec = (
-                    raw_x * np.asarray([
-                        math.cos((theta)),
-                        math.sin((theta)),
-                        0.0
-                    ]) +
-                    raw_y * np.asarray([
-                        -math.sin((theta)),
-                        math.cos((theta)),
-                        0.0
-                    ])
-                ) * self.base_sensitivity
-                self._delta_base += new_vec[[1,0,2]]* np.array([1, -1, 1])
-
-                # 3) remember it
-                self._last_leftJS = new_js
-        print("-----------------------")
-        print("abs_pos_left", self._abs_pos_left)
-        print("abs_rot_left", self._abs_rot_left)
-        print("-----------------------")
-        print("abs_pos_right", self._abs_pos_right)
-        print("abs_rot_right", self._abs_rot_right)
-        print("-----------------------")
-
-
-        # return the commands
-        if not buttons['LG']:
-            self._abs_pos_left = np.zeros(3)
-            self._abs_rot_left = np.zeros(4)
-        if not buttons['RG']:
-            self._abs_pos_right = np.zeros(3)
-            self._abs_rot_right = np.zeros(4)
+        raw_x, raw_y = buttons['leftJS']
+        self._delta_base[1] = raw_x * self.base_sensitivity
+        self._delta_base[0] = raw_y * self.base_sensitivity * (-1)
 
         return (
             np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
