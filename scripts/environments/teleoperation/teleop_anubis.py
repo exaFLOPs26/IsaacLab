@@ -59,6 +59,7 @@ from scipy.spatial.transform import Rotation
 
 def get_ee_state(env, ee_name):
     # arm
+    # ipdb.set_trace()
     ee = env.scene[ee_name].data
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
@@ -107,11 +108,6 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
         gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
         
-        # Check if the absolute poses are zeroed out
-        if torch.all(abs_pose_L == 0):
-            abs_pose_L = ee_l_state
-        if torch.all(abs_pose_R == 0):
-            abs_pose_R = ee_r_state
         dummy_zeros = torch.zeros((1, 60), device=abs_pose_R.device)
 
         # Concatenate the zeroed out poses with the velocities and base movement
@@ -208,7 +204,6 @@ def main():
             teleop_interface = Oculus_droid()
         elif args_cli.EEF_control.lower() == "abs":
             teleop_interface = Oculus_abs()
-            teleop_interface.add_callback("X", )
     elif args_cli.teleop_device.lower() == "spacemouse":
         teleop_interface = Se3SpaceMouse(
             pos_sensitivity=0.000001 * args_cli.sensitivity, rot_sensitivity=0.000001 * args_cli.sensitivity
@@ -270,7 +265,8 @@ def main():
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             else: # abs
                 actions = pre_process_actions_abs(env, pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
-            
+            # print("pose_L:", pose_L)
+            # print("pose_R:", pose_R)
             # apply actions
             env.step(actions)
 

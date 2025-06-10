@@ -207,8 +207,6 @@ class DifferentialInverseKinematicsAction(ActionTerm):
         # compute the pose of the body in the root frame
         # ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(root_pos_w, root_quat_w, ee_pos_w, ee_quat_w)
         ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(head_pos_w, head_quat_w, ee_pos_w, ee_quat_w)
-        print("ee_pos_b", ee_pose_b)
-        print("ee_quat_b", ee_quat_b)
         # account for the offset
         if self.cfg.body_offset is not None:
             ee_pose_b, ee_quat_b = math_utils.combine_frame_transforms(

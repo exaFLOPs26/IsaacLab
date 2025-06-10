@@ -35,7 +35,7 @@
   <parent link="base_link"/>
   <child link="vr_headset_frame"/>
   <!-- Adjust xyz and rpy based on actual headset position and tilt -->
-  <origin xyz="0 0 1.5" rpy="-0.52 0 0"/> <!-- -30° pitch -->
+  <origin xyz="-0.15 0 1.4" rpy="0 0 -1.5708"/> <!-- -30° pitch -->
 </joint>
 <link name="vr_headset_frame"/>
 

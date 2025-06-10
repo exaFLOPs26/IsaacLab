@@ -267,6 +267,7 @@ class Oculus_abs(DeviceBase):
         self._abs_pos_right = np.zeros(3)  # (x, y, z) for right arm
         self._abs_rot_right = np.zeros(4)  # quaternion (w, x, y, z) for right arm
         self._delta_base = np.zeros(3)  # (x, y, yaw) for mobile base
+        self._last_freeze_time = 0
 
 
         # dictionary for additional callbacks
@@ -276,27 +277,38 @@ class Oculus_abs(DeviceBase):
         """Release the keyboard interface."""
         self.oculus_reader.stop()
     
+    def reset(self):
+        """Reset all commands."""
+        self._close_gripper_left = False
+        self._close_gripper_right = False
+        self._abs_pos_left = np.zeros(3)
+        self._abs_rot_left = np.zeros(3)
+        self._abs_pos_right = np.zeros(3)
+        self._abs_rot_right = np.zeros(3)
+        self._delta_base = np.zeros(3)
+
     def freeze(self, obs_dict, transforms, buttons):
         """Give no action to robot"""
         self._close_gripper_left = False
         self._close_gripper_right = False
-        self._abs_pos_left = obs_dict['ee_L_frame'][:3]  # (x, y, z) for left arm
-        self._abs_rot_left = obs_dict['ee_L_frame'][3:7]  # quaternion (w, x, y, z) for left arm
-        self._abs_pos_right = obs_dict['ee_R_frame'][:3]  # (x, y, z) for right arm
-        self._abs_rot_right = obs_dict['ee_R_frame'][3:7]  # quaternion (w, x, y, z) for right arm
+        self._abs_pos_left = obs_dict['left_arm'][0, :3]  # (x, y, z) for left arm
+        self._abs_rot_left = obs_dict['left_arm'][0, 3:7]  # quaternion (w, x, y, z) for left arm
+        self._abs_pos_right = obs_dict['right_arm'][0, :3]  # (x, y, z) for right arm
+        self._abs_rot_right = obs_dict['right_arm'][0, 3:7]  # quaternion (w, x, y, z) for right arm
         
-        print("Freezing the robot to match the initial state.")
-        print("Robot's left arm position:", self._abs_pos_left)
-        print("Robot's left arm rotation:", self._abs_rot_left)
-        print("Robot's right arm position:", self._abs_pos_right)
-        print("Robot's right arm rotation:", self._abs_rot_right)
-        
-        print("VR controller's left arm position:", transforms['l'][:3, 3])
-        print("VR controller's left arm rotation:", Rotation.from_matrix(transforms['l'][:3, :3]).as_quat())
-        print("VR controller's right arm position:", transforms['r'][:3, 3])
-        print("VR controller's right arm rotation:", Rotation.from_matrix(transforms['r'][:3, :3]).as_quat())
-        
-        # self._delta_base = np.zeros(3)
+        now = time.time()
+        if now - self._last_freeze_time >= 1.0:
+            self._last_freeze_time = now
+            print("Freezing the robot to match the initial state.")
+            # print("Robot's left arm position:", self._abs_pos_left)
+            # print("Robot's left arm rotation:", Rotation.from_quat(self._abs_rot_left.cpu().numpy()).as_rotvec())
+            print("Robot's right arm position:", self._abs_pos_right)
+            print("Robot's right arm rotation:", Rotation.from_quat(self._abs_rot_right.cpu().numpy()).as_rotvec())
+            
+            # print("VR controller's left arm position:", np.array(transforms['l'][:3, 3])[[1, 0, 2]])
+            # print("VR controller's left arm rotation:", Rotation.from_matrix(transforms['l'][:3, :3]).as_rotvec())
+            print("VR controller's right arm position:", np.array(transforms['r'][:3, 3])[[1, 0, 2]])
+            print("VR controller's right arm rotation:", Rotation.from_matrix(transforms['r'][:3, :3]).as_rotvec())
 
 
     def __str__(self) -> str:
@@ -337,13 +349,15 @@ class Oculus_abs(DeviceBase):
         T_r = transforms["r"]
 
         # 2. Arm absolute pose
-        self._abs_pos_left  = np.array(T_l[:3, 3])
-        self._abs_pos_right = np.array(T_r[:3, 3])
+        self._abs_pos_left  = np.array(T_l[:3, 3])[[1, 0, 2]]
+        self._abs_pos_right = np.array(T_r[:3, 3])[[1, 0, 2]]
 
         # 3. Arm absolute quat
 
-        self._abs_rot_left = Rotation.from_matrix(T_l[:3, :3]).as_quat()
-        self._abs_rot_right = Rotation.from_matrix(T_r[:3, :3]).as_quat()
+        # self._abs_rot_left = Rotation.from_matrix(T_l[:3, :3]).as_quat()
+        # self._abs_rot_right = Rotation.from_matrix(T_r[:3, :3]).as_quat()
+        self._abs_rot_left = obs_dict['left_arm'][0, 3:7].cpu().numpy() # quaternion (w, x, y, z) for left arm
+        self._abs_rot_right = obs_dict['right_arm'][0, 3:7].cpu().numpy() # quaternion (w, x, y, z) for right arm
 
         # Gripper
 
@@ -378,6 +392,21 @@ class Oculus_abs(DeviceBase):
         if buttons.get("X", False):
             self.freeze(obs_dict, transforms, buttons)
 
+            return (
+                np.concatenate([self._abs_pos_left.cpu().numpy(), self._abs_rot_left.cpu().numpy()]),  # Left arm
+                self._close_gripper_left,
+                np.concatenate([self._abs_pos_right.cpu().numpy(), self._abs_rot_right.cpu().numpy()]),  # Right arm
+                self._close_gripper_right,
+                self._delta_base,
+            )
+
+        print(
+            np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
+            self._close_gripper_left,  # Left gripper
+            np.concatenate([self._abs_pos_right, self._abs_rot_right ]),  # Right arm
+            self._close_gripper_right,  # Right gripper
+            self._delta_base,  # Mobile base
+        )
         return (
             np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
             self._close_gripper_left,  # Left gripper
