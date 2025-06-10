@@ -73,7 +73,7 @@ def get_ee_state(env, ee_name):
     return torch.cat((pos, rot, gripper_dist.unsqueeze(0))).unsqueeze(0)
 
 
-def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
+def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base, num_envs, device) -> torch.Tensor:
     """Pre-process actions for the environment."""
     # compute actions based on environment
     if "Reach" in args_cli.task:
@@ -81,37 +81,24 @@ def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bo
         # compute actions
         return delta_pose_base
     else:
-        init_pos = env.scene["ee_L_frame"].data.target_pos_source[0,0]
-        init_rot = env.scene["ee_L_frame"].data.target_quat_source[0,0]
-        ee_l_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
-        
-        init_pos = env.scene["ee_R_frame"].data.target_pos_source[0,0]
-        init_rot = env.scene["ee_R_frame"].data.target_quat_source[0,0]
-        ee_r_state = torch.cat([init_pos, init_rot], dim=0).unsqueeze(0)
-        
+        # ipdb.set_trace()
+        abs_pose_L = torch.tensor(abs_pose_L, dtype=torch.float, device=device)
+        abs_pose_R = torch.tensor(abs_pose_R, dtype=torch.float, device=device)
+        delta_pose_base = torch.tensor(delta_pose_base, dtype=torch.float, device=device)
         # resolve gripper command
-        gripper_vel_L = torch.zeros(abs_pose_L.shape[0], 1, device=abs_pose_L.device)
+        gripper_vel_L = torch.zeros(abs_pose_L.shape[0], 1, device=device)
         gripper_vel_L[:] = -1.0 if gripper_command_L else 1.0
 
-        gripper_vel_R = torch.zeros(abs_pose_R.shape[0], 1, device=abs_pose_R.device)
+        gripper_vel_R = torch.zeros(abs_pose_R.shape[0], 1, device=device)
         gripper_vel_R[:] = -1.0 if gripper_command_R else 1.0
         # compute actions
 
-        pose_L_zeroed = torch.zeros_like(abs_pose_L)  # Shape: (batch_size, 6)
-        pose_L_zeroed[:, 0:3] = abs_pose_L[:, 0:3]  # Position
-        # delta_pose_L_zeroed[:, 3:6] = delta_pose_L[:, 3:6]  # Rotation
-        pose_R_zeroed = torch.zeros_like(abs_pose_R)  # Shape: (batch_size, 6)
-        pose_R_zeroed[:, 0:3] = abs_pose_R[:, 0:3]  # Position
-        # delta_pose_R_zeroed[:, 3:6] = delta_pose_R[:, 3:6]  # Rotation
-
         # Ensure gripper velocities and base poses have the correct shapes  
+        
         gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
         gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
         
-        dummy_zeros = torch.zeros((1, 60), device=abs_pose_R.device)
-
-        # Concatenate the zeroed out poses with the velocities and base movement
-        # return torch.concat([delta_pose_L_zeroed, delta_pose_R_zeroed, gripper_vel_L, gripper_vel_R, delta_pose_base], dim=1)
+        dummy_zeros = torch.zeros((num_envs, 60), device=device)
         return torch.concat([abs_pose_L, abs_pose_R, gripper_vel_L, gripper_vel_R, delta_pose_base, dummy_zeros], dim=1)
 
 def compute_wheel_velocities_torch(vx, vy, wz, wheel_radius, l):
@@ -264,9 +251,8 @@ def main():
             if args_cli.EEF_control.lower() == "delta":
                 actions = pre_process_actions(pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             else: # abs
-                actions = pre_process_actions_abs(env, pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
-            # print("pose_L:", pose_L)
-            # print("pose_R:", pose_R)
+                actions = pre_process_actions_abs(env, pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base, env.num_envs, env.device)
+            
             # apply actions
             env.step(actions)
 
@@ -274,6 +260,11 @@ def main():
                 env.reset()
                 teleop_interface.reset()
                 should_reset_recording_instance = False
+                # ipdb.set_trace()
+                for i in range(env.num_envs):
+                    print("env", i, "stiffness",env.scene.articulations["robot"].data.joint_stiffness[i][-16:-4])
+                    print("env", i, "damping",env.scene.articulations["robot"].data.joint_damping[i][-16:-4])
+
 
     # close the simulator
     env.close()

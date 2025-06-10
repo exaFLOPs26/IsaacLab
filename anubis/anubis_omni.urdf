@@ -1667,7 +1667,7 @@
   <link name="arm1_base_link">
       <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="1" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1697,7 +1697,7 @@
   <link name="link11">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.608351104988555" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1727,7 +1727,7 @@
   <link name="link12">
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="1.0733279014126" />
+            <mass value="0.5" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1756,7 +1756,7 @@
   <link name="link13">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.499404738025019" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1787,7 +1787,7 @@
   <link name="link14">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0809712553169999" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1818,7 +1818,7 @@
   <link name="link15">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.602357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1849,7 +1849,7 @@
   <link name="ee_link1" >
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0062357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
   </link>
@@ -1865,7 +1865,7 @@
   <link name="gripper_base_link" >
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.62357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -1898,7 +1898,7 @@
   		<!-- Inertial frame at link origin -->
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<!-- Mass of the gripper -->
-  		<mass value="0.925"/>
+  		<mass value="0.05"/>
   		<!-- Moments of inertia about the link frame axes -->
   		<inertia 
     			ixx="0.000347" ixy="0.0"    ixz="0.0"
@@ -1937,7 +1937,7 @@
                 <!-- Inertial frame at link origin -->
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <!-- Mass of the gripper -->
-                <mass value="0.925"/>
+                <mass value="0.05"/>
                 <!-- Moments of inertia about the link frame axes -->
                 <inertia 
                         ixx="0.000347" ixy="0.0"    ixz="0.0"
@@ -1975,7 +1975,7 @@
   <link name="arm2_base_link">
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="1" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2006,7 +2006,7 @@
   <link name="link21">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0608351104988555" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2037,7 +2037,7 @@
   <link name="link22">
       <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="1.0733279014126" />
+            <mass value="0.5" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2068,7 +2068,7 @@
   <link name="link23">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.499404738025019" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2099,7 +2099,7 @@
   <link name="link24">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0809712553169999" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2128,7 +2128,7 @@
   <link name="link25">
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.602357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2158,7 +2158,7 @@
   <link name="ee_link2" >
       <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.0062357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
   </link>
@@ -2173,7 +2173,7 @@
   <link name="gripper2_base_link" >
     <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
-            <mass value="0.62357399313257" />
+            <mass value="0.05" />
             <inertia ixx="0.00008" ixy="0.00000" ixz="0.00001" iyy="0.00003" iyz="0.00000" izz="0.00007" />
     </inertial>
     <visual>
@@ -2205,7 +2205,7 @@
                 <!-- Inertial frame at link origin -->
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <!-- Mass of the gripper -->
-                <mass value="0.925"/>
+                <mass value="0.05"/>
                 <!-- Moments of inertia about the link frame axes -->
                 <inertia 
                         ixx="0.000347" ixy="0.0"    ixz="0.0"
@@ -2243,7 +2243,7 @@
                 <!-- Inertial frame at link origin -->
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <!-- Mass of the gripper -->
-                <mass value="0.925"/>
+                <mass value="0.05"/>
                 <!-- Moments of inertia about the link frame axes -->
                 <inertia 
                         ixx="0.000347" ixy="0.0"    ixz="0.0"

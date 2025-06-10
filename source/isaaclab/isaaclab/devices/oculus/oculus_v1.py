@@ -303,12 +303,12 @@ class Oculus_abs(DeviceBase):
             # print("Robot's left arm position:", self._abs_pos_left)
             # print("Robot's left arm rotation:", Rotation.from_quat(self._abs_rot_left.cpu().numpy()).as_rotvec())
             print("Robot's right arm position:", self._abs_pos_right)
-            print("Robot's right arm rotation:", Rotation.from_quat(self._abs_rot_right.cpu().numpy()).as_rotvec())
+            # print("Robot's right arm rotation:", Rotation.from_quat(self._abs_rot_right.cpu().numpy()).as_rotvec())
             
             # print("VR controller's left arm position:", np.array(transforms['l'][:3, 3])[[1, 0, 2]])
             # print("VR controller's left arm rotation:", Rotation.from_matrix(transforms['l'][:3, :3]).as_rotvec())
-            print("VR controller's right arm position:", np.array(transforms['r'][:3, 3])[[1, 0, 2]])
-            print("VR controller's right arm rotation:", Rotation.from_matrix(transforms['r'][:3, :3]).as_rotvec())
+            print("VR controller's right arm position:", np.array(transforms['r'][:3, 3])[[2, 0, 1]])
+            # print("VR controller's right arm rotation:", Rotation.from_matrix(transforms['r'][:3, :3]).as_rotvec())
 
 
     def __str__(self) -> str:
@@ -351,6 +351,7 @@ class Oculus_abs(DeviceBase):
         # 2. Arm absolute pose
         self._abs_pos_left  = np.array(T_l[:3, 3])[[1, 0, 2]]
         self._abs_pos_right = np.array(T_r[:3, 3])[[1, 0, 2]]
+        # self._abs_pos_right[0] *= -1
 
         # 3. Arm absolute quat
 
@@ -388,7 +389,9 @@ class Oculus_abs(DeviceBase):
         self._delta_base[1] = raw_x * self.base_sensitivity
         self._delta_base[0] = raw_y * self.base_sensitivity * (-1)
         
-        
+        self._abs_pos_left = obs_dict['left_arm'][0, :3].cpu().numpy()  # (x, y, z) for left arm
+        self._abs_rot_left = obs_dict['left_arm'][0, 3:7].cpu().numpy()  # quaternion (w, x, y, z) for left arm
+
         if buttons.get("X", False):
             self.freeze(obs_dict, transforms, buttons)
 
@@ -400,13 +403,13 @@ class Oculus_abs(DeviceBase):
                 self._delta_base,
             )
 
-        print(
-            np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
-            self._close_gripper_left,  # Left gripper
-            np.concatenate([self._abs_pos_right, self._abs_rot_right ]),  # Right arm
-            self._close_gripper_right,  # Right gripper
-            self._delta_base,  # Mobile base
-        )
+        # print(
+        #     np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
+        #     self._close_gripper_left,  # Left gripper
+        #     np.concatenate([self._abs_pos_right, self._abs_rot_right ]),  # Right arm
+        #     self._close_gripper_right,  # Right gripper
+        #     self._delta_base,  # Mobile base
+        # )
         return (
             np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm
             self._close_gripper_left,  # Left gripper

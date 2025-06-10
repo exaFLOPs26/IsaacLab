@@ -77,17 +77,17 @@ ANUBIS_CFG = ArticulationCfg(
         ),
         "arm_base": ImplicitActuatorCfg(
             joint_names_expr=["arm.*"],
-            effort_limit_sim=1e7,
-            velocity_limit_sim=1e4,
-            stiffness=1e10,
-            damping=1e5,
+            effort_limit_sim=1e10,
+            velocity_limit_sim=1e10,
+            stiffness=600, #1e10,
+            damping=330 #1e5,
         ),
         "arm_link": ImplicitActuatorCfg(
             joint_names_expr=["link.*"],
-            effort_limit_sim=1e7,
-            velocity_limit_sim=1e4,
-            stiffness=1e10,
-            damping=1e5,
+            effort_limit_sim=1e10,
+            velocity_limit_sim=1e10,
+            stiffness=4000, #1e10,
+            damping=2500, #1e5,
         ),
         "anubis_left_hand": ImplicitActuatorCfg(
             joint_names_expr=["gripper1.*"],
@@ -113,6 +113,6 @@ ANUBIS_CFG = ArticulationCfg(
 ANUBIS_PD_CFG = ANUBIS_CFG.copy()
 # ANUBIS_PD_CFG.spawn.rigid_props.disable_gravity = True
 # ANUBIS_PD_CFG.actuators["arm_link"].stiffness = 400.0
-# ANUBIS_PD_CFG.actuators["arm_link"].damping = 80.0
+# ANUBIS_PD_CFG.actuators["arm_link"].damping ==400.0
 # ANUBIS_PD_CFG.actuators["arm_base"].stiffness = 400.0
-# ANUBIS_PD_CFG.actuators["arm_base"].damping = 80.0
+# ANUBIS_PD_CFG.actuators["arm_base"].damping ==400.0
