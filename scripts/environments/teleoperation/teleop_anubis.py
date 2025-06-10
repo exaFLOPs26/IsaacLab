@@ -18,6 +18,15 @@ parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
 parser.add_argument("--bimanual", type=bool, default=True, help="Whether to use bimanual teleoperation.")
 parser.add_argument("--EEF_control", type=str, default="abs", help="Control mode: 'delta' or 'abs'.")
+
+"""
+Teleoperation devices:
+- Oculus_abs: Bimanual absolute control with Oculus Quest 2
+- Oculus_droid: Bimanual delta control with Oculus Quest 2 from DROID setup
+- Oculus_mobile: Bimanual delta control with Oculus Quest 2 from scratch
+- keyboard_bmm: Bimanual delta control with keyboard and mouse
+"""
+
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 args_cli = parser.parse_args()
@@ -51,7 +60,6 @@ from scipy.spatial.transform import Rotation
 def get_ee_state(env, ee_name):
     # arm
     ee = env.scene[ee_name].data
-    # ipdb.set_trace()
     pos = ee.target_pos_source[0, 0]
     rot = ee.target_quat_source[0, 0]
     
@@ -62,6 +70,7 @@ def get_ee_state(env, ee_name):
         body_pos = env.scene._articulations['robot'].data.body_pos_w[0, -4:-2]
     gripper_dist = torch.norm(body_pos[0] - body_pos[1])*-1*20.8+0.05 # To match [0.05, -1.65] the real robot
     return torch.cat((pos, rot, gripper_dist.unsqueeze(0))).unsqueeze(0)
+
 
 def pre_process_actions_abs(env, abs_pose_L: torch.Tensor, gripper_command_L: bool, abs_pose_R, gripper_command_R: bool, delta_pose_base) -> torch.Tensor:
     """Pre-process actions for the environment."""
@@ -199,6 +208,7 @@ def main():
             teleop_interface = Oculus_droid()
         elif args_cli.EEF_control.lower() == "abs":
             teleop_interface = Oculus_abs()
+            teleop_interface.add_callback("X", )
     elif args_cli.teleop_device.lower() == "spacemouse":
         teleop_interface = Se3SpaceMouse(
             pos_sensitivity=0.000001 * args_cli.sensitivity, rot_sensitivity=0.000001 * args_cli.sensitivity
@@ -207,16 +217,9 @@ def main():
         teleop_interface = Se3Gamepad(
             pos_sensitivity=0.1 * args_cli.sensitivity, rot_sensitivity=0.1 * args_cli.sensitivity
         )
-    # elif args_cli.teleop_device.lower() == "handtracking":
-    #     from isaacsim.xr.openxr import OpenXRSpec
-
-    #     teleop_interface = Se3HandTracking(OpenXRSpec.XrHandEXT.XR_HAND_RIGHT_EXT, False, True)
-    #     teleop_interface.add_callback("RESET", env.reset)
-    #     viewer = ViewerCfg(eye=(-0.25, -0.3, 0.5), lookat=(0.6, 0, 0), asset_name="viewer")
-    #     ViewportCameraController(env, viewer)
     else:
         raise ValueError(
-            f"Invalid device interface '{args_cli.teleop_device}'. Supported: 'keyboard', 'spacemouse''handtracking'."
+            f"Invalid device interface '{args_cli.teleop_device}'."
         )
 
     # add teleoperation key for env reset
@@ -225,6 +228,7 @@ def main():
     def reset_recording_instance():
         nonlocal should_reset_recording_instance
         should_reset_recording_instance = True
+    
 
     teleop_interface2 = Se3Keyboard_BMM(
             pos_sensitivity=0.005 * args_cli.sensitivity, rot_sensitivity=0.01 * args_cli.sensitivity
@@ -246,20 +250,13 @@ def main():
                 ee_l_state = get_ee_state(env, "ee_L_frame")
                 ee_r_state = get_ee_state(env, "ee_R_frame")
                 obs_dict = {"left_arm": ee_l_state, "right_arm": ee_r_state}
-                # print("obs_dict: ", obs_dict)
             else:
                 ee_r_state = get_ee_state(env, "ee_R_frame")
                 obs_dict = {"right_arm": ee_r_state}
-           
-            # Delta or absolute control
-            if args_cli.EEF_control.lower() == "delta":
-                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
             
-            else: # abs
-                pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance()
-
-            print(f"pose_L: {pose_L}, gripper_command_L: {gripper_command_L}, pose_R: {pose_R}, gripper_command_R: {gripper_command_R}, delta_pose_base: {delta_pose_base}")
-
+            pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
+            
+            
             # pre-process actions
             pose_L = pose_L.astype("float32")
             pose_R = pose_R.astype("float32")
@@ -274,9 +271,7 @@ def main():
             else: # abs
                 actions = pre_process_actions_abs(env, pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base)
             
-            
             # apply actions
-
             env.step(actions)
 
             if should_reset_recording_instance:

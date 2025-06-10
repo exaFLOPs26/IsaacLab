@@ -276,15 +276,27 @@ class Oculus_abs(DeviceBase):
         """Release the keyboard interface."""
         self.oculus_reader.stop()
     
-    def reset(self):
-        """Reset all commands."""
+    def freeze(self, obs_dict, transforms, buttons):
+        """Give no action to robot"""
         self._close_gripper_left = False
         self._close_gripper_right = False
-        self._abs_pos_left = np.zeros(3)
-        self._abs_rot_left = np.zeros(4)
-        self._abs_pos_right = np.zeros(3)
-        self._abs_rot_right = np.zeros(4)
-        self._delta_base = np.zeros(3)
+        self._abs_pos_left = obs_dict['ee_L_frame'][:3]  # (x, y, z) for left arm
+        self._abs_rot_left = obs_dict['ee_L_frame'][3:7]  # quaternion (w, x, y, z) for left arm
+        self._abs_pos_right = obs_dict['ee_R_frame'][:3]  # (x, y, z) for right arm
+        self._abs_rot_right = obs_dict['ee_R_frame'][3:7]  # quaternion (w, x, y, z) for right arm
+        
+        print("Freezing the robot to match the initial state.")
+        print("Robot's left arm position:", self._abs_pos_left)
+        print("Robot's left arm rotation:", self._abs_rot_left)
+        print("Robot's right arm position:", self._abs_pos_right)
+        print("Robot's right arm rotation:", self._abs_rot_right)
+        
+        print("VR controller's left arm position:", transforms['l'][:3, 3])
+        print("VR controller's left arm rotation:", Rotation.from_matrix(transforms['l'][:3, :3]).as_quat())
+        print("VR controller's right arm position:", transforms['r'][:3, 3])
+        print("VR controller's right arm rotation:", Rotation.from_matrix(transforms['r'][:3, :3]).as_quat())
+        
+        # self._delta_base = np.zeros(3)
 
 
     def __str__(self) -> str:
@@ -306,7 +318,7 @@ class Oculus_abs(DeviceBase):
         self._additional_callbacks[key] = func
 
 
-    def advance(self) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
+    def advance(self, obs_dict) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
         """
         Read joystick events and return command for BMM.
 
@@ -361,6 +373,10 @@ class Oculus_abs(DeviceBase):
         raw_x, raw_y = buttons['leftJS']
         self._delta_base[1] = raw_x * self.base_sensitivity
         self._delta_base[0] = raw_y * self.base_sensitivity * (-1)
+        
+        
+        if buttons.get("X", False):
+            self.freeze(obs_dict, transforms, buttons)
 
         return (
             np.concatenate([self._abs_pos_left, self._abs_rot_left]),  # Left arm

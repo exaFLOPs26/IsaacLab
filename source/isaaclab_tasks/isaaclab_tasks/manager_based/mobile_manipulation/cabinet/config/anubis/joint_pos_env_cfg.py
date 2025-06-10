@@ -97,7 +97,7 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
         # IMPORTANT: The order of the frames in the list is important. The first frame is the tool center point (TCP)
         # the other frames are the fingers
         self.scene.ee_R_frame = FrameTransformerCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/base_link",
+            prim_path="{ENV_REGEX_NS}/Robot/vr_headset_frame",
             debug_vis=False,
             visualizer_cfg=FRAME_MARKER_SMALL_CFG.replace(prim_path="/Visuals/RightEndEffectorFrameTransformer_R"),
             target_frames=[
@@ -125,7 +125,7 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
             ],
         )
         self.scene.ee_L_frame = FrameTransformerCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/base_link",
+            prim_path="{ENV_REGEX_NS}/Robot/vr_headset_frame",
             debug_vis=False,
             visualizer_cfg=FRAME_MARKER_SMALL_CFG.replace(prim_path="/Visuals/LeftEndEffectorFrameTransformer_L"),
             target_frames=[
