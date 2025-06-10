@@ -262,7 +262,7 @@ class Se3Keyboard_BMM(DeviceBase):
         """
         self._additional_callbacks[key] = func
 
-    def advance(self) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
+    def advance(self, obs_dict) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
         """Provides the result from keyboard event state.
 
         Returns:
