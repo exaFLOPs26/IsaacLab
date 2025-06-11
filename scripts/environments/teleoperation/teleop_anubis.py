@@ -238,6 +238,31 @@ def main():
             
             pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
             
+
+            # Get current gravity flags
+            gravity_flags = env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities().clone()
+
+            # Find body indices for the links you want to disable gravity for
+            index_a, _ = env.scene.articulations['robot'].find_bodies('arm.*')
+            index_l, _ = env.scene.articulations['robot'].find_bodies('link.*')
+            arm_bodies = index_a + index_l
+
+            # Assume articulation index is 0 (if you only have one robot)
+            articulation_index = 0
+
+            # Disable gravity for selected link indices
+            for link_index in arm_bodies:
+                gravity_flags[articulation_index, link_index] = 1  # 1 = disable gravity
+
+            # Convert articulation_index to tensor of indices
+            indices = torch.tensor([articulation_index], dtype=torch.uint32)
+
+            # Send new gravity flags to backend
+            env.scene.articulations['robot'].data._root_physx_view.set_disable_gravities(gravity_flags, indices)
+
+            # Print to verify
+            print(env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities())
+
             
             # pre-process actions
             pose_L = pose_L.astype("float32")
