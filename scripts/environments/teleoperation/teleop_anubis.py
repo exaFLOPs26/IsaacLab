@@ -13,11 +13,11 @@ parser.add_argument(
     "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
 )
 parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
-parser.add_argument("--teleop_device", type=str, default="oculus", help="Device for interacting with environment")
+parser.add_argument("--teleop_device", type=str, default="oculus_mobile", help="Device for interacting with environment")
 parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
 parser.add_argument("--bimanual", type=bool, default=True, help="Whether to use bimanual teleoperation.")
-parser.add_argument("--EEF_control", type=str, default="abs", help="Control mode: 'delta' or 'abs'.")
+parser.add_argument("--EEF_control", type=str, default="delta", help="Control mode: 'delta' or 'abs'.")
 
 """
 Teleoperation devices:
@@ -135,9 +135,12 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         )# Shape: (batch_size, 3)
         delta_pose_base_wheel = delta_pose_base_wheel[:, [2, 1, 0]]
 
-        # Ensure gripper velocities and base poses have the correct shapes  
-        gripper_vel_L = gripper_command_L.reshape(-1, 1)  # Shape: (batch_size, 1)
-        gripper_vel_R = gripper_command_R.reshape(-1, 1)  # Shape: (batch_size, 1)
+        gripper_vel_L = torch.where(gripper_command_L > 0.5, torch.tensor(-1.0, device=gripper_command_L.device), torch.tensor(1.0, device=gripper_command_L.device))
+        gripper_vel_R = torch.where(gripper_command_R > 0.5, torch.tensor(-1.0, device=gripper_command_R.device), torch.tensor(1.0, device=gripper_command_R.device))
+
+        gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
+        gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
+
         
         action = torch.concat([
             delta_pose_L, delta_pose_R,
@@ -222,6 +225,30 @@ def main():
     env.reset()
     teleop_interface.reset()
 
+    # # Get current gravity flags
+    # gravity_flags = env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities().clone()
+
+    # # Find body indices for the links you want to disable gravity for
+    # index_a, _ = env.scene.articulations['robot'].find_bodies('arm.*')
+    # index_l, _ = env.scene.articulations['robot'].find_bodies('link.*')
+    # arm_bodies = index_a + index_l
+
+    # # Assume articulation index is 0 (if you only have one robot)
+    # articulation_index = 0
+
+    # # Disable gravity for selected link indices
+    # for link_index in arm_bodies:
+    #     gravity_flags[articulation_index, link_index] = 1  # 1 = disable gravity
+
+    # # Convert articulation_index to tensor of indices
+    # indices = torch.tensor([articulation_index], dtype=torch.uint32)
+
+    # # Send new gravity flags to backend
+    # env.scene.articulations['robot'].data._root_physx_view.set_disable_gravities(gravity_flags, indices)
+
+    # # Print to verify
+    # print(env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities())
+
     # simulate environment
     while simulation_app.is_running():
         # run everything in inference mode
@@ -237,32 +264,6 @@ def main():
                 obs_dict = {"right_arm": ee_r_state}
             
             pose_L, gripper_command_L, pose_R, gripper_command_R, delta_pose_base = teleop_interface.advance(obs_dict)
-            
-
-            # Get current gravity flags
-            gravity_flags = env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities().clone()
-
-            # Find body indices for the links you want to disable gravity for
-            index_a, _ = env.scene.articulations['robot'].find_bodies('arm.*')
-            index_l, _ = env.scene.articulations['robot'].find_bodies('link.*')
-            arm_bodies = index_a + index_l
-
-            # Assume articulation index is 0 (if you only have one robot)
-            articulation_index = 0
-
-            # Disable gravity for selected link indices
-            for link_index in arm_bodies:
-                gravity_flags[articulation_index, link_index] = 1  # 1 = disable gravity
-
-            # Convert articulation_index to tensor of indices
-            indices = torch.tensor([articulation_index], dtype=torch.uint32)
-
-            # Send new gravity flags to backend
-            env.scene.articulations['robot'].data._root_physx_view.set_disable_gravities(gravity_flags, indices)
-
-            # Print to verify
-            print(env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities())
-
             
             # pre-process actions
             pose_L = pose_L.astype("float32")
@@ -286,9 +287,9 @@ def main():
                 teleop_interface.reset()
                 should_reset_recording_instance = False
                 # ipdb.set_trace()
-                for i in range(env.num_envs):
-                    print("env", i, "stiffness",env.scene.articulations["robot"].data.joint_stiffness[i][-16:-4])
-                    print("env", i, "damping",env.scene.articulations["robot"].data.joint_damping[i][-16:-4])
+                # for i in range(env.num_envs):
+                #     print("env", i, "stiffness",env.scene.articulations["robot"].data.joint_stiffness[i][-16:-4])
+                #     print("env", i, "damping",env.scene.articulations["robot"].data.joint_damping[i][-16:-4])
 
 
     # close the simulator

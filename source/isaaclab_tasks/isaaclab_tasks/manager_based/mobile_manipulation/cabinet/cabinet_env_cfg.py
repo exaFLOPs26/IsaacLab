@@ -222,17 +222,17 @@ class EventCfg:
         },
     )
     
-    robot_joint_stiffness_and_damping = EventTerm(
-        func=mdp.randomize_actuator_gains,
-        mode="reset",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=['arm1_base_link_joint','arm2_base_link_joint','link11_joint', 'link21_joint', 'link12_joint', 'link22_joint', 'link13_joint', 'link23_joint', 'link14_joint', 'link24_joint', 'link15_joint', 'link25_joint']),
-            "stiffness_distribution_params": (1.0, 1000),
-            "damping_distribution_params": (1.0, 1000),
-            "operation": "abs",
-            "distribution": "uniform",
-        },
-    )
+    # robot_joint_stiffness_and_damping = EventTerm(
+    #     func=mdp.randomize_actuator_gains,
+    #     mode="reset",
+    #     params={
+    #         "asset_cfg": SceneEntityCfg("robot", joint_names=['arm1_base_link_joint','arm2_base_link_joint','link11_joint', 'link21_joint', 'link12_joint', 'link22_joint', 'link13_joint', 'link23_joint', 'link14_joint', 'link24_joint', 'link15_joint', 'link25_joint']),
+    #         "stiffness_distribution_params": (1.0, 1000),
+    #         "damping_distribution_params": (1.0, 1000),
+    #         "operation": "abs",
+    #         "distribution": "uniform",
+    #     },
+    # )
 
     reset_all = EventTerm(func=mdp.reset_scene_to_default, mode="reset")
 

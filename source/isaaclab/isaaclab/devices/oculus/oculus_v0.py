@@ -270,10 +270,6 @@ class Oculus_mobile(DeviceBase):
         # initialize OculusReader for joystick input
         self.oculus_reader = OculusReader()
 
-        # set up yaw cumulative motion
-        self._key_hold_start = {}  # Track when rightJS is moved
-        self._base_z_accum = 0.0   # Accumulated vertical motion for base
-
         # command buffers
         self._close_gripper_left = False
         self._close_gripper_right = False
@@ -292,12 +288,10 @@ class Oculus_mobile(DeviceBase):
         self._prev_RTr_state = False
 
         # xy
-        self._last_leftJS = (0.0, 0.0)
         self._js_threshold = 0.4  # tune this to taste
         
         # yaw
-        self.rotation_divisor = 1.2037685675
-        self.base_rot_sensitivity = 10
+        self.base_rot_sensitivity = 3
         
         # dictionary for additional callbacks
         self._additional_callbacks = dict()
@@ -315,8 +309,7 @@ class Oculus_mobile(DeviceBase):
         self._delta_pos_right = np.zeros(3)
         self._delta_rot_right = np.zeros(3)
         self._delta_base = np.zeros(3)
-        # self._base_z_accum = 0.0
-        # self._key_hold_start = {}  # Reset key hold tracking
+
 
     def __str__(self) -> str:
         """Returns: A string containing the information of joystick."""
@@ -338,7 +331,7 @@ class Oculus_mobile(DeviceBase):
         self._additional_callbacks[key] = func
 
 
-    def advance(self) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
+    def advance(self, obs_dict) -> tuple[np.ndarray, bool, np.ndarray, bool, np.ndarray]:
         """
         Read joystick events and return command for BMM.
 
@@ -402,79 +395,22 @@ class Oculus_mobile(DeviceBase):
 
         # mobile base
 
-        # yaw
-        # check if the rightJS is moved to right
-        if buttons['rightJS'][0] < -0.7  and ('counterclockwise' not in self._key_hold_start):
+        # raw rotation
+        if buttons['rightJS'][0] < -0.7:
             self._delta_base[2] += self.base_sensitivity * self.base_rot_sensitivity
-            self._key_hold_start['counterclockwise'] = time.time()
 
         # check if the rightJS is moved to left
-        elif buttons['rightJS'][0] > 0.7 and ('clockwise' not in self._key_hold_start):
+        elif buttons['rightJS'][0] > 0.7:
             self._delta_base[2] -= self.base_sensitivity * self.base_rot_sensitivity
-            self._key_hold_start['clockwise'] = time.time()
 
-        # check if the rightJS is returned to the center (similar to key realeased)
-        elif buttons['rightJS'][0] == 0.0 and (('counterclockwise' in self._key_hold_start) or ('clockwise' in self._key_hold_start)):
-            # remove the key from the dictionary
-            if 'counterclockwise' in self._key_hold_start:
-                duration = time.time() - self._key_hold_start['counterclockwise']
-                self._base_z_accum += self.base_sensitivity * duration
-                self._delta_base[2] = 0.0
-                del self._key_hold_start['counterclockwise']
+        elif buttons['rightJS'][0] == 0.0:
+            self._delta_base[2] = 0.0
                 
-                
-            if 'clockwise' in self._key_hold_start:
-                duration = time.time() - self._key_hold_start['clockwise']
-                self._base_z_accum -= self.base_sensitivity * duration
-                self._delta_base[2] = 0.0
-                del self._key_hold_start['clockwise']
-        
         # xy
-        if buttons['rightJS'][0] == 0.0:
-            raw_x, raw_y = buttons['leftJS']
-            new_js = (raw_x, raw_y)
+        raw_x, raw_y = buttons['leftJS']
+        self._delta_base[1] = raw_x * self.base_sensitivity
+        self._delta_base[0] = raw_y * self.base_sensitivity * (-1)
 
-            # compute Euclidean change
-            dx = raw_x - self._last_leftJS[0]
-            dy = raw_y - self._last_leftJS[1]
-
-            # check if the leftJS is moved by the self._js_threshold
-            if (dx*dx + dy*dy)**0.6 > self._js_threshold:
-                theta = self._base_z_accum * self.base_rot_sensitivity / self.rotation_divisor
-                print(theta)
-                # 1) subtract out the old
-                ox, oy = self._last_leftJS
-                old_vec = (
-                    ox * np.asarray([
-                        math.cos((theta)),
-                        math.sin((theta)),
-                        0.0
-                    ]) +
-                    oy * np.asarray([
-                        -math.sin((theta)),
-                        math.cos((theta)),
-                        0.0
-                    ])
-                ) * self.base_sensitivity
-                self._delta_base -= old_vec[[1,0,2]]* np.array([1, -1, 1])
-
-                # 2) add in the new
-                new_vec = (
-                    raw_x * np.asarray([
-                        math.cos((theta)),
-                        math.sin((theta)),
-                        0.0
-                    ]) +
-                    raw_y * np.asarray([
-                        -math.sin((theta)),
-                        math.cos((theta)),
-                        0.0
-                    ])
-                ) * self.base_sensitivity
-                self._delta_base += new_vec[[1,0,2]]* np.array([1, -1, 1])
-
-                # 3) remember it
-                self._last_leftJS = new_js
             
         # return the commands
         return (

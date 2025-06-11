@@ -500,7 +500,7 @@ class Oculus_droid(DeviceBase):
             action_base[:, 2] -= self.base_sensitivity * self.base_rot_sensitivity
 
         elif self._state["buttons"]['rightJS'][0] == 0.0:
-                action_base[:, 2] = 0.0
+            action_base[:, 2] = 0.0
                 
         # xy
         raw_x, raw_y = self._state["buttons"]['leftJS']
