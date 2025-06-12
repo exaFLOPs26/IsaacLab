@@ -55,6 +55,8 @@ class PackingSceneCfg(InteractiveSceneCfg):
     ee_L_frame: FrameTransformerCfg = MISSING
     # target object: will be populated by agent env cfg
     object : RigidObjectCfg | DeformableObjectCfg = MISSING
+    object0 : RigidObjectCfg | DeformableObjectCfg = MISSING
+    object1 : RigidObjectCfg | DeformableObjectCfg = MISSING
     object2 : RigidObjectCfg | DeformableObjectCfg = MISSING
     # bag : RigidObjectCfg | DeformableObjectCfg = MISSING
     
@@ -213,15 +215,7 @@ class EventCfg:
             "asset_cfg": SceneEntityCfg("object", body_names="can"),
         },
     )
-    reset_object_position = EventTerm(
-        func=mdp.reset_root_state_uniform,
-        mode="reset",
-        params={
-            "pose_range": {"x": (-0.1, 0.1), "y": (-0.1, 0.1), "z": (0.0, 0.0)},
-            "velocity_range": {},
-            "asset_cfg": SceneEntityCfg("object2", body_names="Object2"),
-        },
-    )
+
 
 @configclass
 class RewardsCfg:

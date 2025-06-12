@@ -78,77 +78,43 @@ class AnubisPackingEnvCfg(PackingEnvCfg):
             joint_names=["Omni.*"],
         )
         
-        # self.scene.object = RigidObjectCfg(
-        #     prim_path="{ENV_REGEX_NS}/Object",
-        #     spawn=sim_utils.MultiAssetSpawnerCfg(
-        #         assets_cfg=[
-        #             sim_utils.ConeCfg(
-        #                 radius=0.3,
-        #                 height=0.6,
-        #                 visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0), metallic=0.2),
-        #             ),
-        #             sim_utils.CuboidCfg(
-        #                 size=(0.3, 0.3, 0.3),
-        #                 visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0), metallic=0.2),
-        #             ),
-        #             sim_utils.SphereCfg(
-        #                 radius=0.3,
-        #                 visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0), metallic=0.2),
-        #             ),
-        #         ],
-        #         random_choice=True,
-        #         rigid_props=sim_utils.RigidBodyPropertiesCfg(
-        #             solver_position_iteration_count=4, solver_velocity_iteration_count=0
-        #         ),
-        #         mass_props=sim_utils.MassPropertiesCfg(mass=1.0),
-        #         collision_props=sim_utils.CollisionPropertiesCfg(),
-        #     ),
-        #     init_state=RigidObjectCfg.InitialStateCfg(pos=(1.3, 0.0, 1.5)),
-        # )
-        
         can_cfg = RigidObjectCfg(
-            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.7, 1, 1], rot=[0.70711, -0.70711, 0, 0]),
+            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.8, 1, 1.1], rot=[0.70711, -0.70711, 0, 0]),
             spawn=UsdFileCfg(
                 usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Assets/can.usd",
                 scale=(0.5, 0.5, 0.5),
-                mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
-                collision_props=sim_utils.CollisionPropertiesCfg(),
-                rigid_props=RigidBodyPropertiesCfg(
-                    solver_position_iteration_count=16,
-                    solver_velocity_iteration_count=1,
-                    max_angular_velocity=1000.0,
-                    max_linear_velocity=1000.0,
-                    max_depenetration_velocity=5.0,
-                    disable_gravity=False,
-                ),
-            ),
+            )
         )
         
-        
-        self.scene.object2 = RigidObjectCfg(
-            prim_path="{ENV_REGEX_NS}/Object2",
-            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.7, -1, 1], rot=[0.707, 0, 0, 0.707]),
-            spawn=sim_utils.CylinderCfg(
-                radius=0.018,
-                height=0.35,
-                rigid_props=sim_utils.RigidBodyPropertiesCfg(),
-                mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
-                collision_props=sim_utils.CollisionPropertiesCfg(),
-                visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.15, 0.15, 0.15), metallic=1.0),
-                physics_material=sim_utils.RigidBodyMaterialCfg(
-                    friction_combine_mode="max",
-                    restitution_combine_mode="min",
-                    static_friction=0.9,
-                    dynamic_friction=0.9,
-                    restitution=0.0,
-                ),
-            ),
-        )
-
         self.scene.object = can_cfg.replace(
             prim_path="{ENV_REGEX_NS}/Object",
         )
-        
+
+        for i in range(3):
+            can_cfg = RigidObjectCfg(
+                init_state=RigidObjectCfg.InitialStateCfg(
+                    pos=[0.8 + i * 0.1, -1 , 1.1],  # adjust Y to avoid overlap
+                    rot=[0.70711, -0.70711, 0, 0]
+                ),
+                spawn=UsdFileCfg(
+                    usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Assets/can.usd",
+                    scale=(0.5, 0.5, 0.5),
+                )
+            )
+            if i == 0:
+                self.scene.object0 = can_cfg.replace(
+                    prim_path="{ENV_REGEX_NS}/Can_0",
+                )
+            elif i == 1:
+                self.scene.object1 = can_cfg.replace(
+                    prim_path="{ENV_REGEX_NS}/Can_1",
+                )
+            elif i == 2:
+                self.scene.object2 = can_cfg.replace(
+                    prim_path="{ENV_REGEX_NS}/Can_2",
+                ) 
+
+
 
         # Listens to the required transforms
         # IMPORTANT: The order of the frames in the list is important. The first frame is the tool center point (TCP)

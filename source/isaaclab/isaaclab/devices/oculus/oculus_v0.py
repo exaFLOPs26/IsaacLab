@@ -302,13 +302,23 @@ class Oculus_mobile(DeviceBase):
     
     def reset(self):
         """Reset all commands."""
+        self._close_gripper_left = False
+        self._close_gripper_right = False
+        self._delta_pos_left = np.zeros(3)
+        self._delta_rot_left = np.zeros(3)
+        self._delta_pos_right = np.zeros(3)
+        self._delta_rot_right = np.zeros(3)
+        self._delta_base = np.zeros(3)
+    
+    def freeze(self):
+        """Reset all commands."""
         # self._close_gripper_left = False
         # self._close_gripper_right = False
         self._delta_pos_left = np.zeros(3)
         self._delta_rot_left = np.zeros(3)
         self._delta_pos_right = np.zeros(3)
         self._delta_rot_right = np.zeros(3)
-        self._delta_base = np.zeros(3)
+
 
 
     def __str__(self) -> str:
@@ -376,7 +386,7 @@ class Oculus_mobile(DeviceBase):
 
         # 5. reset on button X
         if buttons.get("LG", False):
-            self.reset()
+            self.freeze()
 
         # Gripper
         # Somewhere in your class, add:
