@@ -14,7 +14,7 @@ parser.add_argument(
 )
 parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to simulate.")
 parser.add_argument("--teleop_device", type=str, default="oculus_mobile", help="Device for interacting with environment")
-parser.add_argument("--task", type=str, default="Cabinet-anubis-teleop-v0", help="Name of the task.")
+parser.add_argument("--task", type=str, default="Packing-anubis-teleop-v0", help="Name of the task.")
 parser.add_argument("--sensitivity", type=float, default=1.0, help="Sensitivity factor.")
 parser.add_argument("--bimanual", type=bool, default=True, help="Whether to use bimanual teleoperation.")
 parser.add_argument("--EEF_control", type=str, default="delta", help="Control mode: 'delta' or 'abs'.")
