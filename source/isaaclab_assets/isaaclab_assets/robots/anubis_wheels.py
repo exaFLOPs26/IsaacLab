@@ -67,13 +67,15 @@ ANUBIS_CFG = ArticulationCfg(
             velocity_limit_sim=1e10,
             stiffness=0.0,
             damping=1000000.0,  # tip:: For velocity control of the base with dummy mechanism, we recommend setting high damping gains to the joints. This ensures that the base remains unperturbed from external disturbances, such as an arm mounted on the base.
+            friction=0.5,
         ),
         "dummy_spheres": ImplicitActuatorCfg(
             joint_names_expr=["OmniR_roller_.*", "OmniFR_roller_.*", "OmniFL_roller_.*"],
             effort_limit_sim=1e10,
             velocity_limit_sim=1e10,
             stiffness=0.0,
-            damping=0.000001, 
+            damping=0.000001,
+            friction=0.5, 
         ),
         "arm_base": ImplicitActuatorCfg(
             joint_names_expr=["arm.*"],

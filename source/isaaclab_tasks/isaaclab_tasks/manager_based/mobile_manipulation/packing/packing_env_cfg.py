@@ -4,6 +4,7 @@ from dataclasses import MISSING
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg, DeformableObjectCfg, RigidObjectCfg
+from isaaclab.sim.schemas.schemas_cfg import RigidBodyPropertiesCfg
 from isaaclab.terrains import TerrainImporterCfg
 from isaaclab.actuators.actuator_cfg import ImplicitActuatorCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
@@ -53,7 +54,8 @@ class PackingSceneCfg(InteractiveSceneCfg):
     ee_R_frame: FrameTransformerCfg = MISSING
     ee_L_frame: FrameTransformerCfg = MISSING
     # target object: will be populated by agent env cfg
-    object: RigidObjectCfg | DeformableObjectCfg = MISSING
+    object : RigidObjectCfg | DeformableObjectCfg = MISSING
+    object2 : RigidObjectCfg | DeformableObjectCfg = MISSING
     # bag : RigidObjectCfg | DeformableObjectCfg = MISSING
     
     plane = AssetBaseCfg(
@@ -67,7 +69,7 @@ class PackingSceneCfg(InteractiveSceneCfg):
     
     table1 = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/Table1",
-        init_state=AssetBaseCfg.InitialStateCfg(pos=[1.3, 2, 1], rot=[0.707, 0, 0, 0.707]),
+        init_state=AssetBaseCfg.InitialStateCfg(pos=[1, 1, 1], rot=[0.707, 0, 0, -0.707]),
         spawn=UsdFileCfg(
             usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/SeattleLabTable/table_instanceable.usd",
             scale=(1.0, 1.0, 1.0), 
@@ -76,7 +78,7 @@ class PackingSceneCfg(InteractiveSceneCfg):
     
     table2 = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/Table2",
-        init_state=AssetBaseCfg.InitialStateCfg(pos=[-1.3, 2, 1], rot=[0.707, 0, 0, 0.707]),
+        init_state=AssetBaseCfg.InitialStateCfg(pos=[1, -1, 1], rot=[0.707, 0, 0, -0.707]),
         spawn=UsdFileCfg(
             usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Mounts/SeattleLabTable/table_instanceable.usd",
             scale=(1.0, 1.0, 1.0), 
@@ -103,8 +105,8 @@ class PackingSceneCfg(InteractiveSceneCfg):
             clipping_range=(0.1, 1.0e5),
         ),
         offset = CameraCfg.OffsetCfg(
-            pos=(0.0, -0.1, -0.05),
-            rot=(0.25882, 0.96593, 0.0, 0.0),
+            pos=(-0.4, 0.0, 1.5),
+            rot=(0.62721, 0.32651, -0.32651, -0.62721),
             convention="opengl",
         ),
     )
@@ -116,7 +118,7 @@ class PackingSceneCfg(InteractiveSceneCfg):
         width=640,
         data_types=["rgb", "distance_to_image_plane"],
         spawn = sim_utils.PinholeCameraCfg(
-            focal_length=14.0,
+            focal_length=10.0,
             focus_distance=400.0,
             horizontal_aperture=20.955,
             clipping_range=(0.1, 1.0e5),
@@ -135,14 +137,14 @@ class PackingSceneCfg(InteractiveSceneCfg):
         width=640,
         data_types=["rgb", "distance_to_image_plane"],
         spawn = sim_utils.PinholeCameraCfg(
-            focal_length=14.0,
+            focal_length=10.0,
             focus_distance=400.0,
             horizontal_aperture=20.955,
             clipping_range=(0.1, 1.0e5),
         ),
         offset = CameraCfg.OffsetCfg(
-            pos=(0.0, 0.0, 0.1),
-            rot=(0.62721, 0.32651, -0.32651, -0.62721),
+            pos=(0.0, -0.1, -0.05),
+            rot=(0.25882, 0.96593, 0.0, 0.0),
             convention="opengl",
         ),
     )
@@ -191,7 +193,7 @@ class EventCfg:
         func=mdp.randomize_rigid_body_material,
         mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=['link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
+            "asset_cfg": SceneEntityCfg("robot", body_names=['Omni.*','link1.*', 'link2.*', 'ee_link.*', 'arm.*', 'gripper.*']),
             "static_friction_range": (0.8, 1.25),
             "dynamic_friction_range": (0.8, 1.25),
             "restitution_range": (0.0, 0.0),
@@ -209,6 +211,15 @@ class EventCfg:
             "pose_range": {"x": (-0.1, 0.1), "y": (-0.1, 0.1), "z": (0.0, 0.0)},
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("object", body_names="can"),
+        },
+    )
+    reset_object_position = EventTerm(
+        func=mdp.reset_root_state_uniform,
+        mode="reset",
+        params={
+            "pose_range": {"x": (-0.1, 0.1), "y": (-0.1, 0.1), "z": (0.0, 0.0)},
+            "velocity_range": {},
+            "asset_cfg": SceneEntityCfg("object2", body_names="Object2"),
         },
     )
 

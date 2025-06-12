@@ -291,7 +291,7 @@ class Oculus_mobile(DeviceBase):
         self._js_threshold = 0.4  # tune this to taste
         
         # yaw
-        self.base_rot_sensitivity = 3
+        self.base_rot_sensitivity = 0.5
         
         # dictionary for additional callbacks
         self._additional_callbacks = dict()
@@ -375,7 +375,7 @@ class Oculus_mobile(DeviceBase):
         self._last_transform_right = T_r.copy()
 
         # 5. reset on button X
-        if buttons.get("X", False):
+        if buttons.get("LG", False):
             self.reset()
 
         # Gripper

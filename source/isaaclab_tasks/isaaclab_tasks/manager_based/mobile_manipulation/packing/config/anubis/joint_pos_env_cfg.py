@@ -16,7 +16,6 @@ from isaaclab_tasks.manager_based.mobile_manipulation.packing.packing_env_cfg im
     FRAME_MARKER_SMALL_CFG,
     PackingEnvCfg,
 )
-
 ##
 # Pre-defined configs
 ##
@@ -107,41 +106,47 @@ class AnubisPackingEnvCfg(PackingEnvCfg):
         #     init_state=RigidObjectCfg.InitialStateCfg(pos=(1.3, 0.0, 1.5)),
         # )
         
-        # self.scene.object = RigidObjectCfg(
-        #     prim_path="{ENV_REGEX_NS}/Object",
-        #     init_state=RigidObjectCfg.InitialStateCfg(pos=[1.3, 2, 1], rot=[0.707, 0, 0, 0.707]),
-        #     spawn=sim_utils.CylinderCfg(
-        #         radius=0.018,
-        #         height=0.35,
-        #         rigid_props=sim_utils.RigidBodyPropertiesCfg(),
-        #         mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
-        #         collision_props=sim_utils.CollisionPropertiesCfg(),
-        #         visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.15, 0.15, 0.15), metallic=1.0),
-        #         physics_material=sim_utils.RigidBodyMaterialCfg(
-        #             friction_combine_mode="max",
-        #             restitution_combine_mode="min",
-        #             static_friction=0.9,
-        #             dynamic_friction=0.9,
-        #             restitution=0.0,
-        #         ),
-        #     ),
-        # )
-        self.scene.object = RigidObjectCfg(
-            prim_path="{ENV_REGEX_NS}/Object",
-            init_state=RigidObjectCfg.InitialStateCfg(pos=[1.3, 2, 1], rot=[0.70711, -0.70711, 0, 0]),
+        can_cfg = RigidObjectCfg(
+            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.7, 1, 1], rot=[0.70711, -0.70711, 0, 0]),
             spawn=UsdFileCfg(
                 usd_path="file:/root/IsaacLab/source/isaaclab_assets/data/Assets/can.usd",
-                # mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
-                # collision_props=sim_utils.CollisionPropertiesCfg(),
-                # rigid_props=RigidBodyPropertiesCfg(
-                #     solver_position_iteration_count=16,
-                #     solver_velocity_iteration_count=1,
-                #     max_angular_velocity=1000.0,
-                #     max_linear_velocity=1000.0,
-                #     max_depenetration_velocity=5.0,
-                #     disable_gravity=False,
-                # ),
+                scale=(0.5, 0.5, 0.5),
+                mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
+                collision_props=sim_utils.CollisionPropertiesCfg(),
+                rigid_props=RigidBodyPropertiesCfg(
+                    solver_position_iteration_count=16,
+                    solver_velocity_iteration_count=1,
+                    max_angular_velocity=1000.0,
+                    max_linear_velocity=1000.0,
+                    max_depenetration_velocity=5.0,
+                    disable_gravity=False,
+                ),
             ),
+        )
+        
+        
+        self.scene.object2 = RigidObjectCfg(
+            prim_path="{ENV_REGEX_NS}/Object2",
+            init_state=RigidObjectCfg.InitialStateCfg(pos=[0.7, -1, 1], rot=[0.707, 0, 0, 0.707]),
+            spawn=sim_utils.CylinderCfg(
+                radius=0.018,
+                height=0.35,
+                rigid_props=sim_utils.RigidBodyPropertiesCfg(),
+                mass_props=sim_utils.MassPropertiesCfg(mass=0.3),
+                collision_props=sim_utils.CollisionPropertiesCfg(),
+                visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.15, 0.15, 0.15), metallic=1.0),
+                physics_material=sim_utils.RigidBodyMaterialCfg(
+                    friction_combine_mode="max",
+                    restitution_combine_mode="min",
+                    static_friction=0.9,
+                    dynamic_friction=0.9,
+                    restitution=0.0,
+                ),
+            ),
+        )
+
+        self.scene.object = can_cfg.replace(
+            prim_path="{ENV_REGEX_NS}/Object",
         )
         
 
