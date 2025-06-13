@@ -1915,11 +1915,11 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="-0.00861 0.0005 0.11054"/>
       <geometry>
-        <mesh filename="package://anubis/meshes/gripper/fingerL.stl"/>
-</geometry>
-  <contact_coefficients mu="0.5"  kp="5000.0"  kd="10.0" />
+        <box size="0.018 0.035 0.093"/>
+      </geometry>
+      <contact_coefficients mu="1.15"  kp="50000.0"  kd="100.0" />
     </collision>
   </link>
 
@@ -1929,7 +1929,7 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
     <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
-    <mimic joint="gripper1_joint" multiplier="1" offset="0" />
+    <!-- <mimic joint="gripper1_joint" multiplier="1" offset="0" /> -->
   </joint>
 
   <link name="gripper1R" >
@@ -1954,11 +1954,11 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0.01061 0.0005 0.11054"/>
       <geometry>
-        <mesh filename="package://anubis/meshes/gripper/fingerR.stl"/>
-</geometry>
-<contact_coefficients mu="0.5"  kp="5000.0"  kd="10.0" />
+        <box size="0.018 0.035 0.093"/>
+      </geometry>
+      <contact_coefficients mu="1.15"  kp="50000.0"  kd="100.0" />
     </collision>
   </link>
 
@@ -2222,11 +2222,11 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="-0.00861 0.0005 0.11054"/>
       <geometry>
-        <mesh filename="package://anubis/meshes/gripper/fingerL.stl"/>
-</geometry>
-<contact_coefficients mu="0.5"  kp="5000.0"  kd="10.0" />
+        <box size="0.018 0.035 0.093"/>
+      </geometry>
+      <contact_coefficients mu="1.15"  kp="50000.0"  kd="100.0" />
     </collision>
   </link>
 
@@ -2236,7 +2236,7 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
     <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
-    <mimic joint="gripper2_joint" multiplier="1" offset="0" />
+    <!-- <mimic joint="gripper2_joint" multiplier="1" offset="0" /> -->
   </joint>
   <link name="gripper2R" >
 	          <inertial>
@@ -2259,12 +2259,12 @@
         <color rgba="0.75294 0.0 0.0 1"/>
       </material>
     </visual>
-    <collision> 
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+    <collision>                               
+      <origin rpy="0 0 0" xyz="0.00828 0.00079 0.1109"/>
       <geometry>
-        <mesh filename="package://anubis/meshes/gripper/fingerR.stl"/>
+        <box size="0.018 0.035 0.093"/>
       </geometry>
-<contact_coefficients mu="0.5"  kp="5000.0"  kd="10.0" />
+      <contact_coefficients mu="1.15"  kp="50000.0"  kd="100.0" />
     </collision>
   </link>
 </robot>

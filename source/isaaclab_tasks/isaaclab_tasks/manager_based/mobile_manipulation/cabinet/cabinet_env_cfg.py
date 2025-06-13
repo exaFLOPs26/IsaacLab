@@ -96,6 +96,44 @@ class CabinetSceneCfg(InteractiveSceneCfg):
             convention="opengl",
         ),
     )
+
+    camera_ee_r = CameraCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/ee_link1/ee_r_camera",
+        update_period=0.1,
+        height=480,
+        width=640,
+        data_types=["rgb", "distance_to_image_plane"],
+        spawn = sim_utils.PinholeCameraCfg(
+            focal_length=10.0,
+            focus_distance=400.0,
+            horizontal_aperture=20.955,
+            clipping_range=(0.1, 1.0e5),
+        ),
+        offset = CameraCfg.OffsetCfg(
+            pos=(0.0, -0.1, -0.05),
+            rot=(0.25882, 0.96593, 0.0, 0.0),
+            convention="opengl",
+        ),
+    )
+    
+    camera_ee_l = CameraCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/ee_link2/ee_l_camera",
+        update_period=0.1,
+        height=480,
+        width=640,
+        data_types=["rgb", "distance_to_image_plane"],
+        spawn = sim_utils.PinholeCameraCfg(
+            focal_length=10.0,
+            focus_distance=400.0,
+            horizontal_aperture=20.955,
+            clipping_range=(0.1, 1.0e5),
+        ),
+        offset = CameraCfg.OffsetCfg(
+            pos=(0.0, -0.1, -0.05),
+            rot=(0.25882, 0.96593, 0.0, 0.0),
+            convention="opengl",
+        ),
+    )
     
     
     cabinet = ArticulationCfg(
@@ -106,7 +144,7 @@ class CabinetSceneCfg(InteractiveSceneCfg):
             scale=(1.5, 1.5, 1.2), 
         ),
         init_state=ArticulationCfg.InitialStateCfg(
-            pos=(1.5, 0, 0.475),
+            pos=(1.5, 0.1, 0.475),
             rot=(0.0, 0.0, 0.0, 1.0),
             joint_pos={
                 "door_left_joint": 0.0,
@@ -202,7 +240,7 @@ class EventCfg:
         func=mdp.randomize_rigid_body_material,
         mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=['link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2', 'gripper1R', 'gripper1L', 'gripper2R', 'gripper2L']),
+            "asset_cfg": SceneEntityCfg("robot", body_names=['link11', 'link21', 'link12', 'link22', 'link13', 'link23', 'link14', 'link24', 'link15', 'link25', 'ee_link1', 'ee_link2']),
             "static_friction_range": (0.8, 1.25),
             "dynamic_friction_range": (0.8, 1.25),
             "restitution_range": (0.0, 0.0),
