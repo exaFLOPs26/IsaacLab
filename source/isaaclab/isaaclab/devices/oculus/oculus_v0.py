@@ -291,7 +291,7 @@ class Oculus_mobile(DeviceBase):
         self._js_threshold = 0.4  # tune this to taste
         
         # yaw
-        self.base_rot_sensitivity = 0.5
+        self.base_rot_sensitivity = 3
         
         # dictionary for additional callbacks
         self._additional_callbacks = dict()
@@ -407,11 +407,11 @@ class Oculus_mobile(DeviceBase):
 
         # raw rotation
         if buttons['rightJS'][0] < -0.7:
-            self._delta_base[2] += self.base_sensitivity * self.base_rot_sensitivity
+            self._delta_base[2] = self.base_sensitivity * self.base_rot_sensitivity
 
         # check if the rightJS is moved to left
         elif buttons['rightJS'][0] > 0.7:
-            self._delta_base[2] -= self.base_sensitivity * self.base_rot_sensitivity
+            self._delta_base[2] = self.base_sensitivity * self.base_rot_sensitivity * (-1)
 
         elif buttons['rightJS'][0] == 0.0:
             self._delta_base[2] = 0.0

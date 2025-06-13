@@ -123,10 +123,6 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         return delta_pose_base
     else:
         
-        # resolve gripper command
-        # Ensure commands are tensors
-        gripper_command_L = torch.as_tensor(gripper_command_L, device=delta_pose_L.device).unsqueeze(-1) 
-        gripper_command_R = torch.as_tensor(gripper_command_R, device=delta_pose_R.device).unsqueeze(-1) 
         # Create output tensors
         # TODO Check if wheel_radius is for real wheels or the cylinders inside the wheels
         delta_pose_base_wheel = compute_wheel_velocities_torch(
@@ -135,12 +131,29 @@ def pre_process_actions(delta_pose_L: torch.Tensor, gripper_command_L: bool, del
         )# Shape: (batch_size, 3)
         delta_pose_base_wheel = delta_pose_base_wheel[:, [2, 1, 0]]
 
-        gripper_vel_L = torch.where(gripper_command_L > 0.5, torch.tensor(-1.0, device=gripper_command_L.device), torch.tensor(1.0, device=gripper_command_L.device))
-        gripper_vel_R = torch.where(gripper_command_R > 0.5, torch.tensor(-1.0, device=gripper_command_R.device), torch.tensor(1.0, device=gripper_command_R.device))
+        batch_size = delta_pose_L.shape[0]
 
-        gripper_vel_L = gripper_vel_L.reshape(-1, 1)  # Shape: (batch_size, 1)
-        gripper_vel_R = gripper_vel_R.reshape(-1, 1)  # Shape: (batch_size, 1)
+        gripper_command_L = torch.as_tensor(gripper_command_L, device=delta_pose_L.device).unsqueeze(-1)
+        gripper_command_R = torch.as_tensor(gripper_command_R, device=delta_pose_R.device).unsqueeze(-1)
 
+        # Expand or repeat to match the batch size
+        if gripper_command_L.shape[0] == 1:
+            gripper_command_L = gripper_command_L.repeat(batch_size, 1)
+        if gripper_command_R.shape[0] == 1:
+            gripper_command_R = gripper_command_R.repeat(batch_size, 1)
+
+        gripper_vel_L = torch.where(gripper_command_L > 0.5,
+                                    torch.tensor(-1.0, device=gripper_command_L.device),
+                                    torch.tensor(1.0, device=gripper_command_L.device))
+        gripper_vel_R = torch.where(gripper_command_R > 0.5,
+                                    torch.tensor(-1.0, device=gripper_command_R.device),
+                                    torch.tensor(1.0, device=gripper_command_R.device))
+
+        # Ensure final shape is (batch_size, 1)
+        gripper_vel_L = gripper_vel_L.reshape(-1, 1)
+        gripper_vel_R = gripper_vel_R.reshape(-1, 1)
+
+        # ipdb.set_trace()
         
         action = torch.concat([
             delta_pose_L, delta_pose_R,
@@ -250,10 +263,11 @@ def main():
     # print(env.scene.articulations['robot'].data._root_physx_view.get_disable_gravities())
 
     # simulate environment
+    print("Starting teleoperation...")
     while simulation_app.is_running():
         # run everything in inference mode
         with torch.inference_mode():
-
+            
             # Bimanual teleoperation
             if args_cli.bimanual == True:
                 ee_l_state = get_ee_state(env, "ee_L_frame")
@@ -281,15 +295,16 @@ def main():
             
             # apply actions
             env.step(actions)
+            # ipdb.set_trace()
 
             if should_reset_recording_instance:
                 env.reset()
                 teleop_interface.reset()
                 should_reset_recording_instance = False
                 # ipdb.set_trace()
-                # for i in range(env.num_envs):
-                #     print("env", i, "stiffness",env.scene.articulations["robot"].data.joint_stiffness[i][-16:-4])
-                #     print("env", i, "damping",env.scene.articulations["robot"].data.joint_damping[i][-16:-4])
+                for i in range(env.num_envs):
+                    print("env", i, "stiffness",env.scene.articulations["robot"].data.joint_stiffness[i])
+                    print("env", i, "damping",env.scene.articulations["robot"].data.joint_damping[i])
 
 
     # close the simulator

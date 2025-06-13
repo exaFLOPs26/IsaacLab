@@ -141,10 +141,10 @@ class CabinetSceneCfg(InteractiveSceneCfg):
         spawn=sim_utils.UsdFileCfg(
             usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Sektion_Cabinet/sektion_cabinet_instanceable.usd",
             activate_contact_sensors=False,
-            scale=(1.5, 1.5, 1.2), 
+            scale=(1.5, 1.5, 1.8), 
         ),
         init_state=ArticulationCfg.InitialStateCfg(
-            pos=(1.5, 0.1, 0.475),
+            pos=(1.5, 0.1, 0.7),
             rot=(0.0, 0.0, 0.0, 1.0),
             joint_pos={
                 "door_left_joint": 0.0,
@@ -247,6 +247,19 @@ class EventCfg:
             "num_buckets": 16,
         },
     )
+
+    # gripper_physics_material = EventTerm(
+    #     func=mdp.randomize_actuator_gains,
+    #     mode="reset",
+    #     params={
+    #         "asset_cfg": SceneEntityCfg("robot", joint_names=["gripper1_joint", "gripper1R_joint", "gripper2_joint", "gripper2R_joint"]),
+    #         "stiffness_distribution_params": (1, 1000),
+    #         "damping_distribution_params": (1, 1000),
+    #         "operation": "scale",
+    #         "distribution": "uniform",
+    #     },
+    # )
+
 
     cabinet_physics_material = EventTerm(
         func=mdp.randomize_rigid_body_material,
