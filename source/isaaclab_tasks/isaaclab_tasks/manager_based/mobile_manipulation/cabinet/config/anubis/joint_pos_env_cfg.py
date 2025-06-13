@@ -59,9 +59,9 @@ class AnubisCabinetEnvCfg(CabinetEnvCfg):
         )
         self.actions.gripperR_action = mdp.BinaryJointPositionActionCfg(
             asset_name="robot",
-            joint_names=["gripper1_.*"],
-            open_command_expr={"gripper1_.*": 0.04},
-            close_command_expr={"gripper1_.*": 0.0},
+            joint_names=["gripper1.*"],
+            open_command_expr={"gripper1.*": 0.04},
+            close_command_expr={"gripper1.*": 0.0},
         )
 
         self.actions.gripperL_action = mdp.BinaryJointPositionActionCfg(

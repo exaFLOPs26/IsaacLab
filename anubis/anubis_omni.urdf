@@ -1890,7 +1890,7 @@
     <child link="gripper1L"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="-1 0 0"/>
-    <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
+    <limit velocity="4.8" effort="4" lower="0" upper="0.04" />
   </joint>
   
   <link name="gripper1L" >
@@ -1928,8 +1928,8 @@
     <child link="gripper1R"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
-    <!-- <mimic joint="gripper1_joint" multiplier="1" offset="0" /> -->
+    <limit velocity="4.8" effort="4" lower="0" upper="0.04" />
+    <mimic joint="gripper1_joint" multiplier="1" offset="0" />
   </joint>
 
   <link name="gripper1R" >
@@ -2198,7 +2198,7 @@
     <child link="gripper2L"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="-1 0 0"/>
-    <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
+    <limit velocity="4.8" effort="4" lower="0" upper="0.04" />
   </joint>
   <link name="gripper2L" >
         <inertial>
@@ -2235,8 +2235,8 @@
     <child link="gripper2R"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit velocity="4.8" effort="1" lower="0" upper="0.04" />
-    <!-- <mimic joint="gripper2_joint" multiplier="1" offset="0" /> -->
+    <limit velocity="4.8" effort="4" lower="0" upper="0.04" />
+    <mimic joint="gripper2_joint" multiplier="1" offset="0" />
   </joint>
   <link name="gripper2R" >
 	          <inertial>

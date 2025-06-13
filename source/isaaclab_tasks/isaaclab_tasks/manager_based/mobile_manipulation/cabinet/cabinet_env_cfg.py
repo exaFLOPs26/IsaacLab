@@ -110,7 +110,7 @@ class CabinetSceneCfg(InteractiveSceneCfg):
             clipping_range=(0.1, 1.0e5),
         ),
         offset = CameraCfg.OffsetCfg(
-            pos=(0.0, -0.1, -0.05),
+            pos=(0.0, -0.1, -0.02),
             rot=(0.25882, 0.96593, 0.0, 0.0),
             convention="opengl",
         ),
@@ -129,7 +129,7 @@ class CabinetSceneCfg(InteractiveSceneCfg):
             clipping_range=(0.1, 1.0e5),
         ),
         offset = CameraCfg.OffsetCfg(
-            pos=(0.0, -0.1, -0.05),
+            pos=(0.0, -0.1, -0.02),
             rot=(0.25882, 0.96593, 0.0, 0.0),
             convention="opengl",
         ),
@@ -159,7 +159,7 @@ class CabinetSceneCfg(InteractiveSceneCfg):
                 effort_limit=87.0,
                 velocity_limit=100.0,
                 stiffness=10.0,
-                damping=1.0,
+                damping=2.5,
             ),
             "doors": ImplicitActuatorCfg(
                 joint_names_expr=["door_left_joint", "door_right_joint"],

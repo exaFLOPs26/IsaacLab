@@ -195,9 +195,9 @@ class DifferentialInverseKinematicsAction(ActionTerm):
         ee_pos_w = self._asset.data.body_pos_w[:, self._body_idx]
         ee_quat_w = self._asset.data.body_quat_w[:, self._body_idx]
         # Virtual headset
-        headset_index, _ = self._asset.find_bodies("vr_headset_frame")
-        head_pos_w = self._asset.data.body_pos_w[:,headset_index].squeeze(1)
-        head_quat_w = self._asset.data.body_quat_w[:,headset_index].squeeze(1)
+        # headset_index, _ = self._asset.find_bodies("vr_headset_frame")
+        # head_pos_w = self._asset.data.body_pos_w[:,headset_index].squeeze(1)
+        # head_quat_w = self._asset.data.body_quat_w[:,headset_index].squeeze(1)
         #import ipdb
         #ipdb.set_trace()
         
@@ -205,8 +205,8 @@ class DifferentialInverseKinematicsAction(ActionTerm):
         root_quat_w = self._asset.data.root_quat_w
 
         # compute the pose of the body in the root frame
-        # ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(root_pos_w, root_quat_w, ee_pos_w, ee_quat_w)
-        ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(head_pos_w, head_quat_w, ee_pos_w, ee_quat_w)
+        ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(root_pos_w, root_quat_w, ee_pos_w, ee_quat_w)
+        # ee_pose_b, ee_quat_b = math_utils.subtract_frame_transforms(head_pos_w, head_quat_w, ee_pos_w, ee_quat_w)
         # account for the offset
         if self.cfg.body_offset is not None:
             ee_pose_b, ee_quat_b = math_utils.combine_frame_transforms(
